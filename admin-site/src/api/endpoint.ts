@@ -1,6 +1,6 @@
 const endpoints = {
   promotion: {
-    get: "api/admin/promotion",
+    get: (storeId: string) => `/admin/promotion/${storeId}`,
   },
 };
 

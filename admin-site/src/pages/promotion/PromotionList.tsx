@@ -1,7 +1,7 @@
-import Promotion from "../../components/promotion/promotionList/Promotion";
+import PromotionList from "../../components/promotion/promotionList/PromotionList";
 
 const PromotionListPage = () => {
-  return <Promotion></Promotion>;
+  return <PromotionList></PromotionList>;
 };
 
 export default PromotionListPage;
