@@ -1,8 +1,9 @@
 import axios from "axios";
 
-const BASE_URL: string =
-  process.env.ADMIN_SITE_BASE_URL || "https://focs.site/";
+const fake_token: string =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkxM2ExYjgzLWNjOTQtNDI1Yi04NTQyLTBiOWMzMDQxYTExOSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6InBodWNAYWRtaW4uY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJTdG9yZUlkIjoiNTUwZTg0MDAtZTI5Yi00MWQ0LWE3MTYtNDQ2NjU1NDQwMDAwIiwiZXhwIjoxNzQ5NzUxMjc2LCJpc3MiOiJUaXBUcmlwSXNzdWVyIiwiYXVkIjoiVGlwVHJpcEF1ZGllbmNlIn0.uMLM2sf--pwSOcajk-yYe-wBkrCvCRogFgvGKCAYpko";
 
+const BASE_URL: string = "/api";
 const axiosClient = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -12,10 +13,8 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  // const token = localStorage.getItem("token");
+  config.headers.Authorization = `Bearer ${fake_token}`;
   return config;
 });
 

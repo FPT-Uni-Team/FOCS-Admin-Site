@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import React, {
+import {
   lazy,
   type JSX,
   type LazyExoticComponent,

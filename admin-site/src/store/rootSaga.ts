@@ -1,5 +1,5 @@
 import { all, fork } from "redux-saga/effects";
-import { watchPromotionSaga } from "./sagas/promotionSaga";
+import { watchPromotionSaga } from "./sagas/promotion/promotionSaga";
 
 export default function* rootSaga() {
   yield all([
