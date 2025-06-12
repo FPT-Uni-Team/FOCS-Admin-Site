@@ -1,21 +1,26 @@
-import { useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import type {
   TablePaginationConfig,
   SorterResult,
   FilterValue,
 } from "antd/es/table/interface";
+import type { SortOrder } from "antd/es/table/interface";
 import TableReuse from "../../common/Table/TableReuse";
-import type {
-  PromotionListDataType,
-  PromotionListParams,
+import {
+  PromotionTypeLabel,
+  type PromotionListDataType,
+  type PromotionListParams,
 } from "../../../type/promotion/promotion";
-import { useAppDispatch } from "../../../hooks/redux";
-import { fetchPromotionsStart } from "../../../store/slices/promotion/promotionListSlice";
+import { useAppSelector } from "../../../hooks/redux";
+import { formatDate } from "../../../helper/formatDate";
+interface PromotionListProps {
+  fetchData: (params: PromotionListParams) => void;
+}
 
-const PromotionList = () => {
-  const [data, setData] = useState<PromotionListDataType[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
+const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
+  const { loading, promotions, total } = useAppSelector(
+    (state) => state.promotion
+  );
   const [params, setParams] = useState<PromotionListParams>({
     page: 1,
     page_size: 10,
@@ -26,15 +31,6 @@ const PromotionList = () => {
     filters: {},
   });
 
-  const fetchData = async () => {
-    setLoading(true);
-    dispatch(fetchPromotionsStart(params));
-  };
-
-  useEffect(() => {
-    fetchData();
-  });
-
   const handleOnChangeTable = (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue | null>,
@@ -42,55 +38,91 @@ const PromotionList = () => {
       | SorterResult<PromotionListDataType>
       | SorterResult<PromotionListDataType>[]
   ) => {
-    let sortField = "";
-    let sortOrder = "";
-
+    let sort_by = "";
+    let sort_order = "";
     if (!Array.isArray(sorter) && sorter.column) {
-      sortField = sorter.field as string;
-      sortOrder = sorter.order || "";
+      sort_by = sorter.columnKey as string;
+      sort_order = sorter.order === "ascend" ? "asc" : "desc";
     }
-
     const newParams = {
+      ...params,
       page: pagination.current || 1,
-      pageSize: pagination.pageSize || 10,
-      sortField,
-      sortOrder,
+      page_size: pagination.pageSize || 10,
+      sort_by,
+      sort_order,
     };
-
     setParams(newParams);
-    fetchData(newParams);
   };
 
   const columns = [
     {
       title: "Promotion Name",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "promotionName",
+      key: "title",
+      sortDirections: [
+        "ascend" as SortOrder,
+        "descend" as SortOrder,
+        "ascend" as SortOrder,
+      ],
       sorter: true,
     },
     {
       title: "Promotion Type",
-      dataIndex: "type",
-      key: "type",
-      sorter: true,
+      dataIndex: "promotionType",
+      key: "promotion_type",
+      render: (text: number) => {
+        return PromotionTypeLabel[text as keyof typeof PromotionTypeLabel];
+      },
     },
     {
-      title: "Promotion Status",
-      dataIndex: "status",
-      key: "status",
+      title: "Status",
+      dataIndex: "promotionStatus",
+      key: "is_active",
+    },
+    {
+      title: "Start Date",
+      dataIndex: "promotionStartDate",
+      key: "start_date",
+      sorter: true,
+      sortDirections: [
+        "ascend" as SortOrder,
+        "descend" as SortOrder,
+        "ascend" as SortOrder,
+      ],
+      render: (text: string) => {
+        return formatDate(text);
+      },
+    },
+    {
+      title: "End Date",
+      dataIndex: "promotionEndDate",
+      key: "end_date",
+      sorter: true,
+      sortDirections: [
+        "ascend" as SortOrder,
+        "descend" as SortOrder,
+        "ascend" as SortOrder,
+      ],
+      render: (text: string) => {
+        return formatDate(text);
+      },
     },
   ];
+
+  useEffect(() => {
+    fetchData(params);
+  }, [fetchData, params]);
 
   return (
     <TableReuse
       columns={columns}
-      dataSource={data}
+      dataSource={promotions}
       loading={loading}
       onChange={handleOnChangeTable}
       pagination={{
         current: params.page,
-        pageSize: params.pageSize,
-        total: 100,
+        pageSize: params.page_size,
+        total: total,
       }}
       rowKey="key"
     />
