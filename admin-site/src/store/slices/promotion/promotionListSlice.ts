@@ -46,6 +46,7 @@ const promotionSlice = createSlice({
     ) => {
       state.loading = false;
       state.promotions = action.payload;
+      state.error = null;
     },
     fetchPromotionsFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
