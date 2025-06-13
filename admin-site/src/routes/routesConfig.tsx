@@ -10,6 +10,8 @@ const PromotionListPage = lazy(
   () => import("../pages/promotion/PromotionList")
 );
 const CouponListPage = lazy(() => import("../pages/coupon/CouponList"));
+const LoginPage = lazy(() => import("../pages/login/LoginPage"));
+const CouponDetailPage = lazy(() => import("../pages/coupon/CouponDetail"));
 
 export interface AppRoute {
   path: string;
@@ -40,6 +42,24 @@ export const routes: AppRoute[] = [
         icon: <UserOutlined />,
       },
     ],
+  },
+  {
+    path: "/login",
+    component: LoginPage,
+    label: "Login",
+    hidden: true,
+  },
+  {
+    path: "/coupons",
+    component: CouponListPage,
+    label: "Coupons",
+    icon: <UserOutlined />,
+  },
+  {
+    path: "/coupons/:couponId",
+    component: CouponDetailPage,
+    label: "Coupon Detail",
+    hidden: true,
   },
 ];
 
