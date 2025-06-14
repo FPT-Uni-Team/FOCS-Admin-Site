@@ -1,0 +1,36 @@
+.couponListContainer {
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.couponListTitle {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.statusActive {
+  color: #52c41a;
+  font-weight: 500;
+}
+
+.statusInactive {
+  color: #ff4d4f;
+  font-weight: 500;
+}
+
+.statusExpired {
+  color: #faad14;
+  font-weight: 500;
+}
+
+.couponCode {
+  font-family: 'Courier New', monospace;
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+} 
