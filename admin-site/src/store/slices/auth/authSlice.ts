@@ -1,5 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
-
+import { createSlice } from "@reduxjs/toolkit";
 
 interface User {
   is_succes: boolean;
@@ -19,15 +18,13 @@ interface LoginPayload {
   password: string;
 }
 
-// Check if user is already logged in
 const getInitialUser = (): User | null => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (token) {
-    // You might want to validate the token here
     return {
       is_succes: true,
       access_token: token,
-      refresh_token: '',
+      refresh_token: "",
       errors: [],
     };
   }
@@ -41,7 +38,7 @@ const initialState: AuthState = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     loginRequest: {
@@ -54,12 +51,11 @@ const authSlice = createSlice({
     loginSuccess(state, action) {
       state.loading = false;
       state.user = action.payload;
-      // Save tokens to localStorage
       if (action.payload.access_token) {
-        localStorage.setItem('token', action.payload.access_token);
+        localStorage.setItem("token", action.payload.access_token);
       }
       if (action.payload.refresh_token) {
-        localStorage.setItem('refreshToken', action.payload.refresh_token);
+        localStorage.setItem("refreshToken", action.payload.refresh_token);
       }
     },
     loginFailure(state, action) {
@@ -68,9 +64,8 @@ const authSlice = createSlice({
     },
     logout(state) {
       state.user = null;
-      // Remove tokens from localStorage
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
     },
     refreshTokenRequest(state) {
       state.loading = true;
@@ -80,27 +75,26 @@ const authSlice = createSlice({
       state.loading = false;
       if (state.user) {
         state.user.access_token = action.payload.access_token;
-        localStorage.setItem('token', action.payload.access_token);
+        localStorage.setItem("token", action.payload.access_token);
       }
     },
     refreshTokenFailure(state, action) {
       state.loading = false;
       state.error = action.payload;
-      // Clear all auth data on refresh failure
       state.user = null;
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
+      localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
     },
   },
 });
 
-export const { 
-  loginRequest, 
-  loginSuccess, 
-  loginFailure, 
+export const {
+  loginRequest,
+  loginSuccess,
+  loginFailure,
   logout,
   refreshTokenRequest,
   refreshTokenSuccess,
-  refreshTokenFailure
+  refreshTokenFailure,
 } = authSlice.actions;
-export default authSlice.reducer; 
+export default authSlice.reducer;

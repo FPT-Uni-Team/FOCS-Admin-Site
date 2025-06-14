@@ -1,0 +1,40 @@
+.filterContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+  .customSearch {
+    width: 100%;
+  }
+  .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .filterForm {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .noHeaderCollapse {
+    :global {
+      .ant-collapse-header {
+        display: none !important;
+      }
+      .ant-collapse-content-box {
+        padding: 0 !important;
+      }
+    }
+  }
+
+  .buttonGroup {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    .formItem {
+      margin: 0;
+    }
+  }
+}
