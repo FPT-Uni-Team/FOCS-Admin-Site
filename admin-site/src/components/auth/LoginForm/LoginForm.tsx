@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './LoginForm.module.scss';
+import React from "react";
+import styles from "./LoginForm.module.scss";
 
 interface LoginFormProps {
   email: string;
@@ -39,7 +39,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
               required
             />
           </div>
-          
+
           <div className={styles.formGroup}>
             <label htmlFor="password" className={styles.label}>
               Password
@@ -54,25 +54,21 @@ const LoginForm: React.FC<LoginFormProps> = ({
               required
             />
           </div>
-          
+
           <button
             type="submit"
             className={styles.loginButton}
             disabled={loading}
           >
             {loading && <span className={styles.loadingSpinner}></span>}
-            {loading ? 'Signing In...' : 'Sign In'}
+            {loading ? "Signing In..." : "Sign In"}
           </button>
-          
-          {error && (
-            <div className={styles.errorMessage}>
-              {error}
-            </div>
-          )}
+
+          {error && <div className={styles.errorMessage}>{error}</div>}
         </form>
       </div>
     </div>
   );
 };
 
-export default LoginForm; 
+export default LoginForm;

@@ -4,6 +4,7 @@ import ContentWrapper from "./ContentWrapper/ContentWrapper";
 import styles from "./MainLayout.module.scss";
 import SiderMenu from "./SiderMenu/SiderMenu";
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
+import { Header } from "antd/es/layout/layout";
 
 const { Sider } = Layout;
 
@@ -35,6 +36,10 @@ const MainLayout: React.FC = () => {
         <SiderMenu />
       </Sider>
       <Layout>
+        <Header
+          style={{ background: colorBgContainer }}
+          className={styles.customHeader}
+        ></Header>
         <ContentWrapper />
       </Layout>
     </Layout>

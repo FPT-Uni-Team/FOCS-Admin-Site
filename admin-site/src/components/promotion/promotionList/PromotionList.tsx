@@ -13,6 +13,8 @@ import {
 } from "../../../type/promotion/promotion";
 import { useAppSelector } from "../../../hooks/redux";
 import { formatDate } from "../../../helper/formatDate";
+import FilterReuse from "../../common/Filter/FilterReuse";
+import type { SelectConfig } from "../../../type/common/common";
 interface PromotionListProps {
   fetchData: (params: PromotionListParams) => void;
 }
@@ -30,29 +32,6 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
     sort_order: "",
     filters: {},
   });
-
-  const handleOnChangeTable = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
-    sorter:
-      | SorterResult<PromotionListDataType>
-      | SorterResult<PromotionListDataType>[]
-  ) => {
-    let sort_by = "";
-    let sort_order = "";
-    if (!Array.isArray(sorter) && sorter.column) {
-      sort_by = sorter.columnKey as string;
-      sort_order = sorter.order === "ascend" ? "asc" : "desc";
-    }
-    const newParams = {
-      ...params,
-      page: pagination.current || 1,
-      page_size: pagination.pageSize || 10,
-      sort_by,
-      sort_order,
-    };
-    setParams(newParams);
-  };
 
   const columns = [
     {
@@ -109,23 +88,120 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
     },
   ];
 
+  const selectConfigs: SelectConfig[] = [
+    {
+      name: "promotion_type",
+      type: "select",
+      label: "Promotion Type",
+      placeholder: "Select Promotion Type",
+      options: [
+        { value: "jack", label: "Jack" },
+        { value: "lucy", label: "Lucy" },
+        { value: "Yiminghe", label: "yiminghe" },
+        { value: "disabled", label: "Disabled", disabled: true },
+      ],
+    },
+    {
+      name: "promotion_status",
+      type: "select",
+      label: "Promotion Status",
+      placeholder: "Select Promotion Status",
+      options: [
+        { value: "jack", label: "Jack" },
+        { value: "lucy", label: "Lucy" },
+        { value: "Yiminghe", label: "yiminghe" },
+        { value: "disabled", label: "Disabled", disabled: true },
+      ],
+    },
+    {
+      name: "date",
+      type: "rangePicker",
+      label: "Promotion Date",
+      placeholder: "Select Promotion Date",
+    },
+  ];
+
+  const formatFilters = (filters: Record<string, unknown>) => {
+    const formatted = { ...filters };
+    if (filters.date && Array.isArray(filters.date)) {
+      formatted.start_date = filters.date[0].toISOString();
+      formatted.start_end = filters.date[1].toISOString();
+      delete formatted.date;
+    }
+    Object.keys(formatted).forEach((key) => {
+      if (formatted[key] === undefined || formatted[key] === null) {
+        delete formatted[key];
+      }
+    });
+    return formatted;
+  };
+
+  const onFilter = (values: Record<string, unknown>) => {
+    const formattedFilters = formatFilters(values);
+    setParams((prev) => ({
+      ...prev,
+      page: 1,
+      filters: formattedFilters as Record<string, string>,
+    }));
+  };
+
+  const onSearch = (value: string) => {
+    setParams((prev) => ({
+      ...prev,
+      page: 1,
+      search_by: "promotion_name",
+      search_value: value,
+    }));
+  };
+
+  const handleOnChangeTable = (
+    pagination: TablePaginationConfig,
+    filters: Record<string, FilterValue | null>,
+    sorter:
+      | SorterResult<PromotionListDataType>
+      | SorterResult<PromotionListDataType>[]
+  ) => {
+    let sort_by = "";
+    let sort_order = "";
+    if (!Array.isArray(sorter) && sorter.column) {
+      sort_by = sorter.columnKey as string;
+      sort_order = sorter.order === "ascend" ? "asc" : "desc";
+    }
+    const newParams = {
+      ...params,
+      page: pagination.current || 1,
+      page_size: pagination.pageSize || 10,
+      sort_by,
+      sort_order,
+    };
+    setParams(newParams);
+  };
+
   useEffect(() => {
+    console.log(params);
     fetchData(params);
   }, [fetchData, params]);
 
   return (
-    <TableReuse
-      columns={columns}
-      dataSource={promotions}
-      loading={loading}
-      onChange={handleOnChangeTable}
-      pagination={{
-        current: params.page,
-        pageSize: params.page_size,
-        total: total,
-      }}
-      rowKey="key"
-    />
+    <div>
+      <FilterReuse
+        onFilter={onFilter}
+        selectConfigs={selectConfigs}
+        onSearch={onSearch}
+      />
+      <TableReuse
+        columns={columns}
+        dataSource={promotions}
+        loading={loading}
+        onChange={handleOnChangeTable}
+        pagination={{
+          current: params.page,
+          pageSize: params.page_size,
+          total: total,
+        }}
+        rowKey="key"
+      />
+    </div>
   );
 };
 
