@@ -98,9 +98,8 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
           >
             <Row gutter={[16, 16]}>
               {selectConfigs.map((select) => (
-                <Col span={24 / selectConfigs.length}>
+                <Col key={select.name} span={24 / selectConfigs.length}>
                   <Form.Item
-                    key={select.name}
                     name={select.name}
                     label={select.label}
                     colon={false}
