@@ -5,6 +5,7 @@ import styles from "./MainLayout.module.scss";
 import SiderMenu from "./SiderMenu/SiderMenu";
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import { Header } from "antd/es/layout/layout";
+import MenuUser from "../../components/auth/MenuUser/MenuUser";
 
 const { Sider } = Layout;
 
@@ -39,7 +40,9 @@ const MainLayout: React.FC = () => {
         <Header
           style={{ background: colorBgContainer }}
           className={styles.customHeader}
-        ></Header>
+        >
+          <MenuUser />
+        </Header>
         <ContentWrapper />
       </Layout>
     </Layout>

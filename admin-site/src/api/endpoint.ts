@@ -4,6 +4,7 @@ const endpoints = {
   },
   auth: {
     login: () => "/me/login",
+    refresh: () => "/me/refresh-token",
   },
   coupon: {
     list: () => `/admin/coupons`,

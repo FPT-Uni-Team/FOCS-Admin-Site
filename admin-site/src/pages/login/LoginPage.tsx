@@ -1,33 +1,34 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginRequest } from '../../store/slices/auth/authSlice';
-import rootReducer from '../../store/rootReducer';
-import LoginForm from '../../components/auth/LoginForm/LoginForm';
-
-type RootState = ReturnType<typeof rootReducer>;
+import { loginRequest } from "../../store/slices/auth/authSlice";
+import LoginForm from "../../components/auth/LoginForm/LoginForm";
+import { useForm } from "antd/es/form/Form";
+import { useAppDispatch } from "../../hooks/redux";
+import useAuth from "../../hooks/useAuth";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  const dispatch = useDispatch();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { loading, error } = useSelector((state: RootState) => state.auth);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const dispatch = useAppDispatch();
+  const { loading, error, isAuthenticated } = useAuth();
+  const [form] = useForm();
+  const navigate = useNavigate();
+  const handleSubmit = () => {
+    const values = form.getFieldsValue();
+    const { email, password } = values;
     dispatch(loginRequest({ email, password }));
   };
-
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
   return (
     <LoginForm
-      email={email}
-      password={password}
+      form={form}
       loading={loading}
       error={error}
-      onEmailChange={setEmail}
-      onPasswordChange={setPassword}
       onSubmit={handleSubmit}
     />
   );
 };
 
-export default LoginPage; 
+export default LoginPage;

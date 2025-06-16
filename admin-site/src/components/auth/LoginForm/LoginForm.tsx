@@ -1,72 +1,68 @@
 import React from "react";
+import { Form, Input, Button, Alert, Card, type FormInstance } from "antd";
 import styles from "./LoginForm.module.scss";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 interface LoginFormProps {
-  email: string;
-  password: string;
   loading: boolean;
   error: string | null;
-  onEmailChange: (email: string) => void;
-  onPasswordChange: (password: string) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  form?: FormInstance;
+  onSubmit: () => void;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({
-  email,
-  password,
   loading,
   error,
-  onEmailChange,
-  onPasswordChange,
   onSubmit,
+  form,
 }) => {
   return (
-    <div className={styles.loginContainer}>
-      <div className={styles.loginCard}>
-        <h2 className={styles.loginTitle}>Welcome Back</h2>
-        <form onSubmit={onSubmit}>
-          <div className={styles.formGroup}>
-            <label htmlFor="email" className={styles.label}>
-              Email Address
-            </label>
-            <input
-              id="email"
-              type="email"
-              className={styles.input}
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => onEmailChange(e.target.value)}
-              required
-            />
+    <div className={styles.loginFormContainer}>
+      <Card title="Chào mừng trở lại" className={styles.loginCard}>
+        <Form layout="vertical" onFinish={onSubmit} form={form}>
+          <div className={styles.formFields}>
+            <Form.Item
+              name="email"
+              rules={[
+                { required: true, message: "Vui lòng nhập email!" },
+                { type: "email", message: "Email không hợp lệ!" },
+              ]}
+            >
+              <Input
+                type="email"
+                placeholder="Nhập email của bạn"
+                prefix={<UserOutlined />}
+              />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                { required: true, message: "Vui lòng nhập mật khẩu!" },
+                { min: 6, message: "Mật khẩu tối thiểu 6 ký tự!" },
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="Nhập mật khẩu"
+              />
+            </Form.Item>
           </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="password" className={styles.label}>
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              className={styles.input}
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => onPasswordChange(e.target.value)}
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className={styles.loginButton}
-            disabled={loading}
-          >
-            {loading && <span className={styles.loadingSpinner}></span>}
-            {loading ? "Signing In..." : "Sign In"}
-          </button>
-
-          {error && <div className={styles.errorMessage}>{error}</div>}
-        </form>
-      </div>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              loading={loading}
+              disabled={loading}
+              className={styles.loginButton}
+            >
+              {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+            </Button>
+          </Form.Item>
+          {error && <Alert message={error} type="error" showIcon />}
+        </Form>
+      </Card>
     </div>
   );
 };
