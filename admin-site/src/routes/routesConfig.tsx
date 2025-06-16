@@ -20,6 +20,7 @@ export interface AppRoute {
   icon?: ReactNode;
   hidden?: boolean;
   children?: AppRoute[];
+  isNotLayout?: boolean;
 }
 
 export const routes: AppRoute[] = [
@@ -48,6 +49,7 @@ export const routes: AppRoute[] = [
     component: LoginPage,
     label: "Login",
     hidden: true,
+    isNotLayout: true,
   },
   {
     path: "/coupons",
