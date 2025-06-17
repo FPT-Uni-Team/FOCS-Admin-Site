@@ -1,0 +1,20 @@
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  .titleContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    .titleText {
+      margin-bottom: 0px;
+      line-height: initial;
+    }
+  }
+  .actionButtons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

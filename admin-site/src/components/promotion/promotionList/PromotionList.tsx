@@ -15,6 +15,7 @@ import { useAppSelector } from "../../../hooks/redux";
 import { formatDate } from "../../../helper/formatDate";
 import FilterReuse from "../../common/Filter/FilterReuse";
 import type { SelectConfig } from "../../../type/common/common";
+import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
 interface PromotionListProps {
   fetchData: (params: PromotionListParams) => void;
 }
@@ -178,7 +179,6 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
   };
 
   useEffect(() => {
-    console.log(params);
     fetchData(params);
   }, [fetchData, params]);
 
@@ -189,18 +189,20 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
         selectConfigs={selectConfigs}
         onSearch={onSearch}
       />
-      <TableReuse
-        columns={columns}
-        dataSource={promotions}
-        loading={loading}
-        onChange={handleOnChangeTable}
-        pagination={{
-          current: params.page,
-          pageSize: params.page_size,
-          total: total,
-        }}
-        rowKey="key"
-      />
+      <ContentInner>
+        <TableReuse
+          columns={columns}
+          dataSource={promotions}
+          loading={loading}
+          onChange={handleOnChangeTable}
+          pagination={{
+            current: params.page,
+            pageSize: params.page_size,
+            total: total,
+          }}
+          rowKey="key"
+        />
+      </ContentInner>
     </div>
   );
 };
