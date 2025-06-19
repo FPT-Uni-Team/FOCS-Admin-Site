@@ -1,16 +1,5 @@
-import TitleLine from "../../common/Title/TitleLine";
-
 const PromotionDetail = () => {
-  return (
-    <TitleLine
-      title="huỳnh"
-      status="active"
-      hasMoreAction
-      onAction={() => {}}
-      onEdit={() => {}}
-      isActive={false}
-    />
-  );
+  return <></>;
 };
 
 export default PromotionDetail;

@@ -42,15 +42,21 @@ const promotionSlice = createSlice({
     },
     fetchPromotionsSuccess: (
       state,
-      action: PayloadAction<PromotionListDataType[]>
+      action: PayloadAction<{
+        promotions: PromotionListDataType[];
+        total: number;
+      }>
     ) => {
       state.loading = false;
-      state.promotions = action.payload;
+      state.promotions = action.payload.promotions;
       state.error = null;
+      state.total = action.payload.total;
     },
     fetchPromotionsFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
+      state.promotions = [];
+      state.total = 0;
     },
   },
 });

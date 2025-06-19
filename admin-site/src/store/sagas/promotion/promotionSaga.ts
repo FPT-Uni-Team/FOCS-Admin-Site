@@ -9,8 +9,9 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type { PromotionListParams } from "../../../type/promotion/promotion";
 import { objectMapper } from "../../../helper/mapperObject";
 import { fieldMap } from "../../../utils/objectMapper/promotion";
+import type { AxiosResponse } from "axios";
 
-export interface PromotionListResponse {
+interface PromotionListResponse {
   total_count: number;
   page_index: number;
   page_size: number;
@@ -21,14 +22,12 @@ const { getListPromtions } = promotionService;
 
 function* fetchPromotionList(
   action: PayloadAction<PromotionListParams>
-): Generator<Effect, void, PromotionListResponse> {
+): Generator<Effect, void, AxiosResponse<PromotionListResponse>> {
   try {
-    const response: PromotionListResponse = yield call(() =>
-      getListPromtions(action.payload)
-    );
-    const dataMapped = objectMapper(response.items, fieldMap);
-    console.log("dataMapped", dataMapped);
-    yield put(fetchPromotionsSuccess(dataMapped));
+    const response = yield call(() => getListPromtions(action.payload));
+    const dataMapped = objectMapper(response.data.items, fieldMap);
+    const total = response.data.total_count;
+    yield put(fetchPromotionsSuccess({ promotions: dataMapped, total: total }));
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : "Failed to fetch users";

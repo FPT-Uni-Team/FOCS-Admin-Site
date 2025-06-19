@@ -13,7 +13,6 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
   selectConfigs = [],
   onSearch,
 }) => {
-  const { Panel } = Collapse;
   const [showForm, setShowForm] = useState(false);
   const [form] = Form.useForm();
   const [searchValue, setSearchValue] = useState("");
@@ -88,42 +87,47 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
         activeKey={showForm ? "1" : undefined}
         ghost
         className={styles.noHeaderCollapse}
-      >
-        <Panel key="1" showArrow={false} header={null}>
-          <Form
-            form={form}
-            layout="vertical"
-            onFinish={handleFinish}
-            className={styles.filterForm}
-          >
-            <Row gutter={[16, 16]}>
-              {selectConfigs.map((select) => (
-                <Col span={24 / selectConfigs.length}>
-                  <Form.Item
-                    key={select.name}
-                    name={select.name}
-                    label={select.label}
-                    colon={false}
-                    className={styles.customSearch}
-                  >
-                    {renderField(select)}
+        items={[
+          {
+            key: "1",
+            label: null,
+            showArrow: false,
+            children: (
+              <Form
+                form={form}
+                layout="vertical"
+                onFinish={handleFinish}
+                className={styles.filterForm}
+              >
+                <Row gutter={[16, 16]}>
+                  {selectConfigs.map((select) => (
+                    <Col span={24 / selectConfigs.length} key={select.name}>
+                      <Form.Item
+                        name={select.name}
+                        label={select.label}
+                        colon={false}
+                        className={styles.customSearch}
+                      >
+                        {renderField(select)}
+                      </Form.Item>
+                    </Col>
+                  ))}
+                </Row>
+                <div className={styles.buttonGroup}>
+                  <Form.Item className={styles.formItem}>
+                    <Button onClick={handleReset}>Xóa</Button>
                   </Form.Item>
-                </Col>
-              ))}
-            </Row>
-            <div className={styles.buttonGroup}>
-              <Form.Item className={styles.formItem}>
-                <Button onClick={handleReset}>Xóa</Button>
-              </Form.Item>
-              <Form.Item className={styles.formItem}>
-                <Button type="primary" htmlType="submit">
-                  Lọc
-                </Button>
-              </Form.Item>
-            </div>
-          </Form>
-        </Panel>
-      </Collapse>
+                  <Form.Item className={styles.formItem}>
+                    <Button type="primary" htmlType="submit">
+                      Lọc
+                    </Button>
+                  </Form.Item>
+                </div>
+              </Form>
+            ),
+          },
+        ]}
+      />
     </div>
   );
 };

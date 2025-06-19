@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Dropdown, Menu, Typography } from "antd";
+import { Button, Dropdown, Typography } from "antd";
 import { DownOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import styles from "./TitleLine.module.scss";
 import StatusTag from "../Status/StatusTag";
@@ -23,16 +23,14 @@ const TitleLine: React.FC<TitleProps> = ({
   isActive,
   onCreate,
 }) => {
-  const moreMenu = (
-    <Menu
-      items={[
-        {
-          key: "1",
-          label: "View History",
-        },
-      ]}
-    />
-  );
+  const moreMenu = {
+    items: [
+      {
+        key: "1",
+        label: "View History",
+      },
+    ],
+  };
 
   return (
     <div className={styles.titleWrapper}>
@@ -44,7 +42,7 @@ const TitleLine: React.FC<TitleProps> = ({
       </div>
       <div className={styles.actionButtons}>
         {hasMoreAction && (
-          <Dropdown overlay={moreMenu} trigger={["click"]}>
+          <Dropdown menu={moreMenu} trigger={["click"]}>
             <Button type="default" icon={<DownOutlined />} iconPosition="end">
               More
             </Button>

@@ -16,6 +16,7 @@ import { formatDate } from "../../../helper/formatDate";
 import FilterReuse from "../../common/Filter/FilterReuse";
 import type { SelectConfig } from "../../../type/common/common";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
+import CustomLink from "../../common/Link/CustomLink";
 interface PromotionListProps {
   fetchData: (params: PromotionListParams) => void;
 }
@@ -24,6 +25,7 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
   const { loading, promotions, total } = useAppSelector(
     (state) => state.promotion
   );
+
   const [params, setParams] = useState<PromotionListParams>({
     page: 1,
     page_size: 10,
@@ -44,6 +46,11 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
         "descend" as SortOrder,
         "ascend" as SortOrder,
       ],
+      render: (text: string) => {
+        return (
+          <CustomLink title={text} href={`/promotions/${text}`} key={text} />
+        );
+      },
       sorter: true,
     },
     {
@@ -150,7 +157,7 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
     setParams((prev) => ({
       ...prev,
       page: 1,
-      search_by: "promotion_name",
+      search_by: "title",
       search_value: value,
     }));
   };
@@ -199,6 +206,8 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
             current: params.page,
             pageSize: params.page_size,
             total: total,
+            showTotal: (total) => `Total ${total} items`,
+            showSizeChanger: true,
           }}
           rowKey="key"
         />
