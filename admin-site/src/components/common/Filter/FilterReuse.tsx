@@ -67,8 +67,9 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
             allowClear
             className={styles.customSearch}
             placeholder="Tìm kiếm theo tên"
+            value={searchValue}
             suffix={<SearchOutlined onClick={() => onSearch(searchValue)} />}
-            onChange={(e) => setSearchValue(e.target.value.trim())}
+            onChange={(e) => setSearchValue(e.target.value)}
             onPressEnter={() => onSearch(searchValue)}
             onClear={() => {
               setSearchValue("");
@@ -98,9 +99,8 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
           >
             <Row gutter={[16, 16]}>
               {selectConfigs.map((select) => (
-                <Col span={24 / selectConfigs.length}>
+                <Col span={24 / selectConfigs.length} key={select.name}>
                   <Form.Item
-                    key={select.name}
                     name={select.name}
                     label={select.label}
                     colon={false}

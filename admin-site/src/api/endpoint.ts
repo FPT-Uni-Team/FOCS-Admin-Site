@@ -7,8 +7,14 @@ const endpoints = {
     refresh: () => "/me/refresh-token",
   },
   coupon: {
-    list: () => `/admin/coupons`,
+    list: (storeId: string) => `/admin/coupons/${storeId}`,
     detail: (id: string) => `/admin/coupon/${id}`,
+    create: () => `/admin/coupon`,
+    update: (id: string) => `/admin/coupon/${id}`,
+    delete: (id: string) => `/admin/coupon/${id}`,
+    trackUsage: (id: string) => `/admin/coupon/${id}/track-usage`,
+    setStatus: (id: string) => `/admin/coupon/${id}/status`,
+    assignPromotion: (storeId: string) => `/admin/coupon/${storeId}/assign-promotion`,
   },
 };
 
