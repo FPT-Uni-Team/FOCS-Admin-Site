@@ -20,14 +20,14 @@ export interface PromotionListDataType {
 }
 
 export const PromotionTypeLabel: Record<PromotionType, string> = {
-  [PromotionType.Percentage]: "Giảm theo phần trăm",
-  [PromotionType.FixedAmount]: "Giảm số tiền cố định",
-  [PromotionType.FreeItem]: "Tặng sản phẩm",
-  [PromotionType.FreeShipping]: "Miễn phí vận chuyển",
-  [PromotionType.BuyXGetY]: "Mua X tặng Y",
-  [PromotionType.TimeBased]: "Khuyến mãi theo khung giờ",
-  [PromotionType.FirstTimeBuyer]: "Dành cho khách hàng lần đầu",
-  [PromotionType.Loyalty]: "Khuyến mãi khách hàng thân thiết",
+  [PromotionType.Percentage]: "Percentage Discount",
+  [PromotionType.FixedAmount]: "Fixed Amount Discount",
+  [PromotionType.FreeItem]: "Free Item",
+  [PromotionType.FreeShipping]: "Free Shipping",
+  [PromotionType.BuyXGetY]: "Buy X Get Y",
+  [PromotionType.TimeBased]: "Time-Based Promotion",
+  [PromotionType.FirstTimeBuyer]: "First Time Buyer",
+  [PromotionType.Loyalty]: "Loyalty Promotion",
 };
 
 export interface PromotionListParams {

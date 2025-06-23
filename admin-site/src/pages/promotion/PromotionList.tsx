@@ -1,3 +1,4 @@
+import TitleLine from "../../components/common/Title/TitleLine";
 import PromotionList from "../../components/promotion/promotionList/PromotionList";
 import { useAppDispatch } from "../../hooks/redux";
 import { fetchPromotionsStart } from "../../store/slices/promotion/promotionListSlice";
@@ -8,7 +9,12 @@ const PromotionListPage = () => {
   const fetchData = async (params: PromotionListParams) => {
     await dispatch(fetchPromotionsStart(params));
   };
-  return <PromotionList fetchData={fetchData} />;
+  return (
+    <>
+      <TitleLine title="Promotions List" onCreate={() => {}} />
+      <PromotionList fetchData={fetchData} />
+    </>
+  );
 };
 
 export default PromotionListPage;

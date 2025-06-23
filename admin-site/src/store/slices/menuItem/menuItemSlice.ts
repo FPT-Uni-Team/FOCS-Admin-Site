@@ -1,19 +1,18 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type {
-  PromotionListDataType,
-  PromotionListParams,
-} from "../../../type/promotion/promotion";
+import type { PromotionListParams } from "../../../type/promotion/promotion";
+import type { MenuListDataType } from "../../../type/menu/menu";
+import type { ListPageParams } from "../../../type/common/common";
 
-interface PromotionListState {
-  promotions: PromotionListDataType[];
+interface MenuItemListState {
+  menuItems: MenuListDataType[];
   loading: boolean;
   error: string | null;
   params: PromotionListParams;
   total: number;
 }
 
-const initialState: PromotionListState = {
-  promotions: [],
+const initialState: MenuItemListState = {
+  menuItems: [],
   loading: false,
   error: null,
   params: {
@@ -28,42 +27,42 @@ const initialState: PromotionListState = {
   total: 0,
 };
 
-const promotionSlice = createSlice({
-  name: "promotionList",
+const menuItemSlice = createSlice({
+  name: "menuItemList",
   initialState,
   reducers: {
-    fetchPromotionsStart: (
+    fetchMenuItemsStart: (
       state,
-      action: PayloadAction<PromotionListParams | undefined>
+      action: PayloadAction<ListPageParams | undefined>
     ) => {
       state.loading = true;
       state.error = null;
       state.params = action.payload || initialState.params;
     },
-    fetchPromotionsSuccess: (
+    fetchMenuItemsSuccess: (
       state,
       action: PayloadAction<{
-        promotions: PromotionListDataType[];
+        menuItems: MenuListDataType[];
         total: number;
       }>
     ) => {
       state.loading = false;
-      state.promotions = action.payload.promotions;
+      state.menuItems = action.payload.menuItems;
       state.error = null;
       state.total = action.payload.total;
     },
-    fetchPromotionsFailure: (state, action: PayloadAction<string>) => {
+    fetchMenuItemsFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
-      state.promotions = [];
+      state.menuItems = [];
       state.total = 0;
     },
   },
 });
 
 export const {
-  fetchPromotionsStart,
-  fetchPromotionsSuccess,
-  fetchPromotionsFailure,
-} = promotionSlice.actions;
-export default promotionSlice.reducer;
+  fetchMenuItemsStart,
+  fetchMenuItemsSuccess,
+  fetchMenuItemsFailure,
+} = menuItemSlice.actions;
+export default menuItemSlice.reducer;

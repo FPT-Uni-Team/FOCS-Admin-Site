@@ -1,4 +1,4 @@
-import { Menu, Dropdown } from "antd";
+import { Avatar, Dropdown, type MenuProps } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { logout } from "../../../store/slices/auth/authSlice";
 import { parseJwt } from "../../../helper/parseJWT";
@@ -13,26 +13,30 @@ const MenuUser = () => {
   const userInfo = parseJwt(accessToken);
   const name = userInfo?.name || "User";
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="username" disabled>
-        👤 {name}
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="logout" onClick={() => dispatch(logout())}>
-        🚪 Logout
-      </Menu.Item>
-    </Menu>
-  );
+  const items: MenuProps["items"] = [
+    {
+      key: "username",
+      label: <>👤 {name}</>,
+      disabled: true,
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "logout",
+      label: "🚪 Logout",
+      onClick: () => dispatch(logout()),
+    },
+  ];
 
   return (
     <Dropdown
-      overlay={menu}
+      menu={{ items }}
       placement="bottomRight"
       className={styles.customDropdown}
       trigger={["click"]}
     >
-      {name}
+      <Avatar shape="circle">{name}</Avatar>
     </Dropdown>
   );
 };

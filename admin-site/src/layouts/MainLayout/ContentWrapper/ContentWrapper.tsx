@@ -8,9 +8,7 @@ const { Content } = Layout;
 const ContentWrapper: React.FC = () => {
   return (
     <Content className={styles.contentWrapper}>
-      <div className={styles.contentInner}>
-        <Outlet />
-      </div>
+      <Outlet />
     </Content>
   );
 };
