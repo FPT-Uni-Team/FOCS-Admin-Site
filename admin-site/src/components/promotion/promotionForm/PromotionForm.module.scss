@@ -1,0 +1,51 @@
+.flexClass {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.customTableSelect {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  .titleSelectCustom {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+.marginItem {
+  margin-top: 10px;
+}
+.conditionApplicationBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  .conditionBlock,
+  .applicationBlock {
+    border: 1px solid #e2e2e2;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .textExample {
+      font-size: 12px;
+      color: #a8a6a6;
+      margin: 6px 0 12px;
+    }
+    .textExampleBold {
+      color: #423e3e;
+      font-weight: 600;
+    }
+    .textInputLabelDisabled {
+      color: black;
+    }
+  }
+  .labelCustom {
+    font-weight: 500;
+    color: black;
+    margin: 6px 0 6px;
+  }
+}

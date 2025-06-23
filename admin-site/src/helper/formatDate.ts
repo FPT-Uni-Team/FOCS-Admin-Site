@@ -5,7 +5,7 @@ type GetFieldValue = FormInstance["getFieldValue"];
 
 interface DateValidationOptions {
   getFieldValue: GetFieldValue;
-  fieldName?: string;
+  fieldName?: string | string[];
   message?: string;
 }
 

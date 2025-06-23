@@ -12,6 +12,11 @@ interface TitleProps {
   hasMoreAction?: boolean;
   isActive?: boolean;
   onCreate?: () => void;
+  step?: number;
+  totalSteps?: number;
+  onNext?: () => void;
+  onPrevious?: () => void;
+  isDisableCreate?: boolean;
 }
 
 const TitleLine: React.FC<TitleProps> = ({
@@ -22,6 +27,11 @@ const TitleLine: React.FC<TitleProps> = ({
   hasMoreAction,
   isActive,
   onCreate,
+  step,
+  totalSteps,
+  onNext,
+  onPrevious,
+  isDisableCreate,
 }) => {
   const moreMenu = {
     items: [
@@ -40,6 +50,7 @@ const TitleLine: React.FC<TitleProps> = ({
         </Typography.Title>
         {status && <StatusTag status={status} />}
       </div>
+
       <div className={styles.actionButtons}>
         {hasMoreAction && (
           <Dropdown menu={moreMenu} trigger={["click"]}>
@@ -59,16 +70,23 @@ const TitleLine: React.FC<TitleProps> = ({
           </Button>
         )}
         {onAction && (
-          <Button
-            onClick={onAction}
-            color={isActive ? "danger" : "green"}
-            variant="outlined"
-          >
+          <Button onClick={onAction} danger={isActive} variant="outlined">
             {isActive ? "Deactivate" : "Reactivate"}
           </Button>
         )}
+        {typeof step === "number" && totalSteps && step && totalSteps > 1 && (
+          <>
+            {step > 1 && <Button onClick={onPrevious}>Previous</Button>}
+            {step < totalSteps && <Button onClick={onNext}>Next</Button>}
+          </>
+        )}
         {onCreate && (
-          <Button icon={<PlusOutlined />} type="primary">
+          <Button
+            icon={<PlusOutlined />}
+            type="primary"
+            onClick={onCreate}
+            disabled={isDisableCreate}
+          >
             Create
           </Button>
         )}

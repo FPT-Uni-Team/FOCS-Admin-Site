@@ -12,8 +12,9 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
   onFilter,
   selectConfigs = [],
   onSearch,
+  isShowFilter = false,
 }) => {
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(isShowFilter);
   const [form] = Form.useForm();
   const [searchValue, setSearchValue] = useState("");
   const { RangePicker } = DatePicker;
@@ -74,12 +75,14 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
               onSearch("");
             }}
           />
-          <Button
-            icon={<FilterOutlined />}
-            onClick={() => setShowForm((prev) => !prev)}
-          >
-            Lọc
-          </Button>
+          {!isShowFilter && (
+            <Button
+              icon={<FilterOutlined />}
+              onClick={() => setShowForm((prev) => !prev)}
+            >
+              Lọc
+            </Button>
+          )}
         </Col>
       </Row>
 
@@ -97,7 +100,9 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
                 form={form}
                 layout="vertical"
                 onFinish={handleFinish}
-                className={styles.filterForm}
+                className={
+                  !isShowFilter ? styles.filterForm : styles.filterFormShow
+                }
               >
                 <Row gutter={[16, 16]}>
                   {selectConfigs.map((select) => (
@@ -115,11 +120,11 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
                 </Row>
                 <div className={styles.buttonGroup}>
                   <Form.Item className={styles.formItem}>
-                    <Button onClick={handleReset}>Xóa</Button>
+                    <Button onClick={handleReset}>Clear</Button>
                   </Form.Item>
                   <Form.Item className={styles.formItem}>
                     <Button type="primary" htmlType="submit">
-                      Lọc
+                      Filter
                     </Button>
                   </Form.Item>
                 </div>
