@@ -156,7 +156,7 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
 
   const handleOnChangeTable = (
     pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
+    _filters: Record<string, FilterValue | null>,
     sorter:
       | SorterResult<PromotionListDataType>
       | SorterResult<PromotionListDataType>[]
@@ -178,7 +178,6 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
   };
 
   useEffect(() => {
-    console.log(params);
     fetchData(params);
   }, [fetchData, params]);
 

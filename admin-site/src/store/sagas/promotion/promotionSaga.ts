@@ -27,7 +27,6 @@ function* fetchPromotionList(
       getListPromtions(action.payload)
     );
     const dataMapped = objectMapper(response.items, fieldMap);
-    console.log("dataMapped", dataMapped);
     yield put(fetchPromotionsSuccess(dataMapped));
   } catch (error: unknown) {
     const errorMessage =
