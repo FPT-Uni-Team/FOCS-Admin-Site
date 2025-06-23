@@ -15,6 +15,7 @@ const PromotionDetailPage = () => {
       ["step1", "promotionName"],
       ["step1", "start_date"],
       ["step1", "promotionType"],
+      ["step1", "end_date"],
     ],
     2: [],
   };
@@ -35,7 +36,9 @@ const PromotionDetailPage = () => {
     form
       .validateFields()
       .then(() => {
-        handleModifyDataPromotion();
+        const payloadData = handleModifyDataPromotion();
+        console.log("payloadData", payloadData);
+        dispatch(createPromotionStart(payloadData));
       })
       .catch((error) => {
         console.log("Validation failed:", error);
@@ -49,7 +52,7 @@ const PromotionDetailPage = () => {
   const handleModifyDataPromotion = () => {
     const allFormValues = form.getFieldsValue();
     console.log("allFormValues", allFormValues);
-    const dataPayload = {
+    return {
       title: allFormValues?.step1?.promotionName,
       description: allFormValues?.step1?.description,
       start_date: allFormValues?.step1?.start_date?.toISOString(),
@@ -69,18 +72,18 @@ const PromotionDetailPage = () => {
       promotion_type: allFormValues?.step1?.promotionType,
       discount_value: checkLegitValue(allFormValues?.step2?.discount_value),
       is_active: true,
-      // accept_for_items: ["3fa85f64-5717-4562-b3fc-2c963f66afa6"],
-      // promotion_item_condition: {
-      //   id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      //   buy_item_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      //   buy_quantity: 2147483647,
-      //   get_item_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      //   get_quantity: 2147483647,
-      // },
+      accept_for_items: allFormValues?.step2?.menu_item_select_discount,
+      promotion_item_condition:
+        allFormValues?.step1?.promotionType === 4
+          ? {
+              buy_item_id: allFormValues?.step2?.menu_item_select_buyX?.[0],
+              buy_quantity: checkLegitValue(allFormValues?.step2?.buy_x),
+              get_item_id: allFormValues?.step2?.menu_item_select_getY?.[0],
+              get_quantity: checkLegitValue(allFormValues?.step2?.get_y),
+            }
+          : undefined,
       store_id: "550e8400-e29b-41d4-a716-446655440000",
     };
-    dispatch(createPromotionStart(dataPayload));
-    console.log("dataPayload", dataPayload);
   };
 
   return (
