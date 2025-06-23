@@ -19,7 +19,7 @@ import {
   PromotionType,
   PromotionTypeLabel,
 } from "../../../type/promotion/promotion";
-import { useState, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import StepBlock from "../../common/Step/StepBlock";
 import { PlusOutlined } from "@ant-design/icons";
 import ModalMenuItem from "../../common/modal/ModalMenuItem";
@@ -74,8 +74,6 @@ const PromotionForm: FC<Props> = ({ mode, form, step }) => {
   const promotionScope = Form.useWatch(["step2", "promotion_scope"], form);
   const useCoupon = Form.useWatch(["step1", "use_coupon"], form);
   const promotionType = Form.useWatch(["step1", "promotionType"], form);
-  console.log("promotionType", promotionType);
-
   const [showModalMenuItem, setShowModalMenuItem] = useState<boolean>(false);
   const [showModalCoupon, setShowModalCoupon] = useState<boolean>(false);
   const [showModalBuyXGetY, setShowModalBuyXGetY] = useState({
@@ -114,6 +112,9 @@ const PromotionForm: FC<Props> = ({ mode, form, step }) => {
           step1: {
             use_coupon: false,
             use_other_promotion: false,
+          },
+          step2: {
+            menu_item_select_discount: [],
           },
         }}
       >
@@ -170,6 +171,10 @@ const PromotionForm: FC<Props> = ({ mode, form, step }) => {
                 label="Promotion End Date"
                 dependencies={[["step1", "start_date"]]}
                 rules={[
+                  {
+                    required: true,
+                    message: "Please select end date!",
+                  },
                   validateDate({
                     getFieldValue: form.getFieldValue,
                     fieldName: ["step1", "start_date"],
@@ -533,151 +538,223 @@ const PromotionForm: FC<Props> = ({ mode, form, step }) => {
                     </Col>
                   </Row>
                   {showMenuItemSelection && (
-                    <Row>
-                      <div className={styles.customTableSelect}>
-                        <div className={styles.titleSelectCustom}>
-                          <Typography.Title level={5}>
-                            Select menu item
-                          </Typography.Title>
-                          <Button
-                            icon={<PlusOutlined />}
-                            onClick={() => setShowModalMenuItem(true)}
-                          >
-                            Select
-                          </Button>
-                        </div>
-                        {showModalMenuItem && (
-                          <ModalMenuItem
-                            open={showModalMenuItem}
-                            width={1000}
-                            onCancel={() => setShowModalMenuItem(false)}
-                            selectedData={dataMenuItemSeleted.items}
-                            selectedDataKey={dataMenuItemSeleted.keys}
-                            handleSubmitModal={(items, keys) => {
-                              setShowModalMenuItem(false);
-                              setDataMenuItemSeleted({
-                                keys,
-                                items,
-                              });
+                    <Form.Item
+                      name={["step2", "menu_item_select_discount"]}
+                      rules={[
+                        {
+                          validator: (_, value) => {
+                            if (!value || value.length <= 0) {
+                              return Promise.reject("Please select menu item");
+                            }
+                            return Promise.resolve();
+                          },
+                        },
+                      ]}
+                    >
+                      <Row>
+                        <div className={styles.customTableSelect}>
+                          <div className={styles.titleSelectCustom}>
+                            <Typography.Title level={5}>
+                              Select menu item
+                            </Typography.Title>
+                            <Button
+                              icon={<PlusOutlined />}
+                              onClick={() => setShowModalMenuItem(true)}
+                            >
+                              Select
+                            </Button>
+                          </div>
+                          {showModalMenuItem && (
+                            <ModalMenuItem
+                              open={showModalMenuItem}
+                              width={1000}
+                              onCancel={() => setShowModalMenuItem(false)}
+                              selectedData={dataMenuItemSeleted.items}
+                              selectedDataKey={dataMenuItemSeleted.keys}
+                              handleSubmitModal={(items, keys) => {
+                                setShowModalMenuItem(false);
+                                setDataMenuItemSeleted({
+                                  keys,
+                                  items,
+                                });
+                                form.setFieldsValue({
+                                  step2: {
+                                    menu_item_select_discount: keys,
+                                  },
+                                });
+                                form.validateFields([
+                                  ["step2", "menu_item_select_discount"],
+                                ]);
+                              }}
+                            />
+                          )}
+                          <TableReuse
+                            columns={columnsMenuItemNoSort}
+                            dataSource={dataMenuItemSeleted.items}
+                            rowKey="menuId"
+                            pagination={{
+                              pageSize: 5,
                             }}
                           />
-                        )}
-                        <TableReuse
-                          columns={columnsMenuItemNoSort}
-                          dataSource={dataMenuItemSeleted.items}
-                          rowKey="menuId"
-                        />
-                      </div>
-                    </Row>
+                        </div>
+                      </Row>
+                    </Form.Item>
                   )}
                 </div>
               ) : (
                 <>
-                  <div className={styles.customTableSelect}>
-                    <div className={styles.titleSelectCustom}>
-                      <Typography.Title level={5}>
-                        Select buy X menu item
-                      </Typography.Title>
-                      <Button
-                        icon={<PlusOutlined />}
-                        onClick={() =>
-                          setShowModalBuyXGetY({
-                            buyX: true,
-                            getY: false,
-                          })
-                        }
-                      >
-                        Select
-                      </Button>
-                    </div>
-                    {showModalBuyXGetY.buyX && (
-                      <ModalMenuItem
-                        open={showModalBuyXGetY.buyX}
-                        width={1000}
-                        onCancel={() =>
-                          setShowModalBuyXGetY({
-                            buyX: false,
-                            getY: false,
-                          })
-                        }
-                        selectedData={dataMenuItemSeletedBuyXGetY.BuyX.items}
-                        selectedDataKey={dataMenuItemSeletedBuyXGetY.BuyX.keys}
-                        handleSubmitModal={(items, keys) => {
-                          setShowModalBuyXGetY({
-                            buyX: false,
-                            getY: false,
-                          });
-                          setDataMenuItemSeletedBuyXGetY({
-                            ...dataMenuItemSeletedBuyXGetY,
-                            BuyX: {
-                              items,
-                              keys,
-                            },
-                          });
-                        }}
-                        singleSelectMode={true}
+                  <Form.Item
+                    name={["step2", "menu_item_select_buyX"]}
+                    rules={[
+                      {
+                        validator: (_, value) => {
+                          if (!value || value.length <= 0) {
+                            return Promise.reject("Please select menu item!");
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                  >
+                    <div className={styles.customTableSelect}>
+                      <div className={styles.titleSelectCustom}>
+                        <Typography.Title level={5}>
+                          Select buy X menu item
+                        </Typography.Title>
+                        <Button
+                          icon={<PlusOutlined />}
+                          onClick={() =>
+                            setShowModalBuyXGetY({
+                              buyX: true,
+                              getY: false,
+                            })
+                          }
+                        >
+                          Select
+                        </Button>
+                      </div>
+                      {showModalBuyXGetY.buyX && (
+                        <ModalMenuItem
+                          open={showModalBuyXGetY.buyX}
+                          width={1000}
+                          onCancel={() =>
+                            setShowModalBuyXGetY({
+                              buyX: false,
+                              getY: false,
+                            })
+                          }
+                          selectedData={dataMenuItemSeletedBuyXGetY.BuyX.items}
+                          selectedDataKey={
+                            dataMenuItemSeletedBuyXGetY.BuyX.keys
+                          }
+                          handleSubmitModal={(items, keys) => {
+                            setShowModalBuyXGetY({
+                              buyX: false,
+                              getY: false,
+                            });
+                            setDataMenuItemSeletedBuyXGetY({
+                              ...dataMenuItemSeletedBuyXGetY,
+                              BuyX: {
+                                items,
+                                keys,
+                              },
+                            });
+                            form.setFieldsValue({
+                              step2: {
+                                menu_item_select_buyX: keys,
+                              },
+                            });
+                            form.validateFields([
+                              ["step2", "menu_item_select_buyX"],
+                            ]);
+                          }}
+                          singleSelectMode={true}
+                        />
+                      )}
+                      <TableReuse
+                        columns={columnsMenuItemNoSort}
+                        dataSource={dataMenuItemSeletedBuyXGetY.BuyX.items}
+                        rowKey="menuId"
+                        pagination={false}
                       />
-                    )}
-                    <TableReuse
-                      columns={columnsMenuItemNoSort}
-                      dataSource={dataMenuItemSeletedBuyXGetY.BuyX.items}
-                      rowKey="menuId"
-                      pagination={false}
-                    />
-                  </div>
-
-                  <div className={styles.customTableSelect}>
-                    <div className={styles.titleSelectCustom}>
-                      <Typography.Title level={5}>
-                        Select get Y menu item
-                      </Typography.Title>
-                      <Button
-                        icon={<PlusOutlined />}
-                        onClick={() =>
-                          setShowModalBuyXGetY({
-                            buyX: false,
-                            getY: true,
-                          })
-                        }
-                      >
-                        Select
-                      </Button>
                     </div>
-                    {showModalBuyXGetY.getY && (
-                      <ModalMenuItem
-                        open={showModalBuyXGetY.getY}
-                        width={1000}
-                        onCancel={() =>
-                          setShowModalBuyXGetY({
-                            buyX: false,
-                            getY: false,
-                          })
-                        }
-                        selectedData={dataMenuItemSeletedBuyXGetY.GetY.items}
-                        selectedDataKey={dataMenuItemSeletedBuyXGetY.GetY.keys}
-                        handleSubmitModal={(items, keys) => {
-                          setShowModalBuyXGetY({
-                            buyX: false,
-                            getY: false,
-                          });
-                          setDataMenuItemSeletedBuyXGetY({
-                            ...dataMenuItemSeletedBuyXGetY,
-                            GetY: {
-                              items,
-                              keys,
-                            },
-                          });
-                        }}
-                        singleSelectMode={true}
+                  </Form.Item>
+                  <Form.Item
+                    name={["step2", "menu_item_select_getY"]}
+                    rules={[
+                      {
+                        validator: (_, value) => {
+                          if (!value || value.length <= 0) {
+                            return Promise.reject("Please select menu item!");
+                          }
+                          return Promise.resolve();
+                        },
+                      },
+                    ]}
+                  >
+                    <div className={styles.customTableSelect}>
+                      <div className={styles.titleSelectCustom}>
+                        <Typography.Title level={5}>
+                          Select get Y menu item
+                        </Typography.Title>
+                        <Button
+                          icon={<PlusOutlined />}
+                          onClick={() =>
+                            setShowModalBuyXGetY({
+                              buyX: false,
+                              getY: true,
+                            })
+                          }
+                        >
+                          Select
+                        </Button>
+                      </div>
+                      {showModalBuyXGetY.getY && (
+                        <ModalMenuItem
+                          open={showModalBuyXGetY.getY}
+                          width={1000}
+                          onCancel={() =>
+                            setShowModalBuyXGetY({
+                              buyX: false,
+                              getY: false,
+                            })
+                          }
+                          selectedData={dataMenuItemSeletedBuyXGetY.GetY.items}
+                          selectedDataKey={
+                            dataMenuItemSeletedBuyXGetY.GetY.keys
+                          }
+                          handleSubmitModal={(items, keys) => {
+                            setShowModalBuyXGetY({
+                              buyX: false,
+                              getY: false,
+                            });
+                            setDataMenuItemSeletedBuyXGetY({
+                              ...dataMenuItemSeletedBuyXGetY,
+                              GetY: {
+                                items,
+                                keys,
+                              },
+                            });
+                            form.setFieldsValue({
+                              step2: {
+                                menu_item_select_getY: keys,
+                              },
+                            });
+                            form.validateFields([
+                              ["step2", "menu_item_select_getY"],
+                            ]);
+                          }}
+                          singleSelectMode={true}
+                        />
+                      )}
+                      <TableReuse
+                        columns={columnsMenuItemNoSort}
+                        dataSource={dataMenuItemSeletedBuyXGetY.GetY.items}
+                        rowKey="menuId"
+                        pagination={false}
                       />
-                    )}
-                    <TableReuse
-                      columns={columnsMenuItemNoSort}
-                      dataSource={dataMenuItemSeletedBuyXGetY.GetY.items}
-                      rowKey="menuId"
-                      pagination={false}
-                    />
-                  </div>
+                    </div>
+                  </Form.Item>
                 </>
               )}
             </div>
