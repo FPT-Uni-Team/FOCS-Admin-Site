@@ -1,0 +1,97 @@
+.trackButton {
+  background: linear-gradient(45deg, #1890ff, #52c41a);
+  border: none;
+  border-radius: 6px;
+  height: 40px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.trackModal {
+  .ant-modal-header {
+    background: linear-gradient(90deg, #f0f9ff, #f6ffed);
+    border-bottom: 1px solid #d9f7be;
+  }
+
+  .ant-modal-title {
+    color: #389e0d;
+    font-weight: 600;
+  }
+}
+
+.modalContent {
+  width: 100%;
+
+  .infoItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #fafafa;
+    border-radius: 4px;
+    border-left: 3px solid #1890ff;
+
+    .ant-typography {
+      margin: 0;
+    }
+  }
+
+  .active {
+    color: #52c41a;
+    font-weight: 600;
+  }
+
+  .inactive {
+    color: #ff4d4f;
+    font-weight: 600;
+  }
+}
+
+.warningAlert {
+  border-left: 4px solid #faad14;
+}
+
+.infoAlert {
+  border-left: 4px solid #1890ff;
+}
+
+.errorAlert {
+  border-left: 4px solid #ff4d4f;
+}
+
+.resultsCard {
+  margin-top: 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  
+  .ant-card-head {
+    background: linear-gradient(90deg, #f6ffed, #f0f9ff);
+    border-bottom: 1px solid #b7eb8f;
+  }
+  
+  .ant-card-head-title {
+    color: #389e0d;
+    font-weight: 600;
+  }
+  
+  .ant-statistic-title {
+    color: #595959;
+    font-weight: 500;
+  }
+  
+  .ant-statistic-content {
+    font-size: 18px;
+    font-weight: 600;
+  }
+} 

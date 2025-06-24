@@ -164,7 +164,7 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
 
   const handleOnChangeTable = (
     pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue | null>,
+    _filters: Record<string, FilterValue | null>,
     sorter:
       | SorterResult<PromotionListDataType>
       | SorterResult<PromotionListDataType>[]

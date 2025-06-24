@@ -1,0 +1,130 @@
+.container {
+  padding: 24px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.backButton {
+  color: #1890ff;
+  
+  &:hover {
+    color: #40a9ff;
+  }
+}
+
+.title {
+  margin: 0 !important;
+  color: #262626;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.couponHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.couponName {
+  margin: 0 0 8px 0 !important;
+  color: #262626;
+}
+
+.couponCode {
+  color: #8c8c8c;
+  font-size: 14px;
+}
+
+.statusTag {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.descriptions {
+  .ant-descriptions-item-label {
+    font-weight: 600;
+    color: #595959;
+  }
+  
+  .ant-descriptions-item-content {
+    color: #262626;
+  }
+}
+
+.statsCard {
+  .ant-card-head-title {
+    color: #262626;
+    font-weight: 600;
+  }
+}
+
+.statusCard {
+  .ant-card-head-title {
+    color: #262626;
+    font-weight: 600;
+  }
+}
+
+.statusItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  
+  &:hover {
+    background: #f5f5f5;
+    border-radius: 4px;
+    padding: 8px;
+    margin: 0 -8px;
+  }
+}
+
+.loading,
+.error,
+.notFound {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 16px;
+}
+
+.error {
+  color: #ff4d4f;
+}
+
+.notFound {
+  color: #8c8c8c;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .couponHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

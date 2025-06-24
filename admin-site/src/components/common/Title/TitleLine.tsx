@@ -12,6 +12,7 @@ interface TitleProps {
   hasMoreAction?: boolean;
   isActive?: boolean;
   onCreate?: () => void;
+  createButtonText?: string;
   step?: number;
   totalSteps?: number;
   onNext?: () => void;
@@ -27,6 +28,7 @@ const TitleLine: React.FC<TitleProps> = ({
   hasMoreAction,
   isActive,
   onCreate,
+  createButtonText = "Create",
   step,
   totalSteps,
   onNext,
@@ -87,7 +89,7 @@ const TitleLine: React.FC<TitleProps> = ({
             onClick={onCreate}
             disabled={isDisableCreate}
           >
-            Create
+            {createButtonText}
           </Button>
         )}
       </div>

@@ -7,6 +7,7 @@ import type {
 import styles from "./FilterReuse.module.scss";
 import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import { Collapse } from "antd";
+const { Panel } = Collapse;
 
 const FilterReuse: React.FC<FilterReuseProps> = ({
   onFilter,
@@ -67,8 +68,9 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
             allowClear
             className={styles.customSearch}
             placeholder="Tìm kiếm theo tên"
+            value={searchValue}
             suffix={<SearchOutlined onClick={() => onSearch(searchValue)} />}
-            onChange={(e) => setSearchValue(e.target.value.trim())}
+            onChange={(e) => setSearchValue(e.target.value)}
             onPressEnter={() => onSearch(searchValue)}
             onClear={() => {
               setSearchValue("");
@@ -90,49 +92,42 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
         activeKey={showForm ? "1" : undefined}
         ghost
         className={styles.noHeaderCollapse}
-        items={[
-          {
-            key: "1",
-            label: null,
-            showArrow: false,
-            children: (
-              <Form
-                form={form}
-                layout="vertical"
-                onFinish={handleFinish}
-                className={
-                  !isShowFilter ? styles.filterForm : styles.filterFormShow
-                }
-              >
-                <Row gutter={[16, 16]}>
-                  {selectConfigs.map((select) => (
-                    <Col span={24 / selectConfigs.length} key={select.name}>
-                      <Form.Item
-                        name={select.name}
-                        label={select.label}
-                        colon={false}
-                        className={styles.customSearch}
-                      >
-                        {renderField(select)}
-                      </Form.Item>
-                    </Col>
-                  ))}
-                </Row>
-                <div className={styles.buttonGroup}>
-                  <Form.Item className={styles.formItem}>
-                    <Button onClick={handleReset}>Clear</Button>
+      >
+        <Panel key="1" showArrow={false} header={null}>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleFinish}
+            className={styles.filterForm}
+          >
+            <Row gutter={[16, 16]}>
+              {selectConfigs.map((select) => (
+                <Col span={24 / selectConfigs.length}>
+                  <Form.Item
+                    key={select.name}
+                    name={select.name}
+                    label={select.label}
+                    colon={false}
+                    className={styles.customSearch}
+                  >
+                    {renderField(select)}
                   </Form.Item>
-                  <Form.Item className={styles.formItem}>
-                    <Button type="primary" htmlType="submit">
-                      Filter
-                    </Button>
-                  </Form.Item>
-                </div>
-              </Form>
-            ),
-          },
-        ]}
-      />
+                </Col>
+              ))}
+            </Row>
+            <div className={styles.buttonGroup}>
+              <Form.Item className={styles.formItem}>
+                <Button onClick={handleReset}>Xóa</Button>
+              </Form.Item>
+              <Form.Item className={styles.formItem}>
+                <Button type="primary" htmlType="submit">
+                  Lọc
+                </Button>
+              </Form.Item>
+            </div>
+          </Form>
+        </Panel>
+      </Collapse>
     </div>
   );
 };

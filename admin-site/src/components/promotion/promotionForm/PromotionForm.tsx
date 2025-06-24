@@ -238,7 +238,7 @@ const PromotionForm: FC<Props> = ({ mode, form, step }) => {
           {useCoupon && (
             <div className={clsx(styles.customTableSelect, styles.marginItem)}>
               <div className={styles.titleSelectCustom}>
-                <Typography.Title level={5}>Select coupon</Typography.Title>
+                <Typography.Title level={5}>Select Coupon</Typography.Title>
                 <Button
                   icon={<PlusOutlined />}
                   onClick={() => setShowModalCoupon(true)}
