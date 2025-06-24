@@ -19,12 +19,10 @@ function* fetchPromotionList(
   action: PayloadAction<PromotionListParams>
 ): Generator<Effect, void, AxiosResponse<ListPageResponse>> {
   try {
-    const response: PromotionListResponse = yield call(() =>
-      getListPromtions(action.payload)
-    );
-    const dataMapped = objectMapper(response.items, fieldMap);
-    console.log("dataMapped", dataMapped);
-    yield put(fetchPromotionsSuccess(dataMapped));
+    const response = yield call(() => getListPromtions(action.payload));
+    const dataMapped = objectMapper(response.data.items, fieldMap);
+    const total = response.data.total_count;
+    yield put(fetchPromotionsSuccess({ promotions: dataMapped, total: total }));
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : "Failed to fetch users";

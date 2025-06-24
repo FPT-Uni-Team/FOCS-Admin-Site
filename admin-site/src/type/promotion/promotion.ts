@@ -1,16 +1,24 @@
 export const PromotionType = {
   Percentage: 0,
   FixedAmount: 1,
-  FreeItem: 2,
-  FreeShipping: 3,
   BuyXGetY: 4,
-  TimeBased: 5,
-  FirstTimeBuyer: 6,
-  Loyalty: 7,
+  // FreeItem: 2,
+  // FreeShipping: 3,
+  // TimeBased: 5,
+  // FirstTimeBuyer: 6,
+  // Loyalty: 7,
+} as const;
+
+export const PromotionStatus = {
+  UnAvailable: 0,
+  NotStarted: 1,
+  Ongoing: 2,
+  Expired: 3,
 } as const;
 
 export type PromotionType = (typeof PromotionType)[keyof typeof PromotionType];
-
+export type PromotionStatus =
+  (typeof PromotionStatus)[keyof typeof PromotionStatus];
 export interface PromotionListDataType {
   promotionName: string;
   promotionStartDate: string;
@@ -22,14 +30,38 @@ export interface PromotionListDataType {
 export const PromotionTypeLabel: Record<PromotionType, string> = {
   [PromotionType.Percentage]: "Percentage Discount",
   [PromotionType.FixedAmount]: "Fixed Amount Discount",
-  [PromotionType.FreeItem]: "Free Item",
-  [PromotionType.FreeShipping]: "Free Shipping",
   [PromotionType.BuyXGetY]: "Buy X Get Y",
-  [PromotionType.TimeBased]: "Time-Based Promotion",
-  [PromotionType.FirstTimeBuyer]: "First Time Buyer",
-  [PromotionType.Loyalty]: "Loyalty Promotion",
+  // [PromotionType.FreeItem]: "Free Item",
+  // [PromotionType.FreeShipping]: "Free Shipping",
+  // [PromotionType.TimeBased]: "Time-Based Promotion",
+  // [PromotionType.FirstTimeBuyer]: "First Time Buyer",
+  // [PromotionType.Loyalty]: "Loyalty Promotion",
 };
 
+export const promotionTypeOptions = [
+  { value: "", label: "All Type" },
+  ...Object.keys(PromotionTypeLabel).map((key) => ({
+    value: key,
+    label:
+      PromotionTypeLabel[key as unknown as keyof typeof PromotionTypeLabel],
+  })),
+];
+
+export const PromotionStatusLabel: Record<PromotionStatus, string> = {
+  [PromotionStatus.UnAvailable]: "UnAvailable",
+  [PromotionStatus.NotStarted]: "Not Start",
+  [PromotionStatus.Ongoing]: "On Going",
+  [PromotionStatus.Expired]: "Expired",
+};
+
+export const promotionStatusOptions = [
+  { value: "", label: "All Status" },
+  ...Object.keys(PromotionStatusLabel).map((key) => ({
+    value: key,
+    label:
+      PromotionStatusLabel[key as unknown as keyof typeof PromotionStatusLabel],
+  })),
+];
 export interface PromotionListParams {
   page: number;
   page_size: number;

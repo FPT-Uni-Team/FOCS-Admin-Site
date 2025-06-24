@@ -67,7 +67,7 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
           <Input
             allowClear
             className={styles.customSearch}
-            placeholder="Tìm kiếm theo tên"
+            placeholder="Search ..."
             value={searchValue}
             suffix={<SearchOutlined onClick={() => onSearch(searchValue)} />}
             onChange={(e) => setSearchValue(e.target.value)}
@@ -82,7 +82,7 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
               icon={<FilterOutlined />}
               onClick={() => setShowForm((prev) => !prev)}
             >
-              Lọc
+              Filter
             </Button>
           )}
         </Col>
@@ -117,11 +117,11 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
             </Row>
             <div className={styles.buttonGroup}>
               <Form.Item className={styles.formItem}>
-                <Button onClick={handleReset}>Xóa</Button>
+                <Button onClick={handleReset}>Clear</Button>
               </Form.Item>
               <Form.Item className={styles.formItem}>
                 <Button type="primary" htmlType="submit">
-                  Lọc
+                  Filter
                 </Button>
               </Form.Item>
             </div>
