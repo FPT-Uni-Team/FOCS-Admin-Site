@@ -29,10 +29,10 @@ function CouponAssignPage() {
         <Col>
           <Space>
             <Button icon={<ArrowLeftOutlined />} onClick={handleBack}>
-              Quay lại
+              Back
             </Button>
             <Title level={2} style={{ margin: 0 }}>
-              Gán Coupons vào Promotion
+              Assign Coupons to Promotion
             </Title>
           </Space>
         </Col>
@@ -42,22 +42,22 @@ function CouponAssignPage() {
       <Card style={{ marginBottom: 24 }}>
         <Space direction="vertical" size="middle" style={{ width: '100%' }}>
           <Title level={4}>
-            <LinkOutlined /> Tính năng Gán Coupons vào Promotion
+            <LinkOutlined /> Assign Coupons to Promotion Feature
           </Title>
           
           <Paragraph>
-            Tính năng này cho phép bạn gán một hoặc nhiều coupons vào một promotion cụ thể 
-            trong cửa hàng. Điều này giúp quản lý các chương trình khuyến mãi một cách hiệu quả.
+            This feature allows you to assign one or more coupons to a specific promotion 
+            in the store. This helps manage promotional programs efficiently.
           </Paragraph>
 
           <Alert
-            message="Yêu cầu hệ thống"
+            message="System Requirements"
             description={
               <ul style={{ marginBottom: 0, paddingLeft: '20px' }}>
-                <li>Admin phải có quyền quản lý promotions cho store này</li>
-                <li>Promotion phải tồn tại và thuộc về store đã chỉ định</li>
-                <li>Tất cả coupons phải tồn tại và thuộc về cùng một store</li>
-                <li>Coupons phải đủ điều kiện cho promotion đã chọn (chưa liên kết với promotion khác)</li>
+                <li>Admin must have permissions to manage promotions for this store</li>
+                <li>Promotion must exist and belong to the specified store</li>
+                <li>All coupons must exist and belong to the same store</li>
+                <li>Coupons must be eligible for the selected promotion (not linked to other promotions)</li>
               </ul>
             }
             type="info"
@@ -65,12 +65,12 @@ function CouponAssignPage() {
           />
 
           <Alert
-            message="Quy tắc nghiệp vụ"
+            message="Business Rules"
             description={
               <ul style={{ marginBottom: 0, paddingLeft: '20px' }}>
-                <li><strong>Không cho phép thành công một phần:</strong> Tất cả coupons sẽ được gán hoặc không có coupon nào được gán</li>
-                <li><strong>Kiểm tra tính hợp lệ:</strong> Hệ thống sẽ kiểm tra tính hợp lệ của tất cả coupons trước khi thực hiện gán</li>
-                <li><strong>Cập nhật cơ sở dữ liệu:</strong> Liên kết sẽ được lưu trữ vĩnh viễn trong cơ sở dữ liệu</li>
+                <li><strong>No partial success allowed:</strong> All coupons will be assigned or no coupons will be assigned</li>
+                <li><strong>Validity check:</strong> The system will check the validity of all coupons before assignment</li>
+                <li><strong>Database update:</strong> Links will be permanently stored in the database</li>
               </ul>
             }
             type="warning"
@@ -80,10 +80,10 @@ function CouponAssignPage() {
       </Card>
 
       {/* Demo Section */}
-      <Card title="Demo Tính Năng" style={{ marginBottom: 24 }}>
+      <Card title="Feature Demo" style={{ marginBottom: 24 }}>
         <Space direction="vertical" size="middle" style={{ width: '100%' }}>
           <Paragraph>
-            Nhấn vào nút bên dưới để mở form gán coupons vào promotion:
+            Click the button below to open the coupon assignment form:
           </Paragraph>
 
           <Row gutter={[16, 16]}>
@@ -95,20 +95,20 @@ function CouponAssignPage() {
                 onClick={handleOpenModal}
                 style={{ width: '100%', height: '60px' }}
               >
-                Gán Coupons vào Promotion
+                Assign Coupons to Promotion
               </Button>
             </Col>
           </Row>
 
           <Alert
-            message="Hướng dẫn sử dụng"
+            message="Usage Instructions"
             description={
               <ol style={{ marginBottom: 0, paddingLeft: '20px' }}>
-                <li>Chọn promotion từ danh sách có sẵn</li>
-                <li>Chọn một hoặc nhiều coupons từ danh sách coupons đang hoạt động</li>
-                <li>Xem lại thông tin đã chọn</li>
-                <li>Nhấn "Gán Coupons" để thực hiện</li>
-                <li>Hệ thống sẽ xử lý và thông báo kết quả</li>
+                <li>Select promotion from the available list</li>
+                <li>Select one or more coupons from the active coupons list</li>
+                <li>Review the selected information</li>
+                <li>Click "Assign Coupons" to execute</li>
+                <li>System will process and notify results</li>
               </ol>
             }
             type="success"
@@ -118,7 +118,7 @@ function CouponAssignPage() {
       </Card>
 
       {/* API Information */}
-      <Card title="Thông tin API" style={{ marginBottom: 24 }}>
+      <Card title="API Information" style={{ marginBottom: 24 }}>
         <Space direction="vertical" size="middle" style={{ width: '100%' }}>
           <div>
             <Title level={5}>Endpoint</Title>
@@ -140,10 +140,10 @@ function CouponAssignPage() {
           <div>
             <Title level={5}>Response Codes</Title>
             <ul>
-              <li><strong>200 OK:</strong> Gán coupons thành công</li>
-              <li><strong>400 Bad Request:</strong> Dữ liệu không hợp lệ</li>
-              <li><strong>404 Not Found:</strong> Promotion không tồn tại hoặc coupons không hợp lệ</li>
-              <li><strong>401 Unauthorized:</strong> Không có quyền truy cập</li>
+              <li><strong>200 OK:</strong> Coupons assigned successfully</li>
+              <li><strong>400 Bad Request:</strong> Invalid data</li>
+              <li><strong>404 Not Found:</strong> Promotion not found or invalid coupons</li>
+              <li><strong>401 Unauthorized:</strong> No access permission</li>
             </ul>
           </div>
         </Space>

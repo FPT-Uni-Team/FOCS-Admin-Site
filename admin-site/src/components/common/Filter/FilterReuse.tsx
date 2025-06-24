@@ -7,14 +7,15 @@ import type {
 import styles from "./FilterReuse.module.scss";
 import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import { Collapse } from "antd";
+const { Panel } = Collapse;
 
 const FilterReuse: React.FC<FilterReuseProps> = ({
   onFilter,
   selectConfigs = [],
   onSearch,
+  isShowFilter = false,
 }) => {
-  const { Panel } = Collapse;
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(isShowFilter);
   const [form] = Form.useForm();
   const [searchValue, setSearchValue] = useState("");
   const { RangePicker } = DatePicker;
@@ -76,12 +77,14 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
               onSearch("");
             }}
           />
-          <Button
-            icon={<FilterOutlined />}
-            onClick={() => setShowForm((prev) => !prev)}
-          >
-            Lọc
-          </Button>
+          {!isShowFilter && (
+            <Button
+              icon={<FilterOutlined />}
+              onClick={() => setShowForm((prev) => !prev)}
+            >
+              Lọc
+            </Button>
+          )}
         </Col>
       </Row>
 
@@ -99,8 +102,9 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
           >
             <Row gutter={[16, 16]}>
               {selectConfigs.map((select) => (
-                <Col span={24 / selectConfigs.length} key={select.name}>
+                <Col span={24 / selectConfigs.length}>
                   <Form.Item
+                    key={select.name}
                     name={select.name}
                     label={select.label}
                     colon={false}

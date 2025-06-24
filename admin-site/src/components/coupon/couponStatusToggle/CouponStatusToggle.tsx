@@ -37,7 +37,7 @@ const CouponStatusToggle: React.FC<CouponStatusToggleProps> = ({
       console.log(`🔄 Toggling coupon status - ID: ${couponId}, Code: ${couponCode}, isActive: ${checked}`);
     } catch (error) {
       console.error('Error toggling coupon status:', error);
-      message.error('Có lỗi xảy ra khi thay đổi trạng thái coupon');
+      message.error('An error occurred while changing coupon status');
     }
   };
 
@@ -48,8 +48,8 @@ const CouponStatusToggle: React.FC<CouponStatusToggleProps> = ({
   // Show success message when status is updated successfully
   React.useEffect(() => {
     if (response && lastUpdatedCouponId === couponId && !loading) {
-      const statusText = response.data?.isActive ? 'kích hoạt' : 'vô hiệu hóa';
-      message.success(`Đã ${statusText} coupon ${couponCode || couponId} thành công!`);
+      const statusText = response.data?.isActive ? 'activated' : 'deactivated';
+      message.success(`Coupon ${couponCode || couponId} has been ${statusText} successfully!`);
       
       // Clear the response after showing message
       setTimeout(() => {
@@ -61,7 +61,7 @@ const CouponStatusToggle: React.FC<CouponStatusToggleProps> = ({
   // Show error message when there's an error
   React.useEffect(() => {
     if (error && lastUpdatedCouponId === couponId && !loading) {
-      message.error(`Lỗi khi thay đổi trạng thái coupon: ${error}`);
+      message.error(`Error changing coupon status: ${error}`);
       
       // Clear the error after showing message
       setTimeout(() => {

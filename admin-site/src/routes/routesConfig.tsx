@@ -9,6 +9,9 @@ import {
 const PromotionListPage = lazy(
   () => import("../pages/promotion/PromotionList")
 );
+const PromotionDetailPage = lazy(
+  () => import("../pages/promotion/PromotionDetail")
+);
 const CouponListPage = lazy(() => import("../pages/coupon/CouponList"));
 const CouponCreatePage = lazy(() => import("../pages/coupon/CouponCreate"));
 const CouponUpdatePage = lazy(() => import("../pages/coupon/CouponUpdate"));
@@ -33,20 +36,13 @@ export const routes: AppRoute[] = [
     component: PromotionListPage,
     label: "Promotions",
     icon: <UserOutlined />,
-    children: [
-      {
-        path: "/promotions/promotions1",
-        component: PromotionListPage,
-        label: "Promotions1",
-        icon: <UserOutlined />,
-      },
-      {
-        path: "/promotions/promotions2",
-        component: CouponListPage,
-        label: "Promotions2",
-        icon: <UserOutlined />,
-      },
-    ],
+  },
+  {
+    path: "/promotions/:promotionId",
+    component: PromotionDetailPage,
+    label: "Promotions",
+    icon: <UserOutlined />,
+    hidden: true,
   },
   {
     path: "/login",

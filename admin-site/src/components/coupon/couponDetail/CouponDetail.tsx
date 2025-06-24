@@ -80,7 +80,7 @@ const CouponDetail: React.FC = () => {
     } else if (discountType === 1) { 
       return `${value.toLocaleString('vi-VN')}đ`;
     } else if (discountType === 2) { 
-      return "Miễn phí vận chuyển";
+      return "Free Shipping";
     }
     return `${value}`;
   }, []);
@@ -127,7 +127,7 @@ const CouponDetail: React.FC = () => {
     return (
       <div style={{ padding: '20px' }}>
         <Alert
-          message="Lỗi tải dữ liệu"
+          message="Error loading data"
           description={error}
           type="error"
           showIcon
@@ -192,14 +192,14 @@ const CouponDetail: React.FC = () => {
           </Title>
         </Space>
         <Button type="primary" icon={<EditOutlined />} onClick={handleEdit}>
-          Chỉnh sửa
+                            Edit
         </Button>
       </div>
 
       {/* Error Alerts */}
       {isExpired && (
         <Alert
-          message="Coupon không thể sử dụng"
+                      message="Coupon is not available"
           description="Coupon has expired."
           type="error"
           showIcon
@@ -209,8 +209,8 @@ const CouponDetail: React.FC = () => {
 
       {isUsageLimitReached && (
         <Alert
-          message="Đã đạt giới hạn sử dụng"
-          description="Coupon này đã đạt giới hạn số lần sử dụng tối đa."
+                      message="Usage limit reached"
+            description="This coupon has reached its maximum usage limit."
           type="warning"
           showIcon
           style={{ marginBottom: 20 }}
@@ -232,7 +232,7 @@ const CouponDetail: React.FC = () => {
                   padding: '2px 6px', 
                   borderRadius: '4px' 
                 }}>
-                  Mã: {coupon.code}
+                  Code: {coupon.code}
                 </Text>
                 <Tag color={getStatusColor(coupon.is_active, coupon.start_date, coupon.end_date)}>
                   {getStatusText(coupon.is_active, coupon.start_date, coupon.end_date)}
@@ -250,7 +250,7 @@ const CouponDetail: React.FC = () => {
                 <Text code>{coupon.id}</Text>
               </Descriptions.Item>
               
-              <Descriptions.Item label="Loại giảm giá">
+              <Descriptions.Item label="Discount Type">
                 <Tag 
                   icon={getCouponTypeIcon(coupon.discount_type)} 
                   color="blue"
@@ -259,7 +259,7 @@ const CouponDetail: React.FC = () => {
                 </Tag>
               </Descriptions.Item>
               
-              <Descriptions.Item label="Giá trị giảm">
+              <Descriptions.Item label="Discount Value">
                 <Text strong style={{ color: '#1890ff', fontSize: '16px' }}>
                   {getDiscountValue(coupon.discount_type, coupon.value)}
                 </Text>
@@ -280,7 +280,7 @@ const CouponDetail: React.FC = () => {
               </Descriptions.Item>
 
               {coupon.minimum_order_amount && (
-                <Descriptions.Item label="Đơn hàng tối thiểu">
+                <Descriptions.Item label="Minimum Order">
                   <Space>
                     <DollarOutlined />
                     {coupon.minimum_order_amount.toLocaleString('vi-VN')}đ
@@ -289,10 +289,10 @@ const CouponDetail: React.FC = () => {
               )}
 
               {coupon.minimum_item_quantity && (
-                <Descriptions.Item label="Số lượng sản phẩm tối thiểu">
+                <Descriptions.Item label="Minimum Items Quantity">
                   <Space>
                     <ShoppingOutlined />
-                    {coupon.minimum_item_quantity} sản phẩm
+                    {coupon.minimum_item_quantity} items
                   </Space>
                 </Descriptions.Item>
               )}
@@ -304,7 +304,7 @@ const CouponDetail: React.FC = () => {
               )}
 
               {coupon.user_used && (
-                <Descriptions.Item label="Đối tượng sử dụng" span={2}>
+                <Descriptions.Item label="Applicable Items" span={2}>
                   <Space>
                     <UserOutlined />
                     <Text>{coupon.user_used}</Text>
@@ -329,9 +329,9 @@ const CouponDetail: React.FC = () => {
         <Col xs={24} lg={8}>
           <Space direction="vertical" size="large" style={{ width: '100%' }}>
             {/* Usage Statistics */}
-            <Card title="Thống kê sử dụng" style={{ background: 'white' }}>
+            <Card title="Usage Statistics" style={{ background: 'white' }}>
               <Statistic
-                title="Đã sử dụng"
+                                  title="Used"
                 value={coupon.count_used}
                 suffix={coupon.max_usage ? `/ ${coupon.max_usage}` : ''}
                 prefix={<UserOutlined />}
@@ -360,16 +360,16 @@ const CouponDetail: React.FC = () => {
             </Card>
 
             {/* Validation Status */}
-            <Card title="Trạng thái xác thực" style={{ background: 'white' }}>
+            <Card title="Validation Status" style={{ background: 'white' }}>
               <Space direction="vertical" style={{ width: '100%' }}>
                 <div style={{ display: 'flex', alignItems: 'center', padding: '8px 0' }}>
                   <CheckCircleOutlined style={{ color: '#52c41a', marginRight: '8px' }} />
-                  <Text>Mã coupon hợp lệ</Text>
+                  <Text>Valid coupon code</Text>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', padding: '8px 0' }}>
                   <CheckCircleOutlined style={{ color: '#52c41a', marginRight: '8px' }} />
-                  <Text>Thời gian hợp lệ</Text>
+                                      <Text>Valid time period</Text>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', padding: '8px 0' }}>
@@ -379,7 +379,7 @@ const CouponDetail: React.FC = () => {
                     <CheckCircleOutlined style={{ color: '#52c41a', marginRight: '8px' }} />
                   )}
                   <Text>
-                    {isExpired || isUsageLimitReached ? 'Không thể sử dụng' : 'Có thể sử dụng'}
+                    {isExpired || isUsageLimitReached ? 'Cannot be used' : 'Available for use'}
                   </Text>
                 </div>
               </Space>

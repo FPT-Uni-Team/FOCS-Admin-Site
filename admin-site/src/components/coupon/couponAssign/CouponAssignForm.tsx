@@ -178,7 +178,7 @@ const CouponAssignForm: React.FC<CouponAssignFormProps> = ({
           setPromotionList(mockPromotions);
           console.log('📋 Using mock promotions:', mockPromotions);
           
-          message.warning('Không thể tải danh sách promotion từ API, sử dụng dữ liệu mẫu');
+          message.warning('Unable to load promotion list from API, using sample data');
         } finally {
           setPromotionLoading(false);
         }
@@ -191,7 +191,7 @@ const CouponAssignForm: React.FC<CouponAssignFormProps> = ({
   // Handle success
   useEffect(() => {
     if (assignSuccess) {
-      message.success('Coupons đã được gán vào promotion thành công!');
+              message.success('Coupons have been assigned to promotion successfully!');
       handleCancel();
     }
   }, [assignSuccess]);
@@ -225,12 +225,12 @@ const CouponAssignForm: React.FC<CouponAssignFormProps> = ({
       await form.validateFields();
       
       if (!selectedPromotion) {
-        message.error('Vui lòng chọn promotion');
+        message.error('Please select a promotion');
         return;
       }
 
       if (selectedCoupons.length === 0) {
-        message.error('Vui lòng chọn ít nhất một coupon');
+        message.error('Please select at least one coupon');
         return;
       }
 
@@ -327,7 +327,7 @@ const CouponAssignForm: React.FC<CouponAssignFormProps> = ({
         <Form.Item
           label="Promotion"
           name="promotionId"
-          rules={[{ required: true, message: 'Vui lòng chọn promotion' }]}
+          rules={[{ required: true, message: 'Please select a promotion' }]}
         >
           {promotionId ? (
             <div style={{ 
@@ -344,7 +344,7 @@ const CouponAssignForm: React.FC<CouponAssignFormProps> = ({
             </div>
           ) : (
             <Select
-              placeholder="Chọn promotion"
+                              placeholder="Select promotion"
               value={selectedPromotion}
               onChange={setSelectedPromotion}
               loading={promotionLoading}
@@ -373,16 +373,16 @@ const CouponAssignForm: React.FC<CouponAssignFormProps> = ({
         <Form.Item
           label={
             <Space>
-              <span>Chọn Coupons</span>
-              <Text type="secondary">({availableCoupons.length} coupons khả dụng)</Text>
+              <span>Select Coupons</span>
+                              <Text type="secondary">({availableCoupons.length} available coupons)</Text>
             </Space>
           }
           name="couponIds"
-          rules={[{ required: true, message: 'Vui lòng chọn ít nhất một coupon' }]}
+                      rules={[{ required: true, message: 'Please select at least one coupon' }]}
         >
           <Select
             mode="multiple"
-            placeholder="Chọn các coupons để gán vào promotion"
+                          placeholder="Select coupons to assign to promotion"
             value={selectedCoupons}
             onChange={setSelectedCoupons}
             loading={couponsLoading}
@@ -415,7 +415,7 @@ const CouponAssignForm: React.FC<CouponAssignFormProps> = ({
           <>
             <Divider />
             <div>
-              <Title level={5}>Coupons đã chọn ({selectedCoupons.length})</Title>
+              <Title level={5}>Selected Coupons ({selectedCoupons.length})</Title>
               <Space wrap>
                 {selectedCoupons.map((couponId) => {
                   const coupon = availableCoupons.find(c => c.id === couponId);
@@ -439,7 +439,7 @@ const CouponAssignForm: React.FC<CouponAssignFormProps> = ({
         {/* Error Alert */}
         {assignError && (
           <Alert
-            message="Lỗi gán coupons"
+            message="Error assigning coupons"
             description={assignError}
             type="error"
             showIcon

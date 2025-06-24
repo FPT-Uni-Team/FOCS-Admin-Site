@@ -10,6 +10,9 @@ import couponTrackUsageReducer from "./slices/coupon/couponTrackUsageSlice";
 import couponSetStatusReducer from "./slices/coupon/couponSetStatusSlice";
 import couponAssignReducer from "./slices/coupon/couponAssignSlice";
 
+import menuItemSlice from "./slices/menuItem/menuItemSlice";
+import promotionCreateSlice from "./slices/promotion/promotionCreateSlice";
+
 
 const rootReducer = combineReducers({
   promotion: promotionSlice,
@@ -22,6 +25,10 @@ const rootReducer = combineReducers({
   couponTrackUsage: couponTrackUsageReducer,
   couponSetStatus: couponSetStatusReducer,
   couponAssign: couponAssignReducer,
+
+  menuItem: menuItemSlice,
+  createPromotion: promotionCreateSlice,
+
 });
 
 export default rootReducer;

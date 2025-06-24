@@ -111,7 +111,7 @@ const CouponList: FC<CouponListProps> = ({ fetchData }) => {
   // Handle delete success notification
   useEffect(() => {
     if (deleteSuccess) {
-      message.success('Coupon đã được xóa thành công!');
+      message.success('Coupon has been deleted successfully!');
       // Refresh the coupon list
       fetchData(params);
       dispatch(clearDeleteCouponState());
@@ -266,31 +266,31 @@ const CouponList: FC<CouponListProps> = ({ fetchData }) => {
     {
       name: "discount_type",
       type: "select",
-      label: "Loại Coupon",
-      placeholder: "Chọn loại coupon",
+              label: "Coupon Type",
+              placeholder: "Select coupon type",
       options: [
-        { value: "0", label: "Phần trăm" },
-        { value: "1", label: "Số tiền cố định" },
-        { value: "2", label: "Miễn phí vận chuyển" },
+            { value: "0", label: "Percentage" },
+    { value: "1", label: "Fixed Amount" },
+                  { value: "2", label: "Free Shipping" },
       ],
     },
     {
       name: "status",
       type: "select",
-      label: "Trạng thái",
-      placeholder: "Chọn trạng thái",
+              label: "Status",
+              placeholder: "Select status",
       options: [
-        { value: "0", label: "Không khả dụng" },
-        { value: "1", label: "Sắp diễn ra" },
-        { value: "2", label: "Đang diễn ra" },
-        { value: "3", label: "Đã hết hạn" },
+                  { value: "0", label: "Unavailable" },
+        { value: "1", label: "Upcoming" },
+        { value: "2", label: "Active" },
+        { value: "3", label: "Expired" },
       ],
     },
     {
       name: "date",
       type: "rangePicker",
-      label: "Thời gian áp dụng",
-      placeholder: "Chọn thời gian",
+      label: "Application Period",
+              placeholder: "Select time period",
     },
   ];
 
@@ -370,7 +370,7 @@ const CouponList: FC<CouponListProps> = ({ fetchData }) => {
     
     if (state?.refresh) {
       if (state.justCreated) {
-        message.success('Coupon được tạo thành công!');
+        message.success('Coupon created successfully!');
       }
       fetchData(params);
       // Clear the navigation state
@@ -392,7 +392,7 @@ const CouponList: FC<CouponListProps> = ({ fetchData }) => {
   if (error) {
     return (
       <Alert
-        message="Lỗi tải dữ liệu"
+                  message="Error loading data"
         description={error}
         type="error"
         showIcon
@@ -428,14 +428,14 @@ const CouponList: FC<CouponListProps> = ({ fetchData }) => {
               icon={<LinkOutlined />} 
               onClick={handleAssignCoupons}
             >
-              Gán Coupons
+            Coupon Assign to Promotion
             </Button>
             <Button 
               type="primary" 
               icon={<PlusOutlined />} 
               onClick={handleCreateCoupon}
             >
-              Tạo Coupon Mới
+              Create New Coupon
             </Button>
           </Space>
         </Col>
@@ -506,8 +506,8 @@ const CouponList: FC<CouponListProps> = ({ fetchData }) => {
         scroll={{ x: 1000 }}
         locale={{
           emptyText: coupons?.length === 0 ? 
-            (loading ? 'Đang tải...' : error ? 'Lỗi tải dữ liệu' : 'Không có dữ liệu') : 
-            'Không có dữ liệu'
+            (loading ? 'Loading...' : error ? 'Error loading data' : 'No data available') : 
+            'No data available'
         }}
       />
       

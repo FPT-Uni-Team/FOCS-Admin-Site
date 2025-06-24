@@ -1,7 +1,8 @@
 .container {
-  background: #ffffff;
-  min-height: 100vh;
-  padding: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .header {
@@ -91,8 +92,7 @@
 }
 
 .errorAlert {
-  margin-bottom: 24px;
-  border-radius: 4px;
+  margin-bottom: 20px;
 }
 
 .buttonContainer {
@@ -119,6 +119,60 @@
       border-color: #096dd9;
     }
   }
+}
+
+.flexClass {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.conditionBlock,
+.usageBlock {
+  border: 1px solid #e2e2e2;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  .textExample {
+    font-size: 12px;
+    color: #a8a6a6;
+    margin: 6px 0 12px;
+  }
+  
+  .textExampleBold {
+    color: #423e3e;
+    font-weight: 600;
+  }
+  
+  .textInputLabelDisabled {
+    color: black;
+  }
+}
+
+.labelCustom {
+  font-weight: 500;
+  color: black;
+  margin: 6px 0 6px;
+}
+
+.customTableSelect {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  
+  .titleSelectCustom {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.marginItem {
+  margin-top: 10px;
 }
 
 // Responsive design

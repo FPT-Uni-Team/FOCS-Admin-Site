@@ -7,9 +7,9 @@ export const CouponType = {
   export type CouponType = (typeof CouponType)[keyof typeof CouponType];
   
   export const CouponTypeLabel: Record<CouponType, string> = {
-    [CouponType.Percentage]: "Giảm theo phần trăm",
-    [CouponType.FixedAmount]: "Giảm số tiền cố định",
-    [CouponType.FreeShipping]: "Miễn phí vận chuyển",
+    [CouponType.Percentage]: "Percentage Discount",
+    [CouponType.FixedAmount]: "Fixed Amount Discount",
+    [CouponType.FreeShipping]: "Free Shipping",
   };
 
   export const CouponStatus = {
@@ -22,10 +22,10 @@ export const CouponType = {
   export type CouponStatus = (typeof CouponStatus)[keyof typeof CouponStatus];
 
   export const CouponStatusLabel: Record<CouponStatus, string> = {
-    [CouponStatus.UnAvailable]: "Không khả dụng",
-    [CouponStatus.Incoming]: "Sắp diễn ra",
-    [CouponStatus.OnGoing]: "Đang diễn ra",
-    [CouponStatus.Expired]: "Đã hết hạn",
+    [CouponStatus.UnAvailable]: "Unavailable",
+    [CouponStatus.Incoming]: "Upcoming",
+    [CouponStatus.OnGoing]: "Active",
+    [CouponStatus.Expired]: "Expired",
   };
   
   // New types for coupon creation according to API documentation
@@ -37,8 +37,8 @@ export const CouponType = {
   export type CouponCreationType = (typeof CouponCreationType)[keyof typeof CouponCreationType];
 
   export const CouponCreationTypeLabel: Record<CouponCreationType, string> = {
-    [CouponCreationType.AutoGenerate]: "Tự động tạo mã",
-    [CouponCreationType.Manual]: "Nhập mã thủ công",
+    [CouponCreationType.AutoGenerate]: "Auto Generate Code",
+    [CouponCreationType.Manual]: "Manual Input Code",
   };
 
   export const DiscountType = {
@@ -49,8 +49,8 @@ export const CouponType = {
   export type DiscountType = (typeof DiscountType)[keyof typeof DiscountType];
 
   export const DiscountTypeLabel: Record<DiscountType, string> = {
-    [DiscountType.Percent]: "Giảm theo phần trăm",
-    [DiscountType.FixedAmount]: "Giảm số tiền cố định",
+    [DiscountType.Percent]: "Percentage Discount",
+    [DiscountType.FixedAmount]: "Fixed Amount Discount",
   };
 
   export const CouponConditionType = {
@@ -61,8 +61,8 @@ export const CouponType = {
   export type CouponConditionType = (typeof CouponConditionType)[keyof typeof CouponConditionType];
 
   export const CouponConditionTypeLabel: Record<CouponConditionType, string> = {
-    [CouponConditionType.MinOrderAmount]: "Giá trị đơn hàng tối thiểu",
-    [CouponConditionType.MinItemsQuantity]: "Số lượng sản phẩm tối thiểu",
+    [CouponConditionType.MinOrderAmount]: "Minimum Order Amount",
+    [CouponConditionType.MinItemsQuantity]: "Minimum Items Quantity",
   };
 
   // Coupon condition interface
