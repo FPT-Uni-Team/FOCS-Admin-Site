@@ -1,25 +1,44 @@
 import { type FC, useEffect, useState } from "react";
-import type { SortOrder } from "antd/es/table/interface";
 import TableReuse from "../../common/Table/TableReuse";
 import {
-  PromotionStatusLabel,
   promotionStatusOptions,
-  PromotionTypeLabel,
   promotionTypeOptions,
   type PromotionListDataType,
   type PromotionListParams,
 } from "../../../type/promotion/promotion";
 import { useAppSelector } from "../../../hooks/redux";
-import { formatDate } from "../../../helper/formatDate";
 import FilterReuse from "../../common/Filter/FilterReuse";
 import type { ListPageParams, SelectConfig } from "../../../type/common/common";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
-import CustomLink from "../../common/Link/CustomLink";
 import { createOnTableChangeHandler } from "../../common/Table/HandleTableChange/HandleTableChange";
 import { createOnFilterHandler } from "../../../helper/formatFilters";
+import { columnsPromotionList } from "../../common/Columns/Colums";
 interface PromotionListProps {
   fetchData: (params: PromotionListParams) => void;
 }
+
+const selectConfigs: SelectConfig[] = [
+  {
+    name: "promotion_type",
+    type: "select",
+    label: "Promotion Type",
+    placeholder: "Select Promotion Type",
+    options: promotionTypeOptions,
+  },
+  {
+    name: "status",
+    type: "select",
+    label: "Promotion Status",
+    placeholder: "Select Promotion Status",
+    options: promotionStatusOptions,
+  },
+  {
+    name: "date",
+    type: "rangePicker",
+    label: "Promotion Date",
+    placeholder: "Select Promotion Date",
+  },
+];
 
 const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
   const { loading, promotions, total } = useAppSelector(
@@ -35,92 +54,6 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
     sort_order: "",
     filters: {},
   });
-
-  const columns = [
-    {
-      title: "Promotion Name",
-      dataIndex: "promotionName",
-      key: "title",
-      sortDirections: [
-        "ascend" as SortOrder,
-        "descend" as SortOrder,
-        "ascend" as SortOrder,
-      ],
-      render: (text: string) => {
-        return (
-          <CustomLink title={text} href={`/promotions/${text}`} key={text} />
-        );
-      },
-      sorter: true,
-    },
-    {
-      title: "Promotion Type",
-      dataIndex: "promotionType",
-      key: "promotion_type",
-      render: (text: number) => {
-        return PromotionTypeLabel[text as keyof typeof PromotionTypeLabel];
-      },
-    },
-    {
-      title: "Status",
-      dataIndex: "promotionStatus",
-      key: "status",
-      render: (text: number) => {
-        return PromotionStatusLabel[text as keyof typeof PromotionStatusLabel];
-      },
-    },
-    {
-      title: "Start Date",
-      dataIndex: "promotionStartDate",
-      key: "start_date",
-      sorter: true,
-      sortDirections: [
-        "ascend" as SortOrder,
-        "descend" as SortOrder,
-        "ascend" as SortOrder,
-      ],
-      render: (text: string) => {
-        return formatDate(text);
-      },
-    },
-    {
-      title: "End Date",
-      dataIndex: "promotionEndDate",
-      key: "end_date",
-      sorter: true,
-      sortDirections: [
-        "ascend" as SortOrder,
-        "descend" as SortOrder,
-        "ascend" as SortOrder,
-      ],
-      render: (text: string) => {
-        return formatDate(text);
-      },
-    },
-  ];
-
-  const selectConfigs: SelectConfig[] = [
-    {
-      name: "promotion_type",
-      type: "select",
-      label: "Promotion Type",
-      placeholder: "Select Promotion Type",
-      options: promotionTypeOptions,
-    },
-    {
-      name: "status",
-      type: "select",
-      label: "Promotion Status",
-      placeholder: "Select Promotion Status",
-      options: promotionStatusOptions,
-    },
-    {
-      name: "date",
-      type: "rangePicker",
-      label: "Promotion Date",
-      placeholder: "Select Promotion Date",
-    },
-  ];
 
   const onFilter = createOnFilterHandler({
     setParams,
@@ -155,7 +88,7 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
       />
       <ContentInner>
         <TableReuse
-          columns={columns}
+          columns={columnsPromotionList}
           dataSource={promotions}
           loading={loading}
           onChange={handleOnChangeTable}

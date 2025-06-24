@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { PromotionPayload } from "../../../type/promotion/promotion";
 
 interface PromotionCreateState {
   loading: boolean;
@@ -16,10 +17,13 @@ const promotionCreateSlice = createSlice({
   name: "promotionCreate",
   initialState,
   reducers: {
-    createPromotionStart: (state) => {
-      state.loading = true;
-      state.success = false;
-      state.error = null;
+    createPromotionStart: {
+      reducer: (state) => {
+        state.loading = true;
+        state.success = false;
+        state.error = null;
+      },
+      prepare: (payload: PromotionPayload) => ({ payload }),
     },
     createPromotionSuccess: (state) => {
       state.loading = false;

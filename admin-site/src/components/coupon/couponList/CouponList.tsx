@@ -1,22 +1,18 @@
 import { type FC, useCallback, useEffect, useState } from "react";
-import type { ColumnsType, SortOrder } from "antd/es/table/interface";
 import {
-  CouponTypeLabel,
-  CouponStatusLabel,
   type CouponAdminDTO,
   type CouponListParams,
   couponStatusOptions,
   couponTypeOptions,
 } from "../../../type/coupon/coupon";
 import { useAppSelector } from "../../../hooks/redux";
-import { formatDate } from "../../../helper/formatDate";
 import FilterReuse from "../../common/Filter/FilterReuse";
 import type { ListPageParams, SelectConfig } from "../../../type/common/common";
 import TableReuse from "../../common/Table/TableReuse";
-import CustomLink from "../../common/Link/CustomLink";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
 import { createOnTableChangeHandler } from "../../common/Table/HandleTableChange/HandleTableChange";
 import { createOnFilterHandler } from "../../../helper/formatFilters";
+import { columnsCouponList } from "../../common/Columns/Colums";
 
 interface CouponListProps {
   fetchData: (params: CouponListParams) => void;
@@ -36,75 +32,6 @@ const CouponList: FC<CouponListProps> = ({ fetchData }) => {
     sort_order: "",
     filters: {},
   });
-
-  const columns: ColumnsType<CouponAdminDTO> = [
-    {
-      title: "Counpon Code",
-      dataIndex: "code",
-      key: "code",
-      render: (_, record: CouponAdminDTO) => {
-        return (
-          <>
-            <CustomLink
-              title={record.code}
-              href={`/coupons/${record.id}`}
-              key={record.id}
-            />
-          </>
-        );
-      },
-      sortDirections: [
-        "ascend" as SortOrder,
-        "descend" as SortOrder,
-        "ascend" as SortOrder,
-      ],
-      sorter: true,
-    },
-    {
-      title: "Coupon Type",
-      dataIndex: "discount_type",
-      key: "discount_type",
-      render: (discountType: number) => {
-        return CouponTypeLabel[discountType as keyof typeof CouponTypeLabel];
-      },
-    },
-    {
-      title: "Coupon Status",
-      dataIndex: "status",
-      key: "status",
-      render: (status: number) => {
-        return CouponStatusLabel[status as keyof typeof CouponStatusLabel];
-      },
-    },
-    {
-      title: "Start Date",
-      dataIndex: "start_date",
-      key: "start_date",
-      sortDirections: [
-        "ascend" as SortOrder,
-        "descend" as SortOrder,
-        "ascend" as SortOrder,
-      ],
-      render: (date: string) => {
-        return formatDate(date);
-      },
-      sorter: true,
-    },
-    {
-      title: "End Date",
-      dataIndex: "end_date",
-      key: "end_date",
-      sortDirections: [
-        "ascend" as SortOrder,
-        "descend" as SortOrder,
-        "ascend" as SortOrder,
-      ],
-      render: (date: string) => {
-        return formatDate(date);
-      },
-      sorter: true,
-    },
-  ];
 
   const selectConfigs: SelectConfig[] = [
     {
@@ -162,7 +89,7 @@ const CouponList: FC<CouponListProps> = ({ fetchData }) => {
       <ContentInner>
         <TableReuse<CouponAdminDTO>
           key={`coupon-table-${coupons?.length || 0}`}
-          columns={columns}
+          columns={columnsCouponList}
           dataSource={coupons}
           loading={loading}
           pagination={{

@@ -19,14 +19,19 @@ import {
   PromotionType,
   PromotionTypeLabel,
 } from "../../../type/promotion/promotion";
-import { useEffect, useState, type FC } from "react";
+import { useState, type FC } from "react";
 import StepBlock from "../../common/Step/StepBlock";
 import { PlusOutlined } from "@ant-design/icons";
 import ModalMenuItem from "../../common/modal/ModalMenuItem";
 import TableReuse from "../../common/Table/TableReuse";
 import type { MenuListDataType } from "../../../type/menu/menu";
-import { columnsMenuItemNoSort } from "../../common/Columns/Colums";
+import {
+  columnsCouponListNoSort,
+  columnsMenuItemNoSort,
+} from "../../common/Columns/Colums";
 import clsx from "clsx";
+import ModalCouponList from "../../common/modal/ModalCouponList";
+import type { CouponAdminDTO } from "../../../type/coupon/coupon";
 
 interface Props {
   title?: string;
@@ -35,14 +40,14 @@ interface Props {
   step: number;
 }
 
-export interface SelectedTableItems {
+export interface SelectedTableItems<T> {
   keys: React.Key[];
-  items: MenuListDataType[];
+  items: T[];
 }
 
 export interface SelectedTableItemsBuyXGetY {
-  BuyX: SelectedTableItems;
-  GetY: SelectedTableItems;
+  BuyX: SelectedTableItems<MenuListDataType>;
+  GetY: SelectedTableItems<MenuListDataType>;
 }
 const promotionOptions = [
   {
@@ -75,17 +80,26 @@ const PromotionForm: FC<Props> = ({ mode, form, step }) => {
   const useCoupon = Form.useWatch(["step1", "use_coupon"], form);
   const promotionType = Form.useWatch(["step1", "promotionType"], form);
   const [showModalMenuItem, setShowModalMenuItem] = useState<boolean>(false);
+
   const [showModalCoupon, setShowModalCoupon] = useState<boolean>(false);
   const [showModalBuyXGetY, setShowModalBuyXGetY] = useState({
     buyX: false,
     getY: false,
   });
 
-  const [dataMenuItemSeleted, setDataMenuItemSeleted] =
-    useState<SelectedTableItems>({
-      keys: [],
-      items: [],
-    });
+  const [dataMenuItemSeleted, setDataMenuItemSeleted] = useState<
+    SelectedTableItems<MenuListDataType>
+  >({
+    keys: [],
+    items: [],
+  });
+
+  const [dataCouponSeleted, setDataCouponSeleted] = useState<
+    SelectedTableItems<CouponAdminDTO>
+  >({
+    keys: [],
+    items: [],
+  });
 
   const [dataMenuItemSeletedBuyXGetY, setDataMenuItemSeletedBuyXGetY] =
     useState<SelectedTableItemsBuyXGetY>({
@@ -236,23 +250,68 @@ const PromotionForm: FC<Props> = ({ mode, form, step }) => {
             </div>
           </Space>
           {useCoupon && (
-            <div className={clsx(styles.customTableSelect, styles.marginItem)}>
-              <div className={styles.titleSelectCustom}>
-                <Typography.Title level={5}>Select Coupon</Typography.Title>
-                <Button
-                  icon={<PlusOutlined />}
-                  onClick={() => setShowModalCoupon(true)}
+            <Form.Item
+              name={["step1", "use_coupon_list"]}
+              rules={[
+                {
+                  validator: (_, value) => {
+                    console.log("pass", value);
+                    if (!value || value.length <= 0) {
+                      return Promise.reject("Please select coupon!");
+                    }
+                    return Promise.resolve();
+                  },
+                },
+              ]}
+            >
+              <Row>
+                <div
+                  className={clsx(styles.customTableSelect, styles.marginItem)}
                 >
-                  Select
-                </Button>
-              </div>
-              {showModalCoupon && (
-                <>
-                  <div>cuong</div>
-                </>
-              )}
-              <TableReuse />
-            </div>
+                  <div className={styles.titleSelectCustom}>
+                    <Typography.Title level={5}>Select Coupon</Typography.Title>
+                    <Button
+                      icon={<PlusOutlined />}
+                      onClick={() => setShowModalCoupon(true)}
+                    >
+                      Select
+                    </Button>
+                  </div>
+                  {showModalCoupon && (
+                    <>
+                      <ModalCouponList
+                        open={showModalCoupon}
+                        width={1000}
+                        onCancel={() => setShowModalCoupon(false)}
+                        selectedData={dataCouponSeleted.items}
+                        selectedDataKey={dataCouponSeleted.keys}
+                        handleSubmitModal={(items, keys) => {
+                          setShowModalCoupon(false);
+                          setDataCouponSeleted({
+                            keys,
+                            items,
+                          });
+                          form.setFieldsValue({
+                            step1: {
+                              use_coupon_list: keys,
+                            },
+                          });
+                          form.validateFields([["step1", "use_coupon_list"]]);
+                        }}
+                      />
+                    </>
+                  )}
+                  <TableReuse
+                    columns={columnsCouponListNoSort}
+                    dataSource={dataCouponSeleted.items}
+                    rowKey="id"
+                    pagination={{
+                      pageSize: 5,
+                    }}
+                  />
+                </div>
+              </Row>
+            </Form.Item>
           )}
         </StepBlock>
 
