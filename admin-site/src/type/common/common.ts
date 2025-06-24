@@ -3,6 +3,7 @@ import type { SelectProps } from "antd";
 export interface SelectConfig {
   type: "select" | "input" | "date" | "rangePicker";
   name: string;
+  key?: string;
   label?: string;
   placeholder?: string;
   searchable?: boolean;

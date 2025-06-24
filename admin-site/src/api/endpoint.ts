@@ -1,6 +1,6 @@
 const endpoints = {
   promotion: {
-    get: (storeId: string) => `/admin/promotion/${storeId}`,
+    get: () => `/admin/promotion/list`,
     post: () => `/admin/promotion/`,
   },
   menuItem: {
@@ -18,7 +18,8 @@ const endpoints = {
     delete: (id: string) => `/admin/coupon/${id}`,
     trackUsage: (id: string) => `/admin/coupon/${id}/track-usage`,
     setStatus: (id: string) => `/admin/coupon/${id}/status`,
-    assignPromotion: (storeId: string) => `/admin/coupon/${storeId}/assign-promotion`,
+    assignPromotion: (storeId: string) =>
+      `/admin/coupon/${storeId}/assign-promotion`,
   },
 };
 

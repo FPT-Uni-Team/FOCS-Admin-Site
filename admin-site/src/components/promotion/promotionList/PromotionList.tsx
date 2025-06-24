@@ -1,22 +1,22 @@
 import { type FC, useEffect, useState } from "react";
-import type {
-  TablePaginationConfig,
-  SorterResult,
-  FilterValue,
-} from "antd/es/table/interface";
 import type { SortOrder } from "antd/es/table/interface";
 import TableReuse from "../../common/Table/TableReuse";
 import {
+  PromotionStatusLabel,
+  promotionStatusOptions,
   PromotionTypeLabel,
+  promotionTypeOptions,
   type PromotionListDataType,
   type PromotionListParams,
 } from "../../../type/promotion/promotion";
 import { useAppSelector } from "../../../hooks/redux";
 import { formatDate } from "../../../helper/formatDate";
 import FilterReuse from "../../common/Filter/FilterReuse";
-import type { SelectConfig } from "../../../type/common/common";
+import type { ListPageParams, SelectConfig } from "../../../type/common/common";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
 import CustomLink from "../../common/Link/CustomLink";
+import { createOnTableChangeHandler } from "../../common/Table/HandleTableChange/HandleTableChange";
+import { createOnFilterHandler } from "../../../helper/formatFilters";
 interface PromotionListProps {
   fetchData: (params: PromotionListParams) => void;
 }
@@ -26,7 +26,7 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
     (state) => state.promotion
   );
 
-  const [params, setParams] = useState<PromotionListParams>({
+  const [params, setParams] = useState<ListPageParams>({
     page: 1,
     page_size: 10,
     search_by: "",
@@ -64,7 +64,10 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
     {
       title: "Status",
       dataIndex: "promotionStatus",
-      key: "is_active",
+      key: "status",
+      render: (text: number) => {
+        return PromotionStatusLabel[text as keyof typeof PromotionStatusLabel];
+      },
     },
     {
       title: "Start Date",
@@ -102,24 +105,14 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
       type: "select",
       label: "Promotion Type",
       placeholder: "Select Promotion Type",
-      options: [
-        { value: "jack", label: "Jack" },
-        { value: "lucy", label: "Lucy" },
-        { value: "Yiminghe", label: "yiminghe" },
-        { value: "disabled", label: "Disabled", disabled: true },
-      ],
+      options: promotionTypeOptions,
     },
     {
-      name: "promotion_status",
+      name: "status",
       type: "select",
       label: "Promotion Status",
       placeholder: "Select Promotion Status",
-      options: [
-        { value: "jack", label: "Jack" },
-        { value: "lucy", label: "Lucy" },
-        { value: "Yiminghe", label: "yiminghe" },
-        { value: "disabled", label: "Disabled", disabled: true },
-      ],
+      options: promotionStatusOptions,
     },
     {
       name: "date",
@@ -129,29 +122,9 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
     },
   ];
 
-  const formatFilters = (filters: Record<string, unknown>) => {
-    const formatted = { ...filters };
-    if (filters.date && Array.isArray(filters.date)) {
-      formatted.start_date = filters.date[0].toISOString();
-      formatted.start_end = filters.date[1].toISOString();
-      delete formatted.date;
-    }
-    Object.keys(formatted).forEach((key) => {
-      if (formatted[key] === undefined || formatted[key] === null) {
-        delete formatted[key];
-      }
-    });
-    return formatted;
-  };
-
-  const onFilter = (values: Record<string, unknown>) => {
-    const formattedFilters = formatFilters(values);
-    setParams((prev) => ({
-      ...prev,
-      page: 1,
-      filters: formattedFilters as Record<string, string>,
-    }));
-  };
+  const onFilter = createOnFilterHandler({
+    setParams,
+  });
 
   const onSearch = (value: string) => {
     setParams((prev) => ({
@@ -162,28 +135,12 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
     }));
   };
 
-  const handleOnChangeTable = (
-    pagination: TablePaginationConfig,
-    _filters: Record<string, FilterValue | null>,
-    sorter:
-      | SorterResult<PromotionListDataType>
-      | SorterResult<PromotionListDataType>[]
-  ) => {
-    let sort_by = "";
-    let sort_order = "";
-    if (!Array.isArray(sorter) && sorter.column) {
-      sort_by = sorter.columnKey as string;
-      sort_order = sorter.order === "ascend" ? "asc" : "desc";
+  const handleOnChangeTable = createOnTableChangeHandler<PromotionListDataType>(
+    {
+      currentParams: params,
+      setParams,
     }
-    const newParams = {
-      ...params,
-      page: pagination.current || 1,
-      page_size: pagination.pageSize || 10,
-      sort_by,
-      sort_order,
-    };
-    setParams(newParams);
-  };
+  );
 
   useEffect(() => {
     fetchData(params);
@@ -205,7 +162,7 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
           pagination={{
             current: params.page,
             pageSize: params.page_size,
-            total: total,
+            total,
             showTotal: (total) => `Total ${total} items`,
             showSizeChanger: true,
           }}
