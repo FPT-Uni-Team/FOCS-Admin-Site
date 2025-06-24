@@ -6,14 +6,21 @@ import {
 } from "../../slices/promotion/promotionListSlice";
 import promotionService from "../../../services/promotionService";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { PromotionListParams } from "../../../type/promotion/promotion";
+import type {
+  PromotionListParams,
+  PromotionPayload,
+} from "../../../type/promotion/promotion";
 import { objectMapper } from "../../../helper/mapperObject";
 import { fieldMap } from "../../../utils/objectMapper/promotion";
 import type { AxiosResponse } from "axios";
 import type { ListPageResponse } from "../../../type/common/common";
-import { createPromotionStart } from "../../slices/promotion/promotionCreateSlice";
+import {
+  createPromotionFailure,
+  createPromotionStart,
+  createPromotionSuccess,
+} from "../../slices/promotion/promotionCreateSlice";
 
-const { getListPromtions, creatPromotion } = promotionService;
+const { getListPromtions, createPromotion } = promotionService;
 
 function* fetchPromotionList(
   action: PayloadAction<PromotionListParams>
@@ -29,16 +36,14 @@ function* fetchPromotionList(
     yield put(fetchPromotionsFailure(errorMessage));
   }
 }
-
-function* fetchCreatePromotion(action: any): Generator<Effect, void, any> {
+function* fetchCreatePromotion(
+  action: PayloadAction<PromotionPayload>
+): Generator<Effect, void, any> {
   try {
-    const response = yield call(() => creatPromotion(action.payload));
-    console.log(response);
-    //yield put(fetchPromotionsSuccess({ promotions: dataMapped, total: total }));
+    const response = yield call(() => createPromotion(action.payload));
+    yield put(createPromotionSuccess());
   } catch (error: unknown) {
-    //const errorMessage =
-    // instanceof Error ? error.message : "Failed to fetch users";
-    //yield put(fetchPromotionsFailure(errorMessage));
+    yield put(createPromotionFailure());
   }
 }
 

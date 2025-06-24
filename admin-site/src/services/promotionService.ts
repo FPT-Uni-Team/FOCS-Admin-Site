@@ -7,8 +7,10 @@ import type { PromotionListParams } from "../type/promotion/promotion";
 const promotionService = {
   getListPromtions: (params: PromotionListParams) =>
     axiosClient.post(endpoints.promotion.get(), params),
-  createPromotion: (promotionData: unknown) =>
-    axiosClient.post(endpoints.promotion.post(), promotionData),
+  createPromotion: (promotionData: unknown) => {
+    console.log("pass");
+    return axiosClient.post(endpoints.promotion.post(), promotionData);
+  },
 };
 
 export default promotionService;

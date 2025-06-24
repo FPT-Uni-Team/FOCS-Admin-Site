@@ -87,47 +87,48 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
           )}
         </Col>
       </Row>
-
-      <Collapse
-        activeKey={showForm ? "1" : undefined}
-        ghost
-        className={styles.noHeaderCollapse}
-      >
-        <Panel key="1" showArrow={false} header={null}>
-          <Form
-            form={form}
-            layout="vertical"
-            onFinish={handleFinish}
-            className={styles.filterForm}
-          >
-            <Row gutter={[16, 16]}>
-              {selectConfigs.map((select) => (
-                <Col span={24 / selectConfigs.length}>
-                  <Form.Item
-                    key={select.name}
-                    name={select.name}
-                    label={select.label}
-                    colon={false}
-                    className={styles.customSearch}
-                  >
-                    {renderField(select)}
-                  </Form.Item>
-                </Col>
-              ))}
-            </Row>
-            <div className={styles.buttonGroup}>
-              <Form.Item className={styles.formItem}>
-                <Button onClick={handleReset}>Clear</Button>
-              </Form.Item>
-              <Form.Item className={styles.formItem}>
-                <Button type="primary" htmlType="submit">
-                  Filter
-                </Button>
-              </Form.Item>
-            </div>
-          </Form>
-        </Panel>
-      </Collapse>
+      {selectConfigs.length > 0 && (
+        <Collapse
+          activeKey={showForm ? "1" : undefined}
+          ghost
+          className={styles.noHeaderCollapse}
+        >
+          <Panel key="1" showArrow={false} header={null}>
+            <Form
+              form={form}
+              layout="vertical"
+              onFinish={handleFinish}
+              className={styles.filterForm}
+            >
+              <Row gutter={[16, 16]}>
+                {selectConfigs.map((select) => (
+                  <Col span={24 / selectConfigs.length}>
+                    <Form.Item
+                      key={select.name}
+                      name={select.name}
+                      label={select.label}
+                      colon={false}
+                      className={styles.customSearch}
+                    >
+                      {renderField(select)}
+                    </Form.Item>
+                  </Col>
+                ))}
+              </Row>
+              <div className={styles.buttonGroup}>
+                <Form.Item className={styles.formItem}>
+                  <Button onClick={handleReset}>Clear</Button>
+                </Form.Item>
+                <Form.Item className={styles.formItem}>
+                  <Button type="primary" htmlType="submit">
+                    Filter
+                  </Button>
+                </Form.Item>
+              </div>
+            </Form>
+          </Panel>
+        </Collapse>
+      )}
     </div>
   );
 };

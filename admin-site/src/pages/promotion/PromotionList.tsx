@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import TitleLine from "../../components/common/Title/TitleLine";
 import PromotionList from "../../components/promotion/promotionList/PromotionList";
 import { useAppDispatch } from "../../hooks/redux";
@@ -6,12 +7,18 @@ import type { PromotionListParams } from "../../type/promotion/promotion";
 
 const PromotionListPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const fetchData = async (params: PromotionListParams) => {
     await dispatch(fetchPromotionsStart(params));
   };
   return (
     <>
-      <TitleLine title="Promotions List" onCreate={() => {}} />
+      <TitleLine
+        title="Promotions List"
+        onCreate={() => {
+          navigate("/promotions/create");
+        }}
+      />
       <PromotionList fetchData={fetchData} />
     </>
   );

@@ -11,7 +11,6 @@ export default function* rootSaga() {
     fork(watchPromotionSaga),
     fork(authSaga),
     fork(couponSaga),
-
     fork(watchMenuSaga),
     // add saga
   ]);

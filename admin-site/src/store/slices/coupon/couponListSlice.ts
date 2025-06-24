@@ -41,28 +41,28 @@ const couponSlice = createSlice({
       state.error = null;
       state.params = action.payload || initialState.params;
     },
-    fetchCouponsSuccess: (
-      state,
-      action: PayloadAction<CouponListResponse>
-    ) => {
+    fetchCouponsSuccess: (state, action: PayloadAction<CouponListResponse>) => {
       state.loading = false;
-      // Map data to ensure all required fields exist
-      const newCoupons = action.payload.items.map(item => ({
+      const newCoupons = action.payload.items.map((item) => ({
         ...item,
-        status: item.status !== undefined ? item.status : 2 // Default to OnGoing if status not provided
+        status: item.status !== undefined ? item.status : 2,
       }));
-      
-      // Remove duplicates - prefer API data over locally added data
-      const existingTempIds = state.coupons.filter(c => c.id.startsWith('temp-')).map(c => c.id);
-      const filteredCoupons = newCoupons.filter(apiCoupon => 
-        !existingTempIds.some(tempId => {
-          const existingCoupon = state.coupons.find(c => c.id === tempId);
-          return existingCoupon && 
-            existingCoupon.code === apiCoupon.code &&
-            existingCoupon.description === apiCoupon.description;
-        })
+
+      const existingTempIds = state.coupons
+        .filter((c) => c.id.startsWith("temp-"))
+        .map((c) => c.id);
+      const filteredCoupons = newCoupons.filter(
+        (apiCoupon) =>
+          !existingTempIds.some((tempId) => {
+            const existingCoupon = state.coupons.find((c) => c.id === tempId);
+            return (
+              existingCoupon &&
+              existingCoupon.code === apiCoupon.code &&
+              existingCoupon.description === apiCoupon.description
+            );
+          })
       );
-      
+
       state.coupons = filteredCoupons;
       state.total = action.payload.totalCount;
       state.error = null;
@@ -72,7 +72,6 @@ const couponSlice = createSlice({
       state.error = action.payload;
     },
     addNewCouponToList: (state, action: PayloadAction<CouponAdminDTO>) => {
-      // Add new coupon to the beginning of the list
       state.coupons.unshift(action.payload);
       state.total += 1;
     },
@@ -85,4 +84,4 @@ export const {
   fetchCouponsFailure,
   addNewCouponToList,
 } = couponSlice.actions;
-export default couponSlice.reducer; 
+export default couponSlice.reducer;

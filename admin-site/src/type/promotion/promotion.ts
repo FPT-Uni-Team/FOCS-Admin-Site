@@ -20,6 +20,7 @@ export type PromotionType = (typeof PromotionType)[keyof typeof PromotionType];
 export type PromotionStatus =
   (typeof PromotionStatus)[keyof typeof PromotionStatus];
 export interface PromotionListDataType {
+  promotionId: string;
   promotionName: string;
   promotionStartDate: string;
   promotionEndDate: string;
@@ -70,4 +71,28 @@ export interface PromotionListParams {
   sort_by?: string;
   sort_order?: string;
   filters?: Record<string, string>;
+}
+
+export interface PromotionPayload {
+  title: string;
+  description?: string;
+  start_date: string;
+  end_date: string;
+  promotion_scope: string;
+  max_discount_value?: number;
+  max_usage?: number;
+  minimum_order_amount?: number;
+  minimum_item_quantity?: number;
+  can_apply_combine: boolean;
+  promotion_type: number;
+  discount_value?: number;
+  is_active: boolean;
+  accept_for_items?: string[];
+  promotion_item_condition?: {
+    buy_item_id?: string;
+    buy_quantity?: number;
+    get_item_id?: string;
+    get_quantity?: number;
+  };
+  store_id: string;
 }
