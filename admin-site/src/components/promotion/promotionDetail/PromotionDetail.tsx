@@ -3,6 +3,7 @@ import type { PromotionPayload } from "../../../type/promotion/promotion";
 import GeneralTab from "../../common/TabGeneral/General";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
 import { useForm } from "antd/es/form/Form";
+import ConditionApplication from "../../common/TabConditionApplication/ConditionApplication";
 
 interface Props {
   promotionDetail: PromotionPayload;
@@ -28,7 +29,7 @@ const PromotionDetail: React.FC<Props> = ({ promotionDetail }) => {
           key: "2",
           children: (
             <ContentInner>
-              <GeneralTab dataGeneral={promotionDetail} />
+              <ConditionApplication dataGeneral={promotionDetail} form={form} />
             </ContentInner>
           ),
         },

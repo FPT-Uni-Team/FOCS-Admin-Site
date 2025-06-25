@@ -16,8 +16,8 @@ import TextArea from "antd/es/input/TextArea";
 import { getDisabledTime, validateDate } from "../../../helper/formatDate";
 import dayjs from "dayjs";
 import {
-  PromotionType,
-  PromotionTypeLabel,
+  promotionApplyOption,
+  promotionOptions,
 } from "../../../type/promotion/promotion";
 import { useState, type FC } from "react";
 import StepBlock from "../../common/Step/StepBlock";
@@ -49,31 +49,6 @@ export interface SelectedTableItemsBuyXGetY {
   BuyX: SelectedTableItems<MenuListDataType>;
   GetY: SelectedTableItems<MenuListDataType>;
 }
-const promotionOptions = [
-  {
-    value: PromotionType.Percentage,
-    label: PromotionTypeLabel[PromotionType.Percentage],
-  },
-  {
-    value: PromotionType.FixedAmount,
-    label: PromotionTypeLabel[PromotionType.FixedAmount],
-  },
-  {
-    value: PromotionType.BuyXGetY,
-    label: PromotionTypeLabel[PromotionType.BuyXGetY],
-  },
-];
-
-const promotionApplyOption = [
-  {
-    value: 0,
-    label: "Item",
-  },
-  {
-    value: 1,
-    label: "Order",
-  },
-];
 
 const PromotionForm: FC<Props> = ({ form, step }) => {
   const promotionScope = Form.useWatch(["step2", "promotion_scope"], form);

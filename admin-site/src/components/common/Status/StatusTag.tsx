@@ -9,16 +9,17 @@ interface StatusTagProps {
 const statusColorMap: Record<string, string> = {
   active: "Active",
   inactive: "Inactive",
+  notstart: "Not Start",
 };
 
 const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
-  const normalized = status.toLowerCase();
+  const normalized = status.replace(" ", "").toLowerCase();
   const statusInfo = statusColorMap[normalized];
   if (!statusInfo) {
     return <Tag color="default">{status}</Tag>;
   }
   return (
-    <Tag className={styles[`custom-${status}`]}>{statusInfo || status}</Tag>
+    <Tag className={styles[`custom-${normalized}`]}>{statusInfo || status}</Tag>
   );
 };
 
