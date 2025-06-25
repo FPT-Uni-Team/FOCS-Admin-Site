@@ -1,16 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { PromotionPayload } from "../../../type/promotion/promotion";
 
 interface PromotionCreateState {
   loading: boolean;
   success: boolean;
   error: string | null;
+  promotionSuccess: PromotionPayload;
 }
 
 const initialState: PromotionCreateState = {
   loading: false,
   success: false,
   error: null,
+  promotionSuccess: {},
 };
 
 const promotionCreateSlice = createSlice({
@@ -25,9 +27,13 @@ const promotionCreateSlice = createSlice({
       },
       prepare: (payload: PromotionPayload) => ({ payload }),
     },
-    createPromotionSuccess: (state) => {
+    createPromotionSuccess: (
+      state,
+      action: PayloadAction<PromotionPayload>
+    ) => {
       state.loading = false;
       state.success = true;
+      state.promotionSuccess = action.payload;
     },
     createPromotionFailure: (state) => {
       state.loading = false;

@@ -87,7 +87,7 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
         onSearch={onSearch}
       />
       <ContentInner>
-        <TableReuse
+        <TableReuse<PromotionListDataType>
           columns={columnsPromotionList}
           dataSource={promotions}
           loading={loading}
@@ -99,7 +99,7 @@ const PromotionList: FC<PromotionListProps> = ({ fetchData }) => {
             showTotal: (total) => `Total ${total} items`,
             showSizeChanger: true,
           }}
-          rowKey="key"
+          rowKey="promotionId"
         />
       </ContentInner>
     </div>

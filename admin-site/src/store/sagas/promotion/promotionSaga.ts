@@ -19,8 +19,15 @@ import {
   createPromotionStart,
   createPromotionSuccess,
 } from "../../slices/promotion/promotionCreateSlice";
+import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
+import {
+  fetchPromotionDetailFailed,
+  fetchPromotionDetailStart,
+  fetchPromotionDetailSuccess,
+} from "../../slices/promotion/promotionDetailSlice";
 
-const { getListPromtions, createPromotion } = promotionService;
+const { getListPromtions, createPromotion, getPromotionDetail } =
+  promotionService;
 
 function* fetchPromotionList(
   action: PayloadAction<PromotionListParams>
@@ -38,16 +45,32 @@ function* fetchPromotionList(
 }
 function* fetchCreatePromotion(
   action: PayloadAction<PromotionPayload>
-): Generator<Effect, void, any> {
+): Generator<Effect, void, PromotionPayload> {
   try {
     const response = yield call(() => createPromotion(action.payload));
-    yield put(createPromotionSuccess());
-  } catch (error: unknown) {
+    yield put(createPromotionSuccess(response));
+  } catch {
     yield put(createPromotionFailure());
+  }
+}
+
+function* fetchPromotionDetail(
+  action: PayloadAction<string>
+): Generator<Effect, void, AxiosResponse<PromotionPayload>> {
+  try {
+    const response = yield call(() => getPromotionDetail(action.payload));
+    yield put(fetchPromotionDetailSuccess(response.data));
+  } catch {
+    yield put(fetchPromotionDetailFailed());
   }
 }
 
 export function* watchPromotionSaga() {
   yield takeEvery(fetchPromotionsStart.type, fetchPromotionList);
-  yield takeEvery(createPromotionStart.type, fetchCreatePromotion);
+  yield takeEvery(createPromotionStart.type, function* (action) {
+    yield* withGlobalLoading(fetchCreatePromotion, action);
+  });
+  yield takeEvery(fetchPromotionDetailStart.type, function* (action) {
+    yield* withGlobalLoading(fetchPromotionDetail, action);
+  });
 }

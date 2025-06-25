@@ -74,19 +74,20 @@ export interface PromotionListParams {
 }
 
 export interface PromotionPayload {
-  title: string;
+  id?: string;
+  title?: string;
   description?: string;
-  start_date: string;
-  end_date: string;
-  promotion_scope: string;
+  start_date?: string;
+  end_date?: string;
+  promotion_scope?: string;
   max_discount_value?: number;
   max_usage?: number;
   minimum_order_amount?: number;
   minimum_item_quantity?: number;
-  can_apply_combine: boolean;
-  promotion_type: number;
+  can_apply_combine?: boolean;
+  promotion_type?: number;
   discount_value?: number;
-  is_active: boolean;
+  is_active?: boolean;
   accept_for_items?: string[];
   promotion_item_condition?: {
     buy_item_id?: string;
@@ -94,5 +95,6 @@ export interface PromotionPayload {
     get_item_id?: string;
     get_quantity?: number;
   };
-  store_id: string;
+  coupon_ids?: string[];
+  store_id?: string;
 }
