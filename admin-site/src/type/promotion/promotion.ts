@@ -97,4 +97,31 @@ export interface PromotionPayload {
   };
   coupon_ids?: string[];
   store_id?: string;
+  status?: number;
 }
+
+export const promotionOptions = [
+  {
+    value: PromotionType.Percentage,
+    label: PromotionTypeLabel[PromotionType.Percentage],
+  },
+  {
+    value: PromotionType.FixedAmount,
+    label: PromotionTypeLabel[PromotionType.FixedAmount],
+  },
+  {
+    value: PromotionType.BuyXGetY,
+    label: PromotionTypeLabel[PromotionType.BuyXGetY],
+  },
+];
+
+export const promotionApplyOption = [
+  {
+    value: 0,
+    label: "Item",
+  },
+  {
+    value: 1,
+    label: "Order",
+  },
+];

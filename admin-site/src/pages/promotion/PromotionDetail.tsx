@@ -4,6 +4,7 @@ import PromotionDetail from "../../components/promotion/promotionDetail/Promotio
 import { useEffect } from "react";
 import { fetchPromotionDetailStart } from "../../store/slices/promotion/promotionDetailSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { PromotionStatusLabel } from "../../type/promotion/promotion";
 
 const PromotionDetailPage = () => {
   const { promotionId } = useParams();
@@ -14,7 +15,16 @@ const PromotionDetailPage = () => {
   }, [dispatch, promotionId]);
   return (
     <>
-      <TitleLine title="Test" />
+      <TitleLine
+        title={promotion.title}
+        status={
+          PromotionStatusLabel[
+            promotion.status as keyof typeof PromotionStatusLabel
+          ]
+        }
+        onEdit={() => {}}
+        hasMoreAction
+      />
       <PromotionDetail promotionDetail={promotion} />
     </>
   );

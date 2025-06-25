@@ -1,5 +1,8 @@
-import { useState, type FC } from "react";
-import type { PromotionPayload } from "../../../type/promotion/promotion";
+import { useEffect, type FC } from "react";
+import {
+  promotionOptions,
+  type PromotionPayload,
+} from "../../../type/promotion/promotion";
 import {
   Col,
   DatePicker,
@@ -14,9 +17,9 @@ import {
 import type { FormInstance } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import dayjs from "dayjs";
-import { getDisabledTime, validateDate } from "../../../helper/formatDate";
 import TableReuse from "../Table/TableReuse";
 import { columnsCouponListNoSort } from "../Columns/Colums";
+import styles from "../../promotion/promotionForm/PromotionForm.module.scss";
 
 interface Props {
   dataGeneral: PromotionPayload;
@@ -25,6 +28,22 @@ interface Props {
 
 const GeneralTab: FC<Props> = ({ dataGeneral, form }) => {
   const useCoupon = Form.useWatch(["step1", "use_coupon"], form);
+  useEffect(() => {
+    if (dataGeneral) {
+      form.setFieldsValue({
+        step1: {
+          title: dataGeneral.title,
+          description: dataGeneral.description,
+          start_date: dayjs(dataGeneral.start_date),
+          end_date: dayjs(dataGeneral.end_date),
+          promotionType: dataGeneral.promotion_type,
+          use_other_promotion: dataGeneral.can_apply_combine,
+          use_coupon:
+            dataGeneral.coupon_ids && dataGeneral?.coupon_ids?.length > 0,
+        },
+      });
+    }
+  }, [dataGeneral, form]);
   return (
     <Form form={form} layout="vertical" name="promotionDetailForm" colon={true}>
       <Row gutter={36}>
@@ -37,7 +56,7 @@ const GeneralTab: FC<Props> = ({ dataGeneral, form }) => {
       <Row gutter={36}>
         <Col span={24}>
           <Form.Item label="Description" name={["step1", "description"]}>
-            <TextArea rows={4} placeholder="Enter promotion description" />
+            <TextArea rows={4} disabled />
           </Form.Item>
         </Col>
       </Row>
@@ -46,87 +65,49 @@ const GeneralTab: FC<Props> = ({ dataGeneral, form }) => {
           <Form.Item
             name={["step1", "start_date"]}
             label="Promotion Start Date"
-            rules={[
-              {
-                required: true,
-                message: "Please select start date!",
-              },
-            ]}
           >
             <DatePicker
-              showTime={{ format: "HH:mm" }}
               format="DD/MM/YYYY HH:mm"
-              disabledDate={(current) =>
-                current && current < dayjs().startOf("day")
-              }
-              disabledTime={() => getDisabledTime()}
               style={{ width: "100%" }}
+              disabled
             />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item
-            name={["step1", "end_date"]}
-            label="Promotion End Date"
-            dependencies={[["step1", "start_date"]]}
-            rules={[
-              {
-                required: true,
-                message: "Please select end date!",
-              },
-              validateDate({
-                getFieldValue: form.getFieldValue,
-                fieldName: ["step1", "start_date"],
-                message: "End date must be after start date!",
-              }),
-            ]}
-          >
+          <Form.Item name={["step1", "end_date"]} label="Promotion End Date">
             <DatePicker
-              showTime={{ format: "HH:mm" }}
               format="DD/MM/YYYY HH:mm"
-              disabledDate={(current) =>
-                current && current < dayjs().startOf("day")
-              }
-              disabledTime={() => getDisabledTime()}
               style={{ width: "100%" }}
+              disabled
             />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={36}>
         <Col span={12}>
-          <Form.Item
-            label="Promotion type"
-            name={["step1", "promotionType"]}
-            rules={[
-              {
-                required: true,
-                message: "Please select promotion type!",
-              },
-            ]}
-          >
-            <Select placeholder="Select promotion type" />
+          <Form.Item label="Promotion type" name={["step1", "promotionType"]}>
+            <Select options={promotionOptions} disabled />
           </Form.Item>
         </Col>
       </Row>
       <Space direction="vertical">
-        <div>
+        <div className={styles.flexClass}>
           <Form.Item
             name={["step1", "use_other_promotion"]}
             valuePropName="checked"
             style={{ marginBottom: 0 }}
           >
-            <Switch />
+            <Switch disabled />
           </Form.Item>
           <div>Use with other promotions</div>
         </div>
-        <div>
+        <div className={styles.flexClass}>
           <Form.Item
             name={["step1", "use_coupon"]}
             valuePropName="checked"
             style={{ marginBottom: 0 }}
           >
-            <Switch />
+            <Switch disabled />
           </Form.Item>
           <div>Use coupon for promotion</div>
         </div>
@@ -138,7 +119,6 @@ const GeneralTab: FC<Props> = ({ dataGeneral, form }) => {
               <div>
                 <Typography.Title level={5}>Select Coupon</Typography.Title>
               </div>
-
               <TableReuse
                 columns={columnsCouponListNoSort}
                 dataSource={[]}
