@@ -75,7 +75,7 @@ const promotionApplyOption = [
   },
 ];
 
-const PromotionForm: FC<Props> = ({ mode, form, step }) => {
+const PromotionForm: FC<Props> = ({ form, step }) => {
   const promotionScope = Form.useWatch(["step2", "promotion_scope"], form);
   const useCoupon = Form.useWatch(["step1", "use_coupon"], form);
   const promotionType = Form.useWatch(["step1", "promotionType"], form);
@@ -170,7 +170,7 @@ const PromotionForm: FC<Props> = ({ mode, form, step }) => {
               >
                 <DatePicker
                   showTime={{ format: "HH:mm" }}
-                  format="YYYY-MM-DD HH:mm"
+                  format="DD/MM/YYYY HH:mm"
                   disabledDate={(current) =>
                     current && current < dayjs().startOf("day")
                   }
@@ -198,7 +198,7 @@ const PromotionForm: FC<Props> = ({ mode, form, step }) => {
               >
                 <DatePicker
                   showTime={{ format: "HH:mm" }}
-                  format="YYYY-MM-DD HH:mm"
+                  format="DD/MM/YYYY HH:mm"
                   disabledDate={(current) =>
                     current && current < dayjs().startOf("day")
                   }

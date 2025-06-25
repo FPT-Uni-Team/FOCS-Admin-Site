@@ -11,6 +11,8 @@ import couponSetStatusReducer from "./slices/coupon/couponSetStatusSlice";
 import couponAssignReducer from "./slices/coupon/couponAssignSlice";
 import menuItemSlice from "./slices/menuItem/menuItemSlice";
 import promotionCreateSlice from "./slices/promotion/promotionCreateSlice";
+import loadingSlice from "./slices/loading/loadingSlice";
+import promotionDetailSlice from "./slices/promotion/promotionDetailSlice";
 
 const rootReducer = combineReducers({
   promotion: promotionSlice,
@@ -25,6 +27,8 @@ const rootReducer = combineReducers({
   couponAssign: couponAssignReducer,
   menuItem: menuItemSlice,
   createPromotion: promotionCreateSlice,
+  loadingGlobal: loadingSlice,
+  promotionDetail: promotionDetailSlice,
 });
 
 export default rootReducer;

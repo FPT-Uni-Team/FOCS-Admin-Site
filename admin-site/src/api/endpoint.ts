@@ -1,7 +1,8 @@
 const endpoints = {
   promotion: {
-    get: () => `/admin/promotion/list`,
-    post: () => `/admin/promotion/`,
+    list: () => `/admin/promotion/list`,
+    create: () => `/admin/promotion`,
+    detail: (params: string) => `/admin/promotion/${params}`,
   },
   menuItem: {
     get: (storeId: string) => `/admin/menu-items?storeId=${storeId}`,

@@ -1,14 +1,18 @@
 import { useForm } from "antd/es/form/Form";
 import TitleLine from "../../components/common/Title/TitleLine";
 import PromotionForm from "../../components/promotion/promotionForm/PromotionForm";
-import { useState } from "react";
-import { useAppDispatch } from "../../hooks/redux";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { createPromotionStart } from "../../store/slices/promotion/promotionCreateSlice";
 import type { PromotionPayload } from "../../type/promotion/promotion";
+import { useNavigate } from "react-router-dom";
+import { showNotification } from "../../components/common/Notification/ToastCustom";
 
 const PromotionCreatePage = () => {
   const [form] = useForm();
   const [step, setStep] = useState(1);
+  const navigate = useNavigate();
+  const { success } = useAppSelector((state) => state.createPromotion);
   const dispatch = useAppDispatch();
 
   const validationFieldsByStep: Record<number, string[][]> = {
@@ -33,19 +37,6 @@ const PromotionCreatePage = () => {
         console.log("Validation failed:", error);
       });
   };
-
-  const handleCreatePromotion = () => {
-    form
-      .validateFields()
-      .then(() => {
-        const payloadData = handleModifyDataPromotion();
-        dispatch(createPromotionStart(payloadData));
-      })
-      .catch((error) => {
-        console.log("Validation failed:", error);
-      });
-  };
-
   const checkLegitValue = (value: number) => {
     return value !== undefined ? Number(value) : undefined;
   };
@@ -82,9 +73,29 @@ const PromotionCreatePage = () => {
               get_quantity: checkLegitValue(allFormValues?.step2?.get_y),
             }
           : undefined,
+      coupon_ids: allFormValues?.step1?.use_coupon_list,
       store_id: "550e8400-e29b-41d4-a716-446655440000",
     };
   };
+
+  const handleCreatePromotion = () => {
+    form
+      .validateFields()
+      .then(() => {
+        const payloadData = handleModifyDataPromotion();
+        dispatch(createPromotionStart(payloadData));
+      })
+      .catch(() => {
+        showNotification("error", "Create promotion failed!");
+      });
+  };
+
+  useEffect(() => {
+    if (success) {
+      showNotification("success", "Create promotion success!");
+      navigate("/promotions");
+    }
+  }, [navigate, success]);
 
   return (
     <>
