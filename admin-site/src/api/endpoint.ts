@@ -3,10 +3,12 @@ const endpoints = {
     list: () => `/admin/promotion/list`,
     create: () => `/admin/promotion`,
     detail: (params: string) => `/admin/promotion/${params}`,
+    get: (storeId: string) => `/admin/promotion?storeId=${storeId}`,
   },
   menuItem: {
     get: (storeId: string) => `/admin/menu-items?storeId=${storeId}`,
     list: () => `/admin/menu-items`,
+    create: () => `/admin/menu-item`,
   },
   auth: {
     login: () => "/me/login",

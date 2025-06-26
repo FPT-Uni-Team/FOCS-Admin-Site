@@ -6,6 +6,7 @@ import couponSaga from "./sagas/coupon/couponSaga";
 
 import { watchMenuSaga } from "./sagas/menu/menuItemSaga";
 import { watchMenuItemSaga } from "./sagas/menuItem/menuItemSaga";
+import { watchMenuItemCreateSaga } from "./sagas/menuItem/menuItemCreateSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -14,6 +15,7 @@ export default function* rootSaga() {
     fork(couponSaga),
     fork(watchMenuSaga),
     fork(watchMenuItemSaga),
+    fork(watchMenuItemCreateSaga),
     // add saga
   ]);
 }

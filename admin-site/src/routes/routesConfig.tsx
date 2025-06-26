@@ -22,6 +22,7 @@ const CouponAssignPage = lazy(() => import("../pages/coupon/CouponAssign"));
 const LoginPage = lazy(() => import("../pages/login/LoginPage"));
 const CouponDetailPage = lazy(() => import("../pages/coupon/CouponDetail"));
 const MenuItemListPage = lazy(() => import("../pages/menuItem/MenuItemList"));
+const MenuItemCreatePage = lazy(() => import("../pages/menuItem/MenuItemCreate"));
 
 export interface AppRoute {
   path: string;
@@ -45,6 +46,11 @@ export const routes: AppRoute[] = [
     component: MenuItemListPage,
     label: "Menu Items",
     icon: <UserOutlined />,
+  },
+  {
+    path: "/menu-items/create",
+    component: MenuItemCreatePage,
+    hidden: true,
   },
   {
     path: "/promotions/:promotionId",

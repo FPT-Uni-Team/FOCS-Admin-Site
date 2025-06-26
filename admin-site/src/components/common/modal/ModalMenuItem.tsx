@@ -12,12 +12,12 @@ import CustomLink from "../Link/CustomLink";
 import FilterReuse from "../Filter/FilterReuse";
 import type { ListPageParams, SelectConfig } from "../../../type/common/common";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import type { MenuListDataType } from "../../../type/menu/menu";
+import type { MenuItemListDataType } from "../../../type/menuItem/menuItem";
 import { fetchMenuItemsStart } from "../../../store/slices/menuItem/menuItemSlice";
 
 interface MenuItemSelectionModalProps extends ModalProps {
-  handleSubmitModal: (data: MenuListDataType[], key: React.Key[]) => void;
-  selectedData: MenuListDataType[];
+  handleSubmitModal: (data: MenuItemListDataType[], key: React.Key[]) => void;
+  selectedData: MenuItemListDataType[];
   selectedDataKey: React.Key[];
   singleSelectMode?: boolean;
 }
@@ -25,7 +25,7 @@ interface MenuItemSelectionModalProps extends ModalProps {
 const columnsMenuItem = [
   {
     title: "Menu item name",
-    dataIndex: "menuName",
+    dataIndex: "name",
     key: "name",
     sortDirections: [
       "ascend" as SortOrder,
@@ -39,7 +39,7 @@ const columnsMenuItem = [
   },
   {
     title: "Menu Base Price",
-    dataIndex: "menuBasePrice",
+    dataIndex: "base_price",
     key: "base_price",
     sorter: true,
     sortDirections: [
@@ -50,19 +50,11 @@ const columnsMenuItem = [
   },
   {
     title: "Status",
-    dataIndex: "isAvailable",
+    dataIndex: "is_available",
     key: "is_available",
-  },
-  {
-    title: "Menu category",
-    dataIndex: "menuCategoryId",
-    key: "menu_category_id",
-    sorter: true,
-    sortDirections: [
-      "ascend" as SortOrder,
-      "descend" as SortOrder,
-      "ascend" as SortOrder,
-    ],
+    render: (isAvailable: boolean) => {
+      return isAvailable ? "Available" : "Unavailable";
+    },
   },
 ];
 
@@ -111,7 +103,7 @@ const ModalMenuItem: React.FC<MenuItemSelectionModalProps> = ({
     (state) => state.menuItem
   );
   const [selectedMenuItems, setSelectedMenuItems] =
-    useState<MenuListDataType[]>(selectedData);
+    useState<MenuItemListDataType[]>(selectedData);
   const [selectedMenuItemKeys, setSelectedMenuItemKeys] =
     useState<React.Key[]>(selectedDataKey);
 
@@ -126,7 +118,7 @@ const ModalMenuItem: React.FC<MenuItemSelectionModalProps> = ({
   });
 
   const onRowSelectionChange = useCallback(
-    (selectedRowKeys: React.Key[], selectedRows: MenuListDataType[]) => {
+    (selectedRowKeys: React.Key[], selectedRows: MenuItemListDataType[]) => {
       setSelectedMenuItems(selectedRows);
       setSelectedMenuItemKeys(selectedRowKeys);
     },
@@ -136,18 +128,18 @@ const ModalMenuItem: React.FC<MenuItemSelectionModalProps> = ({
   const rowSelection = {
     selectedRowKeys: selectedMenuItemKeys,
     onChange: onRowSelectionChange,
-    getCheckboxProps: (record: MenuListDataType) => ({
+    getCheckboxProps: (record: MenuItemListDataType) => ({
       disabled:
         singleSelectMode &&
         selectedMenuItemKeys.length > 0 &&
-        !selectedMenuItemKeys.includes(record.menuId),
+        !selectedMenuItemKeys.includes(record.id),
     }),
   };
 
   const handleOnChangeTable = (
     pagination: TablePaginationConfig,
     _filters: Record<string, FilterValue | null>,
-    sorter: SorterResult<MenuListDataType> | SorterResult<MenuListDataType>[]
+    sorter: SorterResult<MenuItemListDataType> | SorterResult<MenuItemListDataType>[]
   ) => {
     let sort_by = "";
     let sort_order = "";
@@ -203,7 +195,7 @@ const ModalMenuItem: React.FC<MenuItemSelectionModalProps> = ({
           showTotal: (total) => `Total ${total} items`,
         }}
         rowSelection={rowSelection}
-        rowKey="menuId"
+        rowKey="id"
       />
     </Modal>
   );
