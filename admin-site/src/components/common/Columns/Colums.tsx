@@ -13,6 +13,7 @@ import {
   PromotionTypeLabel,
   type PromotionListDataType,
 } from "../../../type/promotion/promotion";
+import type { MenuItemListDataType } from "../../../type/menuItem/menuItem";
 
 export const columnsMenuItemNoSort = [
   {
@@ -224,6 +225,53 @@ export const columnsPromotionList: ColumnsType<PromotionListDataType> = [
     ],
     render: (text: string) => {
       return formatDate(text);
+    },
+  },
+];
+
+export const columnsMenuItemList: ColumnsType<MenuItemListDataType> = [
+  {
+    title: "Menu Item Name",
+    dataIndex: "name",
+    key: "name",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (_, record) => {
+      return (
+        <CustomLink
+          title={record.name}
+          href={`/menu-items/${record.id}`}
+          key={record.id}
+        />
+      );
+    },
+    sorter: true,
+  },
+  {
+    title: "Description",
+    dataIndex: "description",
+    key: "description",
+  },
+  {
+    title: "Base Price",
+    dataIndex: "base_price",
+    key: "base_price",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    sorter: true,
+  },
+  {
+    title: "Status",
+    dataIndex: "is_available",
+    key: "is_available",
+    render: (isAvailable: boolean) => {
+      return isAvailable ? "Available" : "Unavailable";
     },
   },
 ];

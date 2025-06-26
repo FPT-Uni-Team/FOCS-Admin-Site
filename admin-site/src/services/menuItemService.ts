@@ -1,12 +1,10 @@
 import axiosClient from "../api/axiosClient";
 import endpoints from "../api/endpoint";
-import type { ListPageParams } from "../type/common/common";
-
-const fake_stroreId = "550e8400-e29b-41d4-a716-446655440000";
+import type { MenuItemListParams } from "../type/menuItem/menuItem";
 
 const menuItemService = {
-  getListMenuItems: (params: ListPageParams) =>
-    axiosClient.post(endpoints.menuItem.get(fake_stroreId), params),
+  getListMenuItems: (params: MenuItemListParams) =>
+    axiosClient.post(endpoints.menuItem.list(), params),
 };
 
 export default menuItemService;

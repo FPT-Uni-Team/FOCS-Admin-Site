@@ -6,6 +6,7 @@ const endpoints = {
   },
   menuItem: {
     get: (storeId: string) => `/admin/menu-items?storeId=${storeId}`,
+    list: () => `/admin/menu-items`,
   },
   auth: {
     login: () => "/me/login",

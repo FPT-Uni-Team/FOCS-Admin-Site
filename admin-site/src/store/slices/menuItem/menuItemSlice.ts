@@ -1,13 +1,11 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { PromotionListParams } from "../../../type/promotion/promotion";
-import type { MenuListDataType } from "../../../type/menu/menu";
-import type { ListPageParams } from "../../../type/common/common";
+import type { MenuItemListDataType, MenuItemListParams } from "../../../type/menuItem/menuItem";
 
 interface MenuItemListState {
-  menuItems: MenuListDataType[];
+  menuItems: MenuItemListDataType[];
   loading: boolean;
   error: string | null;
-  params: PromotionListParams;
+  params: MenuItemListParams;
   total: number;
 }
 
@@ -33,7 +31,7 @@ const menuItemSlice = createSlice({
   reducers: {
     fetchMenuItemsStart: (
       state,
-      action: PayloadAction<ListPageParams | undefined>
+      action: PayloadAction<MenuItemListParams | undefined>
     ) => {
       state.loading = true;
       state.error = null;
@@ -42,7 +40,7 @@ const menuItemSlice = createSlice({
     fetchMenuItemsSuccess: (
       state,
       action: PayloadAction<{
-        menuItems: MenuListDataType[];
+        menuItems: MenuItemListDataType[];
         total: number;
       }>
     ) => {
