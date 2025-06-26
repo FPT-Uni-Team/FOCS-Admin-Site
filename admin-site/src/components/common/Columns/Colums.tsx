@@ -229,49 +229,35 @@ export const columnsPromotionList: ColumnsType<PromotionListDataType> = [
   },
 ];
 
-export const columnsMenuItemList: ColumnsType<MenuItemListDataType> = [
+export const columnsMenuItem = [ 
   {
-    title: "Menu Item Name",
-    dataIndex: "name",
+    title: "Menu item name",
+    dataIndex: "menuName",
     key: "name",
     sortDirections: [
       "ascend" as SortOrder,
       "descend" as SortOrder,
       "ascend" as SortOrder,
     ],
-    render: (_, record) => {
-      return (
-        <CustomLink
-          title={record.name}
-          href={`/menu-items/${record.id}`}
-          key={record.id}
-        />
-      );
+    render: (value: string) => {
+      return <CustomLink title={value} href="promotions" />;
     },
     sorter: true,
   },
   {
-    title: "Description",
-    dataIndex: "description",
-    key: "description",
-  },
-  {
-    title: "Base Price",
-    dataIndex: "base_price",
+    title: "Menu Base Price",
+    dataIndex: "menuBasePrice",
     key: "base_price",
+    sorter: true,
     sortDirections: [
       "ascend" as SortOrder,
       "descend" as SortOrder,
       "ascend" as SortOrder,
     ],
-    sorter: true,
   },
   {
     title: "Status",
-    dataIndex: "is_available",
+    dataIndex: "isAvailable",
     key: "is_available",
-    render: (isAvailable: boolean) => {
-      return isAvailable ? "Available" : "Unavailable";
-    },
   },
 ];

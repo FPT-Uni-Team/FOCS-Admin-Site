@@ -1,9 +1,10 @@
 export const fieldMap = {
-  id: "id",
-  name: "name",
-  description: "description",
-  images: "images",
-  base_price: "base_price",
-  is_available: "is_available",
-  store_id: "store_id",
+  menuId: "id",
+  menuName: "name",
+  menuDescription: "description",
+  menuImageUrl: "images",
+  menuBasePrice: "base_price",
+  isAvailable: "is_available",
+  menuCategoryId: "menu_category_id",
+  storeId: "store_id",
 };

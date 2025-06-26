@@ -11,7 +11,7 @@ import type { ListPageParams, SelectConfig } from "../../../type/common/common";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
 import { createOnTableChangeHandler } from "../../common/Table/HandleTableChange/HandleTableChange";
 import { createOnFilterHandler } from "../../../helper/formatFilters";
-import { columnsMenuItemList } from "../../common/Columns/Colums";
+import { columnsMenuItem } from "../../common/Columns/Colums";
 
 interface MenuItemListProps {
   fetchData: (params: MenuItemListParams) => void;
@@ -84,7 +84,7 @@ const MenuItemList: FC<MenuItemListProps> = ({ fetchData }) => {
       />
       <ContentInner>
         <TableReuse<MenuItemListDataType>
-          columns={columnsMenuItemList}
+          columns={columnsMenuItem}
           dataSource={menuItems}
           loading={loading}
           onChange={handleOnChangeTable}
