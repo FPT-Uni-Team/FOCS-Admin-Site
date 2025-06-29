@@ -1,504 +1,504 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   Input,
   Select,
   DatePicker,
-  InputNumber,
   Switch,
   Row,
   Col,
-  Space,
-  Alert,
-  Typography,
   type FormInstance,
+  Typography,
+  Button,
 } from "antd";
-import {
-  PercentageOutlined,
-  DollarOutlined,
-} from "@ant-design/icons";
 import dayjs from "dayjs";
-import type { RootState } from "../../../store/store";
 import {
   CouponCreationType,
-  CouponCreationTypeLabel,
   DiscountType,
-  DiscountTypeLabel,
   CouponConditionType,
-  CouponConditionTypeLabel,
+  couponCreationOptions,
+  discountTypeOptions,
+  couponConditionOptions,
+  type CouponDetailType,
 } from "../../../type/coupon/coupon";
 import { getDisabledTime, validateDate } from "../../../helper/formatDate";
-import StepBlock from "../../common/Step/StepBlock";
-import menuItemService from "../../../services/menuItemService";
-import promotionService from "../../../services/promotionService";
 import styles from "./CouponCreateForm.module.scss";
-
-const { Option } = Select;
+import TextArea from "antd/es/input/TextArea";
+import { PlusOutlined } from "@ant-design/icons";
+import ModalMenuItem from "../../common/modal/ModalMenuItem";
+import TableReuse from "../../common/Table/TableReuse";
+import {
+  columnsMenuItemNoSort,
+  columnsPromotionListNoSort,
+} from "../../common/Columns/Colums";
+import type { MenuListDataType } from "../../../type/menu/menu";
+import type { SelectedTableItems } from "../../promotion/promotionForm/PromotionForm";
+import type { PromotionListDataType } from "../../../type/promotion/promotion";
+import ModalPromotionList from "../../common/modal/ModalPromotionList";
 
 interface Props {
   form: FormInstance;
-  step: number;
+  mode?: "Update" | "Create";
+  couponDetail?: CouponDetailType;
+  canEditField?: number;
 }
 
-const CouponCreateForm: React.FC<Props> = ({ form, step }) => {
-  const { error } = useSelector((state: RootState) => state.couponCreate);
-  
+const CouponCreateForm: React.FC<Props> = ({
+  form,
+  mode = "Create",
+  couponDetail,
+  canEditField,
+}) => {
   const couponType = Form.useWatch(["step1", "coupon_type"], form);
   const discountType = Form.useWatch(["step1", "discount_type"], form);
   const conditionType = Form.useWatch(["step2", "condition_type"], form);
+  const [showModalMenuItem, setShowModalMenuItem] = useState<boolean>(false);
+  const [showModalPromotion, setShowModalPromotion] = useState<boolean>(false);
 
-  // Local state for dropdown data
-  const [menuItems, setMenuItems] = useState<Array<{id: string, name: string}>>([]);
-  const [promotions, setPromotions] = useState<Array<{id: string, title: string}>>([]);
-  const [loadingMenuItems, setLoadingMenuItems] = useState(false);
-  const [loadingPromotions, setLoadingPromotions] = useState(false);
+  const [dataMenuItemSeleted, setDataMenuItemSeleted] = useState<
+    SelectedTableItems<MenuListDataType>
+  >({
+    keys: [],
+    items: [],
+  });
 
-  // Load menu items data
+  const [dataPromotionSeleted, setDataPromotionSeleted] = useState<
+    SelectedTableItems<PromotionListDataType>
+  >({
+    keys: [],
+    items: [],
+  });
+
+  const disableField =
+    mode == "Update" &&
+    (canEditField == 0 ? true : canEditField == 2 ? false : true);
+  const disableFieldEndDate =
+    mode == "Update" && (canEditField == 0 ? true : false);
+
   useEffect(() => {
-    const loadMenuItems = async () => {
-      setLoadingMenuItems(true);
-      try {
-        const response = await menuItemService.getListMenuItems({
-          page: 1,
-          page_size: 100, // Get more items for dropdown
-          search_by: "",
-          search_value: "",
-          sort_by: "",
-          sort_order: "",
-          filters: {}
-        });
-        
-        // Handle response data structure with multiple fallbacks
-        const items = response?.data?.items || response?.data?.data || response?.data || [];
-        if (Array.isArray(items) && items.length > 0) {
-          setMenuItems(items.map((item: {id: string, name?: string, title?: string, description?: string}) => ({
-            id: item.id || `item_${Math.random()}`,
-            name: item.name || item.title || item.description || `Item ${item.id}`
-          })));
-        } else {
-          // Fallback to empty array - form still works without menu items
-          setMenuItems([]);
-        }
-      } catch (error) {
-        console.error('Failed to load menu items:', error);
-        // Don't show warning to user, just use empty array as fallback
-        setMenuItems([]);
-      } finally {
-        setLoadingMenuItems(false);
-      }
-    };
-
-    loadMenuItems();
-  }, []);
-
-  // Load promotions data  
-  useEffect(() => {
-    const loadPromotions = async () => {
-      setLoadingPromotions(true);
-      try {
-        const response = await promotionService.getListPromtions({
-          page: 1,
-          page_size: 100, // Get more items for dropdown
-          search_by: "",
-          search_value: "",
-          sort_by: "",
-          sort_order: "",
-          filters: {}
-        });
-        
-        // Handle response data structure with multiple fallbacks
-        const items = response?.data?.items || response?.data?.data || response?.data || [];
-        if (Array.isArray(items) && items.length > 0) {
-          setPromotions(items.map((item: {id: string, title?: string, name?: string, description?: string}) => ({
-            id: item.id || `promo_${Math.random()}`,
-            title: item.title || item.name || item.description || `Promotion ${item.id}`
-          })));
-        } else {
-          // Fallback to empty array - form still works without promotions
-          setPromotions([]);
-        }
-      } catch (error) {
-        console.error('Failed to load promotions:', error);
-        // Don't show warning to user, just use empty array as fallback
-        setPromotions([]);
-      } finally {
-        setLoadingPromotions(false);
-      }
-    };
-
-    loadPromotions();
-  }, []);
+    if (couponDetail) {
+      form.setFieldsValue({
+        step1: {
+          coupon_type: couponDetail.coupon_type,
+          description: couponDetail.description,
+          discount_type: couponDetail.discount_type,
+          value: couponDetail.value,
+          start_date: couponDetail.start_date
+            ? dayjs(couponDetail.start_date)
+            : undefined,
+          end_date: couponDetail.end_date
+            ? dayjs(couponDetail.end_date)
+            : undefined,
+          code: couponDetail.code,
+        },
+        step2: {
+          max_usage: couponDetail.max_usage,
+          is_active: couponDetail.is_active,
+          condition_type: couponDetail.coupon_condition?.condition_type,
+          condition_value: couponDetail.coupon_condition?.value,
+          accept_for_items: couponDetail.accept_for_items,
+          promotion_id: couponDetail.promotion_id,
+        },
+      });
+      setDataPromotionSeleted({
+        keys: couponDetail?.promotion_id ? [couponDetail.promotion_id] : [],
+        items: couponDetail?.promotion || [],
+      });
+      setDataMenuItemSeleted({
+        keys: couponDetail?.accept_for_items,
+        items: couponDetail?.accept_for_items_list,
+      });
+    }
+  }, [couponDetail, form]);
 
   return (
-    <div className={styles.container}>
-      {error && (
-        <Alert
-          message="Error creating coupon"
-          description={error}
-          type="error"
-          showIcon
-          closable
-          className={styles.errorAlert}
-        />
-      )}
+    <Form
+      form={form}
+      layout="vertical"
+      name="couponForm"
+      colon={true}
+      initialValues={{
+        step1: {
+          discount_type: DiscountType.FixedAmount,
+        },
+        step2: {
+          is_active: true,
+          condition_type: CouponConditionType.MinOrderAmount,
+        },
+      }}
+    >
+      <Row gutter={36}>
+        <Col span={12}>
+          <Form.Item
+            label="Coupon Code Type"
+            name={["step1", "coupon_type"]}
+            rules={[
+              {
+                required: true,
+                message: "Please select coupon code type!",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Select coupon type"
+              options={couponCreationOptions}
+              disabled={disableField}
+            />
+          </Form.Item>
+        </Col>
+        {couponType === CouponCreationType.Manual && (
+          <Col span={12}>
+            <Form.Item
+              label="Coupon Code"
+              name={["step1", "code"]}
+              rules={[
+                { required: true, message: "Please enter coupon code!" },
+                {
+                  pattern: /^[A-Z0-9]+$/,
+                  message: "Only uppercase letters and numbers allowed",
+                },
+              ]}
+            >
+              <Input
+                placeholder="Enter coupon code (e.g., SUMMER2024)"
+                maxLength={20}
+                disabled={disableField}
+              />
+            </Form.Item>
+          </Col>
+        )}
+      </Row>
 
-      <Form
-        form={form}
-        layout="vertical"
-        name="couponForm"
-        colon={true}
-        initialValues={{
-          step1: {
-            coupon_type: CouponCreationType.AutoGenerate,
-            discount_type: DiscountType.Percent,
-          },
-          step2: {
-            is_active: true,
-            max_usage: 1,
-            condition_type: CouponConditionType.MinOrderAmount,
-            condition_value: 0,
-          },
-        }}
-      >
-        {/* STEP 1: Basic Information */}
-        <StepBlock currentStep={step} step={1}>
-          <Row gutter={36}>
-            <Col span={12}>
-              <Form.Item
-                label="Coupon Type"
-                name={["step1", "coupon_type"]}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select coupon type!",
-                  },
-                ]}
-              >
-                <Select placeholder="Select coupon type">
-                  <Option value={CouponCreationType.AutoGenerate}>
-                    {CouponCreationTypeLabel[CouponCreationType.AutoGenerate]}
-                  </Option>
-                  <Option value={CouponCreationType.Manual}>
-                    {CouponCreationTypeLabel[CouponCreationType.Manual]}
-                  </Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
+      <Row gutter={36}>
+        <Col span={24}>
+          <Form.Item
+            label="Coupon Description"
+            name={["step1", "description"]}
+            rules={[
+              {
+                required: true,
+                message: "Please enter coupon name!",
+              },
+            ]}
+          >
+            <TextArea
+              placeholder="Enter coupon description"
+              rows={4}
+              disabled={disableField}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
 
-          {couponType === CouponCreationType.Manual && (
-            <Row gutter={36}>
-              <Col span={12}>
-                <Form.Item
-                  label="Coupon Code"
-                  name={["step1", "code"]}
-                  rules={[
-                    { required: true, message: "Please enter coupon code!" },
-                    { pattern: /^[A-Z0-9]+$/, message: "Only uppercase letters and numbers allowed" }
-                  ]}
-                >
-                  <Input
-                    placeholder="Enter coupon code (e.g., SUMMER2024)"
-                    maxLength={20}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          )}
+      <Row gutter={36}>
+        <Col span={12}>
+          <Form.Item
+            name={["step1", "start_date"]}
+            label="Coupon Start Date"
+            rules={[
+              {
+                required: true,
+                message: "Please select start date!",
+              },
+            ]}
+          >
+            <DatePicker
+              showTime={{ format: "HH:mm" }}
+              format="DD/MM/YYYY HH:mm"
+              disabledDate={(current) =>
+                current && current < dayjs().startOf("day")
+              }
+              disabledTime={(current) => getDisabledTime(current)}
+              style={{ width: "100%" }}
+              disabled={disableField}
+            />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name={["step1", "end_date"]}
+            label="Coupon End Date"
+            dependencies={[["step1", "start_date"]]}
+            rules={[
+              {
+                required: true,
+                message: "Please select end date!",
+              },
+              validateDate({
+                getFieldValue: form.getFieldValue,
+                fieldName: ["step1", "start_date"],
+                message: "End date must be after start date!",
+              }),
+            ]}
+          >
+            <DatePicker
+              showTime={{ format: "HH:mm" }}
+              format="DD/MM/YYYY HH:mm"
+              disabledDate={(current) =>
+                current && current < dayjs().startOf("day")
+              }
+              disabledTime={(current) => getDisabledTime(current)}
+              style={{ width: "100%" }}
+              disabled={disableFieldEndDate}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
 
-          <Row gutter={36}>
-            <Col span={24}>
-              <Form.Item
-                label="Coupon Name"
-                name={["step1", "description"]}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter coupon name!",
-                  },
-                ]}
-              >
-                <Input placeholder="Enter coupon name" />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={36}>
-            <Col span={12}>
-              <Form.Item
-                label="Discount Type"
-                name={["step1", "discount_type"]}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select discount type!",
-                  },
-                ]}
-              >
-                <Select placeholder="Select discount type">
-                  <Option value={DiscountType.Percent}>
-                    <Space>
-                      <PercentageOutlined />
-                      {DiscountTypeLabel[DiscountType.Percent]}
-                    </Space>
-                  </Option>
-                  <Option value={DiscountType.FixedAmount}>
-                    <Space>
-                      <DollarOutlined />
-                      {DiscountTypeLabel[DiscountType.FixedAmount]}
-                    </Space>
-                  </Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label={`Discount Value ${discountType === DiscountType.Percent ? '(%)' : '(VND)'}`}
-                name={["step1", "value"]}
-                rules={[
-                  { required: true, message: "Please enter discount value!" },
-                  {
-                    validator: (_, value) => {
-                      if (discountType === DiscountType.Percent && (value < 0 || value > 100)) {
-                        return Promise.reject('Percentage must be between 0 and 100');
-                      }
-                      if (discountType === DiscountType.FixedAmount && value < 0) {
-                        return Promise.reject('Amount must be greater than 0');
-                      }
-                      return Promise.resolve();
+      <Row gutter={36}>
+        <Col span={12}>
+          <Form.Item
+            label="Discount Type"
+            name={["step1", "discount_type"]}
+            rules={[
+              {
+                required: true,
+                message: "Please select discount type!",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Select discount type"
+              options={discountTypeOptions}
+              disabled={disableField}
+            ></Select>
+          </Form.Item>
+        </Col>
+        <Col span={6}>
+          <Form.Item
+            label="Discount Value"
+            name={["step1", "value"]}
+            normalize={(value) => {
+              let formatted;
+              if (discountType === DiscountType.FixedAmount) {
+                const rawValue = value
+                  .replace(/\./g, "")
+                  .replace(/[^0-9]/g, "");
+                formatted = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+              } else {
+                formatted = value.replace(/\./g, "").replace(/[^0-9]/g, "");
+              }
+              return formatted;
+            }}
+            rules={[
+              { required: true, message: "Please enter discount value!" },
+              {
+                validator: (_, value) => {
+                  if (discountType !== DiscountType.FixedAmount) {
+                    const numericValue = Number(
+                      String(value)?.replace(/\./g, "")
+                    );
+                    if (numericValue > 100) {
+                      return Promise.reject(
+                        "Percentage discount cannot exceed 100."
+                      );
                     }
                   }
-                ]}
+                  return Promise.resolve();
+                },
+              },
+            ]}
+          >
+            <Input
+              addonBefore={
+                discountType === DiscountType.Percent ? <>%</> : <>VND</>
+              }
+              placeholder={
+                discountType === DiscountType.Percent
+                  ? "Enter percentage (0-100)"
+                  : "Enter amount"
+              }
+              min={0}
+              max={discountType === DiscountType.Percent ? 100 : undefined}
+              style={{ width: "100%" }}
+              disabled={disableField}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={36}>
+        <Col span={12}>
+          <Form.Item
+            label="Condition Type"
+            name={["step2", "condition_type"]}
+            rules={[
+              {
+                required: true,
+                message: "Please select condition type!",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Select condition type"
+              options={couponConditionOptions}
+              disabled={disableField}
+            ></Select>
+          </Form.Item>
+        </Col>
+        <Col span={6}>
+          <Form.Item
+            label={
+              conditionType === CouponConditionType.MinOrderAmount
+                ? "Minimum Order Value (VND)"
+                : "Minimum Items Quantity"
+            }
+            name={["step2", "condition_value"]}
+            rules={[
+              {
+                required: true,
+                message: "Please enter condition value!",
+              },
+            ]}
+            normalize={(value) => {
+              let formatted;
+              if (conditionType === CouponConditionType.MinOrderAmount) {
+                const rawValue = value
+                  .replace(/\./g, "")
+                  .replace(/[^0-9]/g, "");
+                formatted = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+              } else {
+                formatted = value.replace(/\./g, "").replace(/[^0-9]/g, "");
+              }
+              return formatted;
+            }}
+          >
+            <Input
+              placeholder="Enter value"
+              style={{ width: "100%" }}
+              disabled={disableField}
+            />
+          </Form.Item>
+        </Col>
+        <Col span={6}>
+          <Form.Item
+            label="Max Usage"
+            name={["step2", "max_usage"]}
+            rules={[
+              {
+                required: true,
+                message: "Please enter max usage!",
+              },
+            ]}
+            normalize={(value) => {
+              const formatted = value.replace(/\./g, "").replace(/[^0-9]/g, "");
+              return formatted;
+            }}
+          >
+            <Input
+              placeholder="Enter max usage"
+              style={{ width: "100%" }}
+              disabled={disableField}
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Form.Item name={["step2", "menu_item_select_discount"]}>
+        <Row>
+          <div className={styles.customTableSelect}>
+            <div className={styles.titleSelectCustom}>
+              <Typography.Title level={5}>Apply to menu items</Typography.Title>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowModalMenuItem(true)}
+                disabled={disableField}
               >
-                <InputNumber
-                  placeholder={
-                    discountType === DiscountType.Percent
-                      ? "Enter percentage (0-100)"
-                      : "Enter amount"
-                  }
-                  min={0}
-                  max={discountType === DiscountType.Percent ? 100 : undefined}
-                  style={{ width: '100%' }}
-                  formatter={
-                    discountType === DiscountType.FixedAmount
-                      ? (value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-                      : undefined
-                  }
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={36}>
-            <Col span={12}>
-              <Form.Item
-                name={["step1", "start_date"]}
-                label="Coupon Start Date"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select start date!",
-                  },
-                ]}
-              >
-                <DatePicker
-                  showTime={{ format: "HH:mm" }}
-                  format="YYYY-MM-DD HH:mm"
-                  disabledDate={(current) =>
-                    current && current < dayjs().startOf("day")
-                  }
-                  disabledTime={() => getDisabledTime()}
-                  style={{ width: "100%" }}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name={["step1", "end_date"]}
-                label="Coupon End Date"
-                dependencies={[["step1", "start_date"]]}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select end date!",
-                  },
-                  validateDate({
-                    getFieldValue: form.getFieldValue,
-                    fieldName: ["step1", "start_date"],
-                    message: "End date must be after start date!",
-                  }),
-                ]}
-              >
-                <DatePicker
-                  showTime={{ format: "HH:mm" }}
-                  format="YYYY-MM-DD HH:mm"
-                  disabledDate={(current) =>
-                    current && current < dayjs().startOf("day")
-                  }
-                  disabledTime={() => getDisabledTime()}
-                  style={{ width: "100%" }}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-        </StepBlock>
-
-        {/* STEP 2: Conditions & Usage */}
-        <StepBlock currentStep={step} step={2}>
-          <div className={styles.conditionBlock}>
-            <Typography.Title level={5}>Usage Conditions</Typography.Title>
-            
-            <Row gutter={36}>
-              <Col span={12}>
-                <Form.Item
-                  label="Condition Type"
-                  name={["step2", "condition_type"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select condition type!",
-                    },
-                  ]}
-                >
-                  <Select placeholder="Select condition type">
-                    <Option value={CouponConditionType.MinOrderAmount}>
-                      {CouponConditionTypeLabel[CouponConditionType.MinOrderAmount]}
-                    </Option>
-                    <Option value={CouponConditionType.MinItemsQuantity}>
-                      {CouponConditionTypeLabel[CouponConditionType.MinItemsQuantity]}
-                    </Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label={
-                    conditionType === CouponConditionType.MinOrderAmount 
-                      ? "Minimum Order Value (VND)" 
-                      : "Minimum Items Quantity"
-                  }
-                  name={["step2", "condition_value"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter condition value!",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    placeholder="Enter value"
-                    min={0}
-                    style={{ width: '100%' }}
-                    formatter={
-                      conditionType === CouponConditionType.MinOrderAmount
-                        ? (value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-                        : undefined
-                    }
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </div>
-
-          <div className={styles.usageBlock}>
-            <Typography.Title level={5}>Usage Limits</Typography.Title>
-            
-            <Row gutter={36}>
-              <Col span={12}>
-                <Form.Item
-                  label="Max Usage"
-                  name={["step2", "max_usage"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter max usage!",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    placeholder="Enter max usage"
-                    min={1}
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Max Usage Per User"
-                  name={["step2", "max_usage_per_user"]}
-                >
-                  <InputNumber
-                    placeholder="No limit"
-                    min={0}
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Row gutter={36}>
-              <Col span={24}>
-                <Form.Item
-                  label="Apply to Items"
-                  name={["step2", "accept_for_items"]}
-                >
-                  <Select
-                    mode="multiple"
-                    placeholder="Select menu items (optional)"
-                    loading={loadingMenuItems}
-                    allowClear
-                    showSearch
-                    filterOption={(input, option) =>
-                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                    options={menuItems.map(item => ({
-                      value: item.id,
-                      label: item.name
-                    }))}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Row gutter={36}>
-              <Col span={24}>
-                <Form.Item
-                  label="Link to Promotion"
-                  name={["step2", "promotion_id"]}
-                >
-                  <Select
-                    placeholder="Select promotion (optional)"
-                    loading={loadingPromotions}
-                    allowClear
-                    showSearch
-                    filterOption={(input, option) =>
-                      (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                    options={promotions.map(promotion => ({
-                      value: promotion.id,
-                      label: promotion.title
-                    }))}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <div className={styles.flexClass}>
-              <Form.Item
-                name={["step2", "is_active"]}
-                valuePropName="checked"
-                style={{ marginBottom: 0 }}
-              >
-                <Switch />
-              </Form.Item>
-              <div>Activate coupon immediately</div>
+                Select
+              </Button>
             </div>
+            {showModalMenuItem && (
+              <ModalMenuItem
+                open={showModalMenuItem}
+                width={1000}
+                onCancel={() => setShowModalMenuItem(false)}
+                selectedData={dataMenuItemSeleted.items}
+                selectedDataKey={dataMenuItemSeleted.keys}
+                handleSubmitModal={(items, keys) => {
+                  setShowModalMenuItem(false);
+                  setDataMenuItemSeleted({
+                    keys,
+                    items,
+                  });
+                  form.setFieldsValue({
+                    step2: {
+                      menu_item_select_discount: keys,
+                    },
+                  });
+                }}
+              />
+            )}
+            <TableReuse
+              columns={columnsMenuItemNoSort}
+              dataSource={dataMenuItemSeleted.items}
+              rowKey="menuId"
+              pagination={{
+                pageSize: 5,
+              }}
+            />
           </div>
-        </StepBlock>
-      </Form>
-    </div>
+        </Row>
+      </Form.Item>
+
+      <Form.Item name={["step2", "promotion_id"]}>
+        <Row>
+          <div className={styles.customTableSelect}>
+            <div className={styles.titleSelectCustom}>
+              <Typography.Title level={5}>Apply to promotion</Typography.Title>
+              <Button
+                icon={<PlusOutlined />}
+                onClick={() => setShowModalPromotion(true)}
+                disabled={disableField}
+              >
+                Select
+              </Button>
+            </div>
+            {showModalPromotion && (
+              <ModalPromotionList
+                singleSelectMode={true}
+                open={showModalPromotion}
+                width={1000}
+                onCancel={() => setShowModalPromotion(false)}
+                selectedData={dataPromotionSeleted.items}
+                selectedDataKey={dataPromotionSeleted.keys}
+                handleSubmitModal={(items, keys) => {
+                  setShowModalPromotion(false);
+                  setDataPromotionSeleted({
+                    keys,
+                    items,
+                  });
+                  form.setFieldsValue({
+                    step2: {
+                      promotion_id: keys,
+                    },
+                  });
+                }}
+              />
+            )}
+            <TableReuse
+              columns={columnsPromotionListNoSort}
+              dataSource={dataPromotionSeleted.items}
+              rowKey="promotionId"
+              pagination={{
+                pageSize: 5,
+              }}
+            />
+          </div>
+        </Row>
+      </Form.Item>
+
+      <div className={styles.flexClass}>
+        <Form.Item
+          name={["step2", "is_active"]}
+          valuePropName="checked"
+          style={{ marginBottom: 0 }}
+        >
+          <Switch disabled={disableField} />
+        </Form.Item>
+        <div>Activate coupon immediately</div>
+      </div>
+    </Form>
   );
 };
 
-export default CouponCreateForm; 
+export default CouponCreateForm;

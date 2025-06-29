@@ -1,4 +1,4 @@
-import { useEffect, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import {
   promotionApplyOption,
   type PromotionPayload,
@@ -8,6 +8,8 @@ import type { FormInstance } from "antd";
 import TableReuse from "../Table/TableReuse";
 import { columnsMenuItemNoSort } from "../Columns/Colums";
 import styles from "../../promotion/promotionForm/PromotionForm.module.scss";
+import type { SelectedTableItems } from "../../promotion/promotionForm/PromotionForm";
+import type { MenuListDataType } from "../../../type/menu/menu";
 
 interface Props {
   dataGeneral: PromotionPayload;
@@ -17,6 +19,13 @@ interface Props {
 const ConditionApplication: FC<Props> = ({ dataGeneral, form }) => {
   const promotionScope = Form.useWatch(["step2", "promotion_scope"], form);
   const promotionType = Form.useWatch(["step1", "promotionType"], form);
+  const [dataMenuItemSeleted, setDataMenuItemSeleted] = useState<
+    SelectedTableItems<MenuListDataType>
+  >({
+    keys: [],
+    items: [],
+  });
+
   const showMenuItemSelection = promotionScope === 0;
 
   useEffect(() => {
@@ -24,7 +33,7 @@ const ConditionApplication: FC<Props> = ({ dataGeneral, form }) => {
       form.setFieldsValue({
         step2: {
           promotion_scope: dataGeneral.promotion_scope,
-          minimun_item_in_cart: dataGeneral.minimum_order_amount,
+          minimun_item_in_cart: dataGeneral.minimum_item_quantity,
           max_usage: dataGeneral.max_usage,
           max_discount_value: dataGeneral.max_discount_value,
           minimun_order_value: dataGeneral.minimum_order_amount,
@@ -32,6 +41,10 @@ const ConditionApplication: FC<Props> = ({ dataGeneral, form }) => {
           get_y: dataGeneral.promotion_item_condition?.get_quantity,
           discount_value: dataGeneral.discount_value,
         },
+      });
+      setDataMenuItemSeleted({
+        keys: dataGeneral.accept_for_items || [],
+        items: dataGeneral.accept_for_items_lists || [],
       });
     }
   }, [dataGeneral, form]);
@@ -283,7 +296,7 @@ const ConditionApplication: FC<Props> = ({ dataGeneral, form }) => {
 
                       <TableReuse
                         columns={columnsMenuItemNoSort}
-                        dataSource={[]}
+                        dataSource={dataMenuItemSeleted.items}
                         rowKey="menuId"
                         pagination={{
                           pageSize: 5,

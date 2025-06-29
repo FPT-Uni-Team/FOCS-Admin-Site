@@ -2,7 +2,6 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type {
   CouponAdminDTO,
   CouponListParams,
-  CouponListResponse,
 } from "../../../type/coupon/coupon";
 
 interface CouponListState {
@@ -29,11 +28,11 @@ const initialState: CouponListState = {
   total: 0,
 };
 
-const couponSlice = createSlice({
-  name: "couponList",
+const couponListValidSlice = createSlice({
+  name: "couponListValid",
   initialState,
   reducers: {
-    fetchCouponsStart: (
+    fetchCouponsValidStart: (
       state,
       action: PayloadAction<CouponListParams | undefined>
     ) => {
@@ -41,27 +40,28 @@ const couponSlice = createSlice({
       state.error = null;
       state.params = action.payload || initialState.params;
     },
-    fetchCouponsSuccess: (state, action: PayloadAction<CouponListResponse>) => {
+    fetchCouponsValidSuccess: (
+      state,
+      action: PayloadAction<{
+        coupons: CouponAdminDTO[];
+        total: number;
+      }>
+    ) => {
       state.loading = false;
-      state.coupons = action.payload.items;
-      state.total = action.payload.totalCount;
+      state.coupons = action.payload.coupons;
+      state.total = action.payload.total;
       state.error = null;
     },
-    fetchCouponsFailure: (state, action: PayloadAction<string>) => {
+    fetchCouponsValidFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
-    },
-    addNewCouponToList: (state, action: PayloadAction<CouponAdminDTO>) => {
-      state.coupons.unshift(action.payload);
-      state.total += 1;
     },
   },
 });
 
 export const {
-  fetchCouponsStart,
-  fetchCouponsSuccess,
-  fetchCouponsFailure,
-  addNewCouponToList,
-} = couponSlice.actions;
-export default couponSlice.reducer;
+  fetchCouponsValidStart,
+  fetchCouponsValidSuccess,
+  fetchCouponsValidFailure,
+} = couponListValidSlice.actions;
+export default couponListValidSlice.reducer;

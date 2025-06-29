@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 import routes, { type AppRoute } from "./routesConfig";
 import MainLayout from "../layouts/MainLayout/MainLayout";
+import FallBack from "../components/common/Fallback/FallBack";
 
 const loginRoute = routes.find((r) => r.isNotLayout);
 const appRoutes = routes.filter((r) => !r.isNotLayout);
@@ -25,7 +26,7 @@ const renderRoutes = (routes: AppRoute[]) =>
   });
 
 const AppRoutes = () => (
-  <Suspense fallback={<div>Loading...</div>}>
+  <Suspense fallback={<FallBack />}>
     <Routes>
       {loginRoute && (
         <Route

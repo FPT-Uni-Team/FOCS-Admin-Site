@@ -4,19 +4,27 @@ import PromotionForm from "../../components/promotion/promotionForm/PromotionFor
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
-  createPromotionStart,
-  resetCreatePromotion,
-} from "../../store/slices/promotion/promotionCreateSlice";
-import type { PromotionPayload } from "../../type/promotion/promotion";
-import { useNavigate } from "react-router-dom";
+  PromotionStatusLabel,
+  type PromotionPayload,
+} from "../../type/promotion/promotion";
+import { useNavigate, useParams } from "react-router-dom";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
+import { fetchPromotionDetailStart } from "../../store/slices/promotion/promotionDetailSlice";
+import { checkCanEdit } from "../../helper/checkStatus";
+import {
+  resetUpdatePromotion,
+  updatePromotionStart,
+} from "../../store/slices/promotion/promotionUpdateSlice";
 
 const PromotionCreatePage = () => {
   const [form] = useForm();
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
-  const { success, error } = useAppSelector((state) => state.createPromotion);
+  const { success, error } = useAppSelector((state) => state.promotionUpdate);
+
   const dispatch = useAppDispatch();
+  const { promotionId } = useParams();
+  const { promotion } = useAppSelector((state) => state.promotionDetail);
 
   const validationFieldsByStep: Record<number, string[][]> = {
     1: [
@@ -47,6 +55,7 @@ const PromotionCreatePage = () => {
   const handleModifyDataPromotion = (): PromotionPayload => {
     const allFormValues = form.getFieldsValue();
     return {
+      id: promotionId,
       title: allFormValues?.step1?.promotionName,
       description: allFormValues?.step1?.description,
       start_date: allFormValues?.step1?.start_date?.toISOString(),
@@ -81,44 +90,65 @@ const PromotionCreatePage = () => {
     };
   };
 
-  const handleCreatePromotion = () => {
+  const handleUpdatePromotion = () => {
     form
       .validateFields()
       .then(() => {
         const payloadData = handleModifyDataPromotion();
-        dispatch(createPromotionStart(payloadData));
+        dispatch(updatePromotionStart(payloadData));
       })
       .catch(() => {
         showNotification("error", "Create promotion failed!");
       });
   };
+
   useEffect(() => {
     if (success) {
-      showNotification("success", "Create promotion success!");
-      dispatch(resetCreatePromotion());
-      navigate("/promotions");
+      showNotification("success", "Update promotion success!");
+      dispatch(resetUpdatePromotion());
+      navigate(`/promotions/${promotionId}`);
     }
-  }, [dispatch, navigate, success]);
+  }, [dispatch, navigate, promotionId, success]);
 
   useEffect(() => {
     if (error) {
       showNotification("error", error);
-      dispatch(resetCreatePromotion());
+      dispatch(resetUpdatePromotion());
     }
   }, [dispatch, error]);
+
+  useEffect(() => {
+    dispatch(fetchPromotionDetailStart(promotionId || ""));
+  }, [dispatch, promotionId]);
 
   return (
     <>
       <TitleLine
-        title="New Promotion"
+        title={promotion.title}
         step={step}
         totalSteps={2}
         onNext={handleNextStep}
-        onCreate={handleCreatePromotion}
+        onCreate={handleUpdatePromotion}
         onPrevious={() => setStep(step - 1)}
         isDisableCreate={step === 1}
+        status={
+          PromotionStatusLabel[
+            promotion.status as keyof typeof PromotionStatusLabel
+          ]
+        }
+        createButtonText="Update"
       />
-      <PromotionForm form={form} step={step} />
+      <PromotionForm
+        form={form}
+        step={step}
+        mode="Update"
+        initData={promotion}
+        canEditField={checkCanEdit(
+          PromotionStatusLabel[
+            promotion.status as keyof typeof PromotionStatusLabel
+          ]
+        )}
+      />
     </>
   );
 };

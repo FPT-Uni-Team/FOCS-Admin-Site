@@ -1,3 +1,6 @@
+import type { CouponAdminDTO } from "../coupon/coupon";
+import type { MenuListDataType } from "../menu/menu";
+
 export const PromotionType = {
   Percentage: 0,
   FixedAmount: 1,
@@ -89,13 +92,17 @@ export interface PromotionPayload {
   discount_value?: number;
   is_active?: boolean;
   accept_for_items?: string[];
+  accept_for_items_lists?: MenuListDataType[];
   promotion_item_condition?: {
     buy_item_id?: string;
+    buy_item?: MenuListDataType;
     buy_quantity?: number;
     get_item_id?: string;
+    get_item?: MenuListDataType;
     get_quantity?: number;
   };
   coupon_ids?: string[];
+  coupon_lists?: CouponAdminDTO[];
   store_id?: string;
   status?: number;
 }

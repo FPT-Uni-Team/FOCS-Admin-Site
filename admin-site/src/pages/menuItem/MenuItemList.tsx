@@ -16,7 +16,7 @@ const PromotionListPage = () => {
       <TitleLine
         title="Promotions List"
         onCreate={() => {
-          navigate("/promotions/create");
+          navigate("/menu-item/create");
         }}
       />
       <PromotionList fetchData={fetchData} />

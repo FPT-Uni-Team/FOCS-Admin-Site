@@ -1,25 +1,23 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { PromotionPayload } from "../../../type/promotion/promotion";
 
-interface PromotionCreateState {
+interface PromotionUpdateState {
   loading: boolean;
   success: boolean;
   error: string | null;
-  promotionSuccess: PromotionPayload;
 }
 
-const initialState: PromotionCreateState = {
+const initialState: PromotionUpdateState = {
   loading: false,
   success: false,
   error: null,
-  promotionSuccess: {},
 };
 
-const promotionCreateSlice = createSlice({
-  name: "promotionCreate",
+const promotionUpdateSlice = createSlice({
+  name: "promotionUpdate",
   initialState,
   reducers: {
-    createPromotionStart: {
+    updatePromotionStart: {
       reducer: (state) => {
         state.loading = true;
         state.success = false;
@@ -27,20 +25,16 @@ const promotionCreateSlice = createSlice({
       },
       prepare: (payload: PromotionPayload) => ({ payload }),
     },
-    createPromotionSuccess: (
-      state,
-      action: PayloadAction<PromotionPayload>
-    ) => {
+    updatePromotionSuccess: (state) => {
       state.loading = false;
       state.success = true;
-      state.promotionSuccess = action.payload;
     },
-    createPromotionFailure: (state, action: PayloadAction<string>) => {
+    updatePromotionFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.success = false;
       state.error = action.payload;
     },
-    resetCreatePromotion: (state) => {
+    resetUpdatePromotion: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
@@ -49,10 +43,10 @@ const promotionCreateSlice = createSlice({
 });
 
 export const {
-  createPromotionStart,
-  createPromotionSuccess,
-  createPromotionFailure,
-  resetCreatePromotion,
-} = promotionCreateSlice.actions;
+  updatePromotionStart,
+  updatePromotionSuccess,
+  updatePromotionFailure,
+  resetUpdatePromotion,
+} = promotionUpdateSlice.actions;
 
-export default promotionCreateSlice.reducer;
+export default promotionUpdateSlice.reducer;

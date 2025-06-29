@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import TitleLine from "../../components/common/Title/TitleLine";
 import CouponList from "../../components/coupon/couponList/CouponList";
 import { useAppDispatch } from "../../hooks/redux";
@@ -6,13 +7,19 @@ import type { CouponListParams } from "../../type/coupon/coupon";
 
 const CouponListPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const fetchData = async (params: CouponListParams) => {
-    await dispatch(fetchCouponsStart(params));
+    dispatch(fetchCouponsStart(params));
   };
   return (
     <>
-      <TitleLine title="Coupons List" onCreate={() => {}} />
-      <CouponList fetchData={fetchData} />;
+      <TitleLine
+        title="Coupons List"
+        onCreate={() => {
+          navigate("/coupons/create");
+        }}
+      />
+      <CouponList fetchData={fetchData} />
     </>
   );
 };

@@ -3,15 +3,20 @@ const endpoints = {
     list: () => `/admin/promotion/list`,
     create: () => `/admin/promotion`,
     detail: (params: string) => `/admin/promotion/${params}`,
+    update: (params: string) => `/admin/promotion/${params}`,
+    change: (action: string, id: string) => `admin/promotion/${action}/${id}`,
   },
   menuItem: {
-    get: (storeId: string) => `/admin/menu-items?storeId=${storeId}`,
+    list: (storeId: string) => `/admin/menu-items?storeId=${storeId}`,
+    listByIds: () => "/admin/menu-item-list",
   },
   auth: {
     login: () => "/me/login",
     refresh: () => "/me/refresh-token",
   },
   coupon: {
+    listValid: () => "/admin/coupons/available",
+    listByIds: () => "admin/coupons/by-ids",
     list: (storeId: string) => `/admin/coupons/${storeId}`,
     detail: (id: string) => `/admin/coupon/${id}`,
     create: () => `/admin/coupon`,

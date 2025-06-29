@@ -18,8 +18,9 @@ import dayjs from "dayjs";
 import {
   promotionApplyOption,
   promotionOptions,
+  type PromotionPayload,
 } from "../../../type/promotion/promotion";
-import { useState, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import StepBlock from "../../common/Step/StepBlock";
 import { PlusOutlined } from "@ant-design/icons";
 import ModalMenuItem from "../../common/modal/ModalMenuItem";
@@ -35,9 +36,11 @@ import type { CouponAdminDTO } from "../../../type/coupon/coupon";
 
 interface Props {
   title?: string;
-  mode?: string;
+  mode?: "Update" | "Create";
   form: FormInstance;
   step: number;
+  initData?: PromotionPayload;
+  canEditField?: number;
 }
 
 export interface SelectedTableItems<T> {
@@ -50,18 +53,28 @@ export interface SelectedTableItemsBuyXGetY {
   GetY: SelectedTableItems<MenuListDataType>;
 }
 
-const PromotionForm: FC<Props> = ({ form, step }) => {
+const PromotionForm: FC<Props> = ({
+  form,
+  step,
+  mode = "Create",
+  initData,
+  canEditField,
+}) => {
   const promotionScope = Form.useWatch(["step2", "promotion_scope"], form);
   const useCoupon = Form.useWatch(["step1", "use_coupon"], form);
   const promotionType = Form.useWatch(["step1", "promotionType"], form);
+  const showMenuItemSelection = promotionScope === 0;
+  const disableField =
+    mode == "Update" &&
+    (canEditField == 0 ? true : canEditField == 2 ? false : true);
+  const disableFieldEndDate =
+    mode == "Update" && (canEditField == 0 ? true : false);
   const [showModalMenuItem, setShowModalMenuItem] = useState<boolean>(false);
-
   const [showModalCoupon, setShowModalCoupon] = useState<boolean>(false);
   const [showModalBuyXGetY, setShowModalBuyXGetY] = useState({
     buyX: false,
     getY: false,
   });
-
   const [dataMenuItemSeleted, setDataMenuItemSeleted] = useState<
     SelectedTableItems<MenuListDataType>
   >({
@@ -88,7 +101,57 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
       },
     });
 
-  const showMenuItemSelection = promotionScope === 0;
+  useEffect(() => {
+    if (initData) {
+      form.setFieldsValue({
+        step1: {
+          promotionName: initData.title,
+          description: initData?.description,
+          start_date: dayjs(initData.start_date),
+          end_date: dayjs(initData.end_date),
+          promotionType: initData.promotion_type,
+          use_other_promotion: initData.can_apply_combine,
+          use_coupon: initData.coupon_ids && initData?.coupon_ids?.length > 0,
+        },
+        step2: {
+          promotion_scope: initData.promotion_scope || undefined,
+          minimun_item_in_cart: initData?.minimum_item_quantity || undefined,
+          max_usage: initData?.max_usage || undefined,
+          max_discount_value: initData?.max_discount_value || undefined,
+          minimun_order_value: initData?.minimum_order_amount || undefined,
+          buy_x: initData.promotion_item_condition?.buy_quantity || undefined,
+          get_y: initData.promotion_item_condition?.get_quantity || undefined,
+          discount_value: initData?.discount_value || undefined,
+        },
+      });
+      setDataMenuItemSeleted({
+        keys: initData.accept_for_items || [],
+        items: initData.accept_for_items_lists || [],
+      });
+      setDataCouponSeleted({
+        keys: initData?.coupon_ids || [],
+        items: initData?.coupon_lists || [],
+      });
+      setDataMenuItemSeletedBuyXGetY({
+        BuyX: {
+          items: initData?.promotion_item_condition?.buy_item
+            ? [initData.promotion_item_condition.buy_item]
+            : [],
+          keys: initData?.promotion_item_condition?.buy_item_id
+            ? [initData.promotion_item_condition.buy_item_id]
+            : [],
+        },
+        GetY: {
+          items: initData?.promotion_item_condition?.get_item
+            ? [initData.promotion_item_condition.get_item]
+            : [],
+          keys: initData?.promotion_item_condition?.get_item_id
+            ? [initData.promotion_item_condition.get_item_id]
+            : [],
+        },
+      });
+    }
+  }, [initData, form]);
 
   return (
     <>
@@ -120,14 +183,21 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                   },
                 ]}
               >
-                <Input placeholder="Enter promotion name" />
+                <Input
+                  placeholder="Enter promotion name"
+                  disabled={disableField}
+                />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={36}>
             <Col span={24}>
               <Form.Item label="Description" name={["step1", "description"]}>
-                <TextArea rows={4} placeholder="Enter promotion description" />
+                <TextArea
+                  rows={4}
+                  placeholder="Enter promotion description"
+                  disabled={disableField}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -149,8 +219,9 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                   disabledDate={(current) =>
                     current && current < dayjs().startOf("day")
                   }
-                  disabledTime={() => getDisabledTime()}
+                  disabledTime={(current) => getDisabledTime(current)}
                   style={{ width: "100%" }}
+                  disabled={disableField}
                 />
               </Form.Item>
             </Col>
@@ -177,8 +248,9 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                   disabledDate={(current) =>
                     current && current < dayjs().startOf("day")
                   }
-                  disabledTime={() => getDisabledTime()}
+                  disabledTime={(current) => getDisabledTime(current)}
                   style={{ width: "100%" }}
+                  disabled={disableFieldEndDate}
                 />
               </Form.Item>
             </Col>
@@ -196,8 +268,12 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                 ]}
               >
                 <Select
+                  onChange={() => {
+                    form.setFieldValue(["step2", "discount_value"], undefined);
+                  }}
                   placeholder="Select promotion type"
                   options={promotionOptions}
+                  disabled={disableField}
                 />
               </Form.Item>
             </Col>
@@ -209,7 +285,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                 valuePropName="checked"
                 style={{ marginBottom: 0 }}
               >
-                <Switch />
+                <Switch disabled={disableField} />
               </Form.Item>
               <div>Use with other promotions</div>
             </div>
@@ -219,7 +295,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                 valuePropName="checked"
                 style={{ marginBottom: 0 }}
               >
-                <Switch />
+                <Switch disabled={disableField} />
               </Form.Item>
               <div>Use coupon for promotion</div>
             </div>
@@ -248,6 +324,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                     <Button
                       icon={<PlusOutlined />}
                       onClick={() => setShowModalCoupon(true)}
+                      disabled={disableField}
                     >
                       Select
                     </Button>
@@ -310,6 +387,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                         <Select
                           options={promotionApplyOption}
                           placeholder="Apply promotion to"
+                          disabled={disableField}
                         />
                       </Form.Item>
                     </Col>
@@ -333,7 +411,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                           return formatted;
                         }}
                       >
-                        <Input />
+                        <Input disabled={disableField} />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -357,7 +435,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                           return formatted;
                         }}
                       >
-                        <Input />
+                        <Input disabled={disableField} />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -394,6 +472,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                           <Input
                             placeholder="From VND"
                             addonBefore={<>VND</>}
+                            disabled={disableField}
                           />
                         </Form.Item>
                       </Col>
@@ -427,7 +506,11 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                           return formatted;
                         }}
                       >
-                        <Input placeholder="From VND" addonBefore={<>VND</>} />
+                        <Input
+                          placeholder="From VND"
+                          addonBefore={<>VND</>}
+                          disabled={disableField}
+                        />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -464,7 +547,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                           },
                         ]}
                       >
-                        <Input addonBefore={<>Buy</>} />
+                        <Input addonBefore={<>Buy</>} disabled={disableField} />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -499,7 +582,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                           },
                         ]}
                       >
-                        <Input addonBefore={<>Get</>} />
+                        <Input addonBefore={<>Get</>} disabled={disableField} />
                       </Form.Item>
                     </Col>
                   </Row>
@@ -547,7 +630,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                             validator: (_, value) => {
                               if (promotionType !== 1) {
                                 const numericValue = Number(
-                                  value?.replace(/\./g, "")
+                                  String(value)?.replace(/\./g, "")
                                 );
                                 if (numericValue > 100) {
                                   return Promise.reject(
@@ -567,6 +650,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                           addonBefore={
                             <>{`${promotionType === 1 ? "VND" : "%"}`}</>
                           }
+                          disabled={disableField}
                         />
                       </Form.Item>
                     </Col>
@@ -594,6 +678,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                             <Button
                               icon={<PlusOutlined />}
                               onClick={() => setShowModalMenuItem(true)}
+                              disabled={disableField}
                             >
                               Select
                             </Button>
@@ -663,6 +748,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                               getY: false,
                             })
                           }
+                          disabled={disableField}
                         >
                           Select
                         </Button>
@@ -739,6 +825,7 @@ const PromotionForm: FC<Props> = ({ form, step }) => {
                               getY: true,
                             })
                           }
+                          disabled={disableField}
                         >
                           Select
                         </Button>

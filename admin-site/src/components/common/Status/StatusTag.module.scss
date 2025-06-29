@@ -1,8 +1,19 @@
-.custom-active {
+.custom-tag {
+  padding: 1px 4px;
+}
+
+.custom-ongoing {
   font-weight: 500;
   background-color: #e7ffde;
   color: #50923d;
   border: 1px solid #50923d;
+}
+
+.custom-expired {
+  font-weight: 500;
+  background-color: #ffe9c8;
+  color: #ff9800;
+  border: 1px solid #ff9800;
 }
 
 .custom-notstart {
@@ -10,4 +21,11 @@
   background-color: #f1eeee;
   color: black;
   border: 1px solid #ccc;
+}
+
+.custom-unavailable {
+  font-weight: 500;
+  background-color: #ffb9b9;
+  color: #a40000;
+  border: 1px solid red;
 }

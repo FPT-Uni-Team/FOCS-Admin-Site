@@ -6,7 +6,9 @@ const fake_stroreId = "550e8400-e29b-41d4-a716-446655440000";
 
 const menuItemService = {
   getListMenuItems: (params: ListPageParams) =>
-    axiosClient.post(endpoints.menuItem.get(fake_stroreId), params),
+    axiosClient.post(endpoints.menuItem.list(fake_stroreId), params),
+  getListMenuItemsIds: (params: string[]) =>
+    axiosClient.post(endpoints.menuItem.listByIds(), params),
 };
 
 export default menuItemService;

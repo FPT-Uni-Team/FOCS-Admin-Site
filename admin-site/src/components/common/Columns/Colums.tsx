@@ -13,6 +13,7 @@ import {
   PromotionTypeLabel,
   type PromotionListDataType,
 } from "../../../type/promotion/promotion";
+import StatusTag from "../Status/StatusTag";
 
 export const columnsMenuItemNoSort = [
   {
@@ -77,7 +78,11 @@ export const columnsCouponList: ColumnsType<CouponAdminDTO> = [
     dataIndex: "status",
     key: "status",
     render: (status: number) => {
-      return CouponStatusLabel[status as keyof typeof CouponStatusLabel];
+      return (
+        <StatusTag
+          status={CouponStatusLabel[status as keyof typeof CouponStatusLabel]}
+        />
+      );
     },
   },
   {
@@ -195,7 +200,13 @@ export const columnsPromotionList: ColumnsType<PromotionListDataType> = [
     dataIndex: "promotionStatus",
     key: "status",
     render: (text: number) => {
-      return PromotionStatusLabel[text as keyof typeof PromotionStatusLabel];
+      return (
+        <StatusTag
+          status={
+            PromotionStatusLabel[text as keyof typeof PromotionStatusLabel]
+          }
+        />
+      );
     },
   },
   {
@@ -222,6 +233,61 @@ export const columnsPromotionList: ColumnsType<PromotionListDataType> = [
       "descend" as SortOrder,
       "ascend" as SortOrder,
     ],
+    render: (text: string) => {
+      return formatDate(text);
+    },
+  },
+];
+
+export const columnsPromotionListNoSort: ColumnsType<PromotionListDataType> = [
+  {
+    title: "Promotion Name",
+    dataIndex: "promotionName",
+    key: "title",
+    render: (_, record) => {
+      return (
+        <CustomLink
+          title={record.promotionName}
+          href={`/promotions/${record.promotionId}`}
+          key={record.promotionId}
+        />
+      );
+    },
+  },
+  {
+    title: "Promotion Type",
+    dataIndex: "promotionType",
+    key: "promotion_type",
+    render: (text: number) => {
+      return PromotionTypeLabel[text as keyof typeof PromotionTypeLabel];
+    },
+  },
+  {
+    title: "Status",
+    dataIndex: "promotionStatus",
+    key: "status",
+    render: (text: number) => {
+      return (
+        <StatusTag
+          status={
+            PromotionStatusLabel[text as keyof typeof PromotionStatusLabel]
+          }
+        />
+      );
+    },
+  },
+  {
+    title: "Start Date",
+    dataIndex: "promotionStartDate",
+    key: "start_date",
+    render: (text: string) => {
+      return formatDate(text);
+    },
+  },
+  {
+    title: "End Date",
+    dataIndex: "promotionEndDate",
+    key: "end_date",
     render: (text: string) => {
       return formatDate(text);
     },
