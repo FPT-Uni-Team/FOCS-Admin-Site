@@ -38,21 +38,21 @@ const CouponList: FC<CouponListProps> = ({ fetchData }) => {
       name: "discount_type",
       type: "select",
       label: "Coupon Type",
-      placeholder: "Select coupon type",
+      placeholder: "Select Coupon Type",
       options: couponTypeOptions,
     },
     {
       name: "status",
       type: "select",
-      label: "Status",
-      placeholder: "Select status",
+      label: "Coupon Status",
+      placeholder: "Select Coupon Status",
       options: couponStatusOptions,
     },
     {
       name: "date",
       type: "rangePicker",
-      label: "Application Period",
-      placeholder: "Select time period",
+      label: "Coupon Date",
+      placeholder: "Select Coupon Date",
     },
   ];
 

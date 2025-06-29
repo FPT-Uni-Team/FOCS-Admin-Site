@@ -1,4 +1,4 @@
-import { call, put, takeEvery, type Effect } from "redux-saga/effects";
+import { call, put, takeLatest, type Effect } from "redux-saga/effects";
 import {
   fetchPromotionsFailure,
   fetchPromotionsStart,
@@ -11,8 +11,9 @@ import type {
   PromotionPayload,
 } from "../../../type/promotion/promotion";
 import { objectMapper } from "../../../helper/mapperObject";
-import { fieldMap } from "../../../utils/objectMapper/promotion";
-import type { AxiosResponse } from "axios";
+import { fieldMapPromotion } from "../../../utils/objectMapper/promotion";
+import { fieldMap } from "../../../utils/objectMapper/menuItem";
+import type { AxiosError, AxiosResponse } from "axios";
 import type { ListPageResponse } from "../../../type/common/common";
 import {
   createPromotionFailure,
@@ -25,16 +26,38 @@ import {
   fetchPromotionDetailStart,
   fetchPromotionDetailSuccess,
 } from "../../slices/promotion/promotionDetailSlice";
+import {
+  updatePromotionFailure,
+  updatePromotionStart,
+  updatePromotionSuccess,
+} from "../../slices/promotion/promotionUpdateSlice";
+import { couponService } from "../../../services/couponService";
+import type { CouponAdminDTO } from "../../../type/coupon/coupon";
+import menuItemService from "../../../services/menuItemService";
+import type { MenuListDataType } from "../../../type/menu/menu";
+import {
+  changeStatusPromotionsFailure,
+  changeStatusPromotionsStart,
+  changeStatusPromotionsSuccess,
+} from "../../slices/promotion/promotionChangeStatusSlice";
 
-const { getListPromtions, createPromotion, getPromotionDetail } =
-  promotionService;
+const {
+  getListPromtions,
+  createPromotion,
+  getPromotionDetail,
+  updatePromotion,
+  changeStatus,
+} = promotionService;
+
+const { getListCouponByIDs } = couponService;
+const { getListMenuItemsIds } = menuItemService;
 
 function* fetchPromotionList(
   action: PayloadAction<PromotionListParams>
 ): Generator<Effect, void, AxiosResponse<ListPageResponse>> {
   try {
     const response = yield call(() => getListPromtions(action.payload));
-    const dataMapped = objectMapper(response.data.items, fieldMap);
+    const dataMapped = objectMapper(response.data.items, fieldMapPromotion);
     const total = response.data.total_count;
     yield put(fetchPromotionsSuccess({ promotions: dataMapped, total: total }));
   } catch (error: unknown) {
@@ -49,8 +72,14 @@ function* fetchCreatePromotion(
   try {
     const response = yield call(() => createPromotion(action.payload));
     yield put(createPromotionSuccess(response));
-  } catch {
-    yield put(createPromotionFailure());
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred";
+    yield put(createPromotionFailure(message));
   }
 }
 
@@ -59,18 +88,112 @@ function* fetchPromotionDetail(
 ): Generator<Effect, void, AxiosResponse<PromotionPayload>> {
   try {
     const response = yield call(() => getPromotionDetail(action.payload));
-    yield put(fetchPromotionDetailSuccess(response.data));
+    let dataResponse = response.data;
+    if (response?.data?.coupon_ids && response.data.coupon_ids.length > 0) {
+      const responseCoupon = yield call(() =>
+        getListCouponByIDs(response?.data?.coupon_ids as string[])
+      );
+      dataResponse = {
+        ...dataResponse,
+        coupon_lists: responseCoupon.data as CouponAdminDTO[],
+      };
+    }
+    if (
+      response?.data?.accept_for_items &&
+      response?.data?.accept_for_items.length > 0
+    ) {
+      const responseMenuItems = yield call(() =>
+        getListMenuItemsIds(response?.data?.accept_for_items as string[])
+      );
+      const dataMappedMenuItems = objectMapper(
+        Array.isArray(responseMenuItems.data)
+          ? responseMenuItems.data
+          : [responseMenuItems.data],
+        fieldMap
+      );
+
+      dataResponse = {
+        ...dataResponse,
+        accept_for_items_lists: dataMappedMenuItems as MenuListDataType[],
+      };
+    }
+
+    if (response?.data?.promotion_item_condition) {
+      const responseMenuItemByGet = yield call(() =>
+        getListMenuItemsIds([
+          response?.data?.promotion_item_condition?.buy_item_id,
+          response?.data?.promotion_item_condition?.get_item_id,
+        ] as string[])
+      );
+      const dataMappedMenuItemByGet = objectMapper(
+        Array.isArray(responseMenuItemByGet.data)
+          ? responseMenuItemByGet.data
+          : [responseMenuItemByGet.data],
+        fieldMap
+      );
+      dataResponse = {
+        ...dataResponse,
+        promotion_item_condition: {
+          ...dataResponse.promotion_item_condition,
+          buy_item: dataMappedMenuItemByGet[0],
+          get_item: dataMappedMenuItemByGet[1],
+        },
+      };
+    }
+    yield put(fetchPromotionDetailSuccess(dataResponse));
   } catch {
     yield put(fetchPromotionDetailFailed());
   }
 }
 
+function* fetchUpdatePromotion(
+  action: PayloadAction<PromotionPayload>
+): Generator<Effect, void, PromotionPayload> {
+  try {
+    yield call(() => updatePromotion(action.payload));
+    yield put(updatePromotionSuccess());
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred";
+    yield put(updatePromotionFailure(message));
+  }
+}
+
+function* fetchChangeStatusPromotion(
+  action: PayloadAction<{ category: string; promotionId: string }>
+): Generator<Effect, void, AxiosResponse> {
+  try {
+    yield call(() =>
+      changeStatus(action.payload.category, action.payload.promotionId)
+    );
+    yield put(changeStatusPromotionsSuccess());
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred";
+    yield put(changeStatusPromotionsFailure(message));
+  }
+}
+
 export function* watchPromotionSaga() {
-  yield takeEvery(fetchPromotionsStart.type, fetchPromotionList);
-  yield takeEvery(createPromotionStart.type, function* (action) {
+  yield takeLatest(fetchPromotionsStart.type, fetchPromotionList);
+  yield takeLatest(createPromotionStart.type, function* (action) {
     yield* withGlobalLoading(fetchCreatePromotion, action);
   });
-  yield takeEvery(fetchPromotionDetailStart.type, function* (action) {
+  yield takeLatest(fetchPromotionDetailStart.type, function* (action) {
     yield* withGlobalLoading(fetchPromotionDetail, action);
+  });
+  yield takeLatest(updatePromotionStart.type, function* (action) {
+    yield* withGlobalLoading(fetchUpdatePromotion, action);
+  });
+  yield takeLatest(changeStatusPromotionsStart.type, function* (action) {
+    yield* withGlobalLoading(fetchChangeStatusPromotion, action);
   });
 }

@@ -1,4 +1,4 @@
-export const fieldMap = {
+export const fieldMapPromotion = {
   promotionId: "id",
   promotionName: "title",
   promotionStartDate: "start_date",

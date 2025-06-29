@@ -18,22 +18,29 @@ export const formatDate = (date: string | Date): string => {
   });
 };
 
-export const getDisabledTime = () => {
+export const getDisabledTime = (currentDate?: dayjs.Dayjs) => {
   const now = dayjs();
-  return {
-    disabledHours: () =>
-      Array.from({ length: 24 }, (_, i) => i).filter(
-        (hour) => hour < now.hour()
-      ),
 
-    disabledMinutes: (selectedHour: number) => {
-      if (selectedHour === now.hour()) {
-        return Array.from({ length: 60 }, (_, i) => i).filter(
-          (minute) => minute < now.minute() + 1
-        );
-      }
-      return [];
-    },
+  if (currentDate && currentDate.isSame(now, "day")) {
+    return {
+      disabledHours: () =>
+        Array.from({ length: 24 }, (_, i) => i).filter(
+          (hour) => hour < now.hour()
+        ),
+      disabledMinutes: (selectedHour: number) => {
+        if (selectedHour === now.hour()) {
+          return Array.from({ length: 60 }, (_, i) => i).filter(
+            (minute) => minute < now.minute() + 1
+          );
+        }
+        return [];
+      },
+    };
+  }
+
+  return {
+    disabledHours: () => [],
+    disabledMinutes: () => [],
   };
 };
 

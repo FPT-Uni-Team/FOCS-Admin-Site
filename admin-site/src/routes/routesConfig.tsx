@@ -15,6 +15,9 @@ const PromotionDetailPage = lazy(
 const PromotionCreatePage = lazy(
   () => import("../pages/promotion/PromotionCreate")
 );
+const PromotionUpdatePage = lazy(
+  () => import("../pages/promotion/PromotionUpdate")
+);
 const CouponListPage = lazy(() => import("../pages/coupon/CouponList"));
 const CouponCreatePage = lazy(() => import("../pages/coupon/CouponCreate"));
 const CouponUpdatePage = lazy(() => import("../pages/coupon/CouponUpdate"));
@@ -47,6 +50,11 @@ export const routes: AppRoute[] = [
   {
     path: "/promotions/create",
     component: PromotionCreatePage,
+    hidden: true,
+  },
+  {
+    path: "/promotions/update/:promotionId",
+    component: PromotionUpdatePage,
     hidden: true,
   },
   {

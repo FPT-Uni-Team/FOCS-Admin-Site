@@ -21,7 +21,11 @@ function App() {
   const { count } = useAppSelector((state) => state.loadingGlobal);
   const globalLoading = count > 0;
   return (
-    <Spin spinning={globalLoading} indicator={<LoadingOutlined spin />}>
+    <Spin
+      spinning={globalLoading}
+      indicator={<LoadingOutlined spin />}
+      size="large"
+    >
       {contextHolder}
       <AppRoutes />
     </Spin>

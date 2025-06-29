@@ -1,3 +1,6 @@
+import type { MenuListDataType } from "../menu/menu";
+import type { PromotionListDataType } from "../promotion/promotion";
+
 export const CouponType = {
   Percentage: 0,
   FixedAmount: 1,
@@ -22,7 +25,7 @@ export const couponTypeOptions = [
 
 export const CouponStatus = {
   UnAvailable: 0,
-  Incoming: 1,
+  NotStarted: 1,
   OnGoing: 2,
   Expired: 3,
 } as const;
@@ -30,9 +33,9 @@ export const CouponStatus = {
 export type CouponStatus = (typeof CouponStatus)[keyof typeof CouponStatus];
 
 export const CouponStatusLabel: Record<CouponStatus, string> = {
-  [CouponStatus.UnAvailable]: "Unavailable",
-  [CouponStatus.Incoming]: "Upcoming",
-  [CouponStatus.OnGoing]: "Active",
+  [CouponStatus.UnAvailable]: "UnAvailable",
+  [CouponStatus.NotStarted]: "Not Start",
+  [CouponStatus.OnGoing]: "On Going",
   [CouponStatus.Expired]: "Expired",
 };
 
@@ -57,6 +60,13 @@ export const CouponCreationTypeLabel: Record<CouponCreationType, string> = {
   [CouponCreationType.Manual]: "Manual Input Code",
 };
 
+export const couponCreationOptions = Object.values(CouponCreationType).map(
+  (value) => ({
+    value,
+    label: CouponCreationTypeLabel[value],
+  })
+);
+
 export const DiscountType = {
   Percent: 0,
   FixedAmount: 1,
@@ -69,6 +79,11 @@ export const DiscountTypeLabel: Record<DiscountType, string> = {
   [DiscountType.FixedAmount]: "Fixed Amount Discount",
 };
 
+export const discountTypeOptions = Object.values(DiscountType).map((value) => ({
+  value,
+  label: DiscountTypeLabel[value],
+}));
+
 export const CouponConditionType = {
   MinOrderAmount: 0,
   MinItemsQuantity: 1,
@@ -78,14 +93,21 @@ export type CouponConditionType =
   (typeof CouponConditionType)[keyof typeof CouponConditionType];
 
 export const CouponConditionTypeLabel: Record<CouponConditionType, string> = {
-  [CouponConditionType.MinOrderAmount]: "Minimum Order Amount",
-  [CouponConditionType.MinItemsQuantity]: "Minimum Items Quantity",
+  [CouponConditionType.MinOrderAmount]: "Minimum order value",
+  [CouponConditionType.MinItemsQuantity]: "Minimum items in cart",
 };
 
 export interface CouponConditionRequest {
   condition_type: CouponConditionType;
   value: number;
 }
+
+export const couponConditionOptions = Object.values(CouponConditionType).map(
+  (value) => ({
+    value,
+    label: CouponConditionTypeLabel[value],
+  })
+);
 
 // Main coupon creation request interface
 export interface CouponCreateRequest {
@@ -153,8 +175,10 @@ export interface CouponListParams {
 }
 
 export interface CouponDetailType {
+  [x: string]: any;
   id: string;
   code: string;
+  coupon_type: number;
   description: string;
   discount_type: CouponType;
   value: number;
@@ -162,13 +186,18 @@ export interface CouponDetailType {
   end_date: string;
   max_usage: number;
   count_used: number;
-  user_used: string;
-  accept_for_items: string;
+  accept_for_items: [];
+  accept_for_items_list: MenuListDataType[];
   minimum_order_amount: number;
   minimum_item_quantity: number;
   is_active: boolean;
-  store_id: string;
   promotion_id: string;
+  status: number;
+  promotion?: PromotionListDataType[];
+  coupon_condition?: {
+    condition_type: number;
+    value: number;
+  };
 }
 
 export interface PagedResult<T> {
@@ -195,24 +224,21 @@ export interface CouponAdminDTO {
 
 export type CouponListResponse = PagedResult<CouponAdminDTO>;
 
-// Set Coupon Status Types
 export interface SetCouponStatusRequest {
-  id: string; // Coupon ID (Path Parameter)
-  isActive: boolean; // Query Parameter - true to enable, false to disable
+  id: string;
+  isActive: boolean;
 }
 
-// Track Coupon Usage Response - READ ONLY operation
 export interface TrackCouponUsageResponse {
-  totalLeft: number; // remaining uses = MaxUsage - usageCount
-  leftPerUser?: number; // remaining uses for the user = MaxUsagePerUser - userUsage (if applicable)
+  totalLeft: number;
+  leftPerUser?: number;
   couponId: string;
   currentUsage: number;
   maxUsage: number;
   maxUsagePerUser?: number;
-  userUsage?: number; // if userId was provided
+  userUsage?: number;
 }
 
-// Set Coupon Status Response
 export interface SetCouponStatusResponse {
   success: boolean;
   message: string;
@@ -224,8 +250,8 @@ export interface SetCouponStatusResponse {
 
 // Coupon Assignment Types
 export interface CouponAssignRequest {
-  couponIds: string[]; // List of coupon IDs to assign to promotion
-  promotionId: string; // ID of the promotion to assign coupons to
+  couponIds: string[];
+  promotionId: string;
 }
 
 export interface CouponAssignResponse {

@@ -1,15 +1,18 @@
 import React from "react";
 import { Tag } from "antd";
 import styles from "./StatusTag.module.scss";
+import clsx from "clsx";
 
 interface StatusTagProps {
   status: string;
 }
 
 const statusColorMap: Record<string, string> = {
-  active: "Active",
-  inactive: "Inactive",
+  ongoing: "On Going",
+  expired: "Expired",
   notstart: "Not Start",
+  unavailable: "UnAvailable",
+  upcoming: "Up Coming",
 };
 
 const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
@@ -19,7 +22,9 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
     return <Tag color="default">{status}</Tag>;
   }
   return (
-    <Tag className={styles[`custom-${normalized}`]}>{statusInfo || status}</Tag>
+    <Tag className={clsx(styles[`custom-${normalized}`], styles["custom-tag"])}>
+      {statusInfo || status}
+    </Tag>
   );
 };
 

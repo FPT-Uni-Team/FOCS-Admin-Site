@@ -13,7 +13,7 @@ export const showNotification = (
   message: string,
   description?: string,
   duration: number = 4.5,
-  placement: NotificationPlacement = "topRight"
+  placement: NotificationPlacement = "top"
 ) => {
   notificationApi[type]({
     message,

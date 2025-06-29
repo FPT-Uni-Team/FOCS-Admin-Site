@@ -3,16 +3,13 @@ import { Modal } from "antd";
 import type { ModalProps } from "antd";
 import TableReuse from "../Table/TableReuse";
 import FilterReuse from "../Filter/FilterReuse";
-import type { ListPageParams, SelectConfig } from "../../../type/common/common";
+import type { ListPageParams } from "../../../type/common/common";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { columnsCouponList } from "../Columns/Colums";
-import {
-  couponTypeOptions,
-  type CouponAdminDTO,
-} from "../../../type/coupon/coupon";
+import { type CouponAdminDTO } from "../../../type/coupon/coupon";
 import { createOnTableChangeHandler } from "../Table/HandleTableChange/HandleTableChange";
 import { createOnFilterHandler } from "../../../helper/formatFilters";
-import { fetchCouponsStart } from "../../../store/slices/coupon/couponListSlice";
+import { fetchCouponsValidStart } from "../../../store/slices/coupon/couponListValidSlice";
 
 interface MenuItemSelectionModalProps extends ModalProps {
   handleSubmitModal: (data: CouponAdminDTO[], key: React.Key[]) => void;
@@ -20,16 +17,6 @@ interface MenuItemSelectionModalProps extends ModalProps {
   selectedDataKey: React.Key[];
   singleSelectMode?: boolean;
 }
-
-// const selectConfigs: SelectConfig[] = [
-//   {
-//     name: "discount_type",
-//     type: "select",
-//     label: "Coupon Type",
-//     placeholder: "Select coupon type",
-//     options: couponTypeOptions,
-//   },
-// ];
 
 const ModalCouponList: React.FC<MenuItemSelectionModalProps> = ({
   handleSubmitModal,
@@ -40,7 +27,7 @@ const ModalCouponList: React.FC<MenuItemSelectionModalProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const { loading, coupons, total } = useAppSelector(
-    (state) => state.couponList
+    (state) => state.couponValid
   );
   const [selectedCoupon, setSelectedCoupon] =
     useState<CouponAdminDTO[]>(selectedData);
@@ -95,7 +82,7 @@ const ModalCouponList: React.FC<MenuItemSelectionModalProps> = ({
   }, []);
 
   useEffect(() => {
-    dispatch(fetchCouponsStart(params));
+    dispatch(fetchCouponsValidStart(params));
   }, [dispatch, params]);
 
   return (

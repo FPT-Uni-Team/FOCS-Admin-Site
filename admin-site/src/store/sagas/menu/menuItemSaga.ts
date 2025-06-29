@@ -1,4 +1,4 @@
-import { call, put, takeEvery, type Effect } from "redux-saga/effects";
+import { call, put, takeLatest, type Effect } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { objectMapper } from "../../../helper/mapperObject";
 import type { AxiosResponse } from "axios";
@@ -32,5 +32,5 @@ function* fetchMenuItemList(
 }
 
 export function* watchMenuSaga() {
-  yield takeEvery(fetchMenuItemsStart.type, fetchMenuItemList);
+  yield takeLatest(fetchMenuItemsStart.type, fetchMenuItemList);
 }

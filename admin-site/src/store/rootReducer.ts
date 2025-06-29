@@ -13,6 +13,9 @@ import menuItemSlice from "./slices/menuItem/menuItemSlice";
 import promotionCreateSlice from "./slices/promotion/promotionCreateSlice";
 import loadingSlice from "./slices/loading/loadingSlice";
 import promotionDetailSlice from "./slices/promotion/promotionDetailSlice";
+import couponListValidSlice from "./slices/coupon/couponListValidSlice";
+import promotionUpdateSlice from "./slices/promotion/promotionUpdateSlice";
+import changeStatusPromotionSlice from "./slices/promotion/promotionChangeStatusSlice";
 
 const rootReducer = combineReducers({
   promotion: promotionSlice,
@@ -29,6 +32,9 @@ const rootReducer = combineReducers({
   createPromotion: promotionCreateSlice,
   loadingGlobal: loadingSlice,
   promotionDetail: promotionDetailSlice,
+  couponValid: couponListValidSlice,
+  promotionUpdate: promotionUpdateSlice,
+  changeStatusPromotion: changeStatusPromotionSlice,
 });
 
 export default rootReducer;

@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Dropdown, Typography } from "antd";
+import React, { useState } from "react";
+import { Button, Dropdown, Modal } from "antd";
 import { DownOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import styles from "./TitleLine.module.scss";
 import StatusTag from "../Status/StatusTag";
@@ -8,9 +8,9 @@ interface TitleProps {
   title?: string;
   status?: string;
   onEdit?: () => void;
-  onAction?: () => void;
+  onAction?: (category: string, id: string) => void;
   hasMoreAction?: boolean;
-  isActive?: boolean;
+  isActive?: number;
   onCreate?: () => void;
   createButtonText?: string;
   step?: number;
@@ -18,6 +18,9 @@ interface TitleProps {
   onNext?: () => void;
   onPrevious?: () => void;
   isDisableCreate?: boolean;
+  contentModal?: string;
+  promotionId?: string;
+  isShowEdit?: boolean;
 }
 
 const TitleLine: React.FC<TitleProps> = ({
@@ -34,6 +37,9 @@ const TitleLine: React.FC<TitleProps> = ({
   onNext,
   onPrevious,
   isDisableCreate,
+  contentModal,
+  promotionId,
+  isShowEdit = true,
 }) => {
   const moreMenu = {
     items: [
@@ -44,12 +50,12 @@ const TitleLine: React.FC<TitleProps> = ({
     ],
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className={styles.titleWrapper}>
       <div className={styles.titleContainer}>
-        <Typography.Title level={2} className={styles.titleText}>
-          {title}
-        </Typography.Title>
+        <h1 className={styles.titleText}>{title}</h1>
         {status && <StatusTag status={status} />}
       </div>
 
@@ -61,20 +67,32 @@ const TitleLine: React.FC<TitleProps> = ({
             </Button>
           </Dropdown>
         )}
-        {onEdit && (
-          <Button
-            icon={<EditOutlined />}
-            onClick={onEdit}
-            color="primary"
-            variant="outlined"
-          >
-            Edit
-          </Button>
-        )}
-        {onAction && (
-          <Button onClick={onAction} danger={isActive} variant="outlined">
-            {isActive ? "Deactivate" : "Reactivate"}
-          </Button>
+
+        {onAction && isActive !== 2 && (
+          <>
+            <Button
+              onClick={() => setIsModalOpen(true)}
+              danger={isActive == 0}
+              variant="outlined"
+            >
+              {isActive == 1 ? "Reactivate" : "Deactivate"}
+            </Button>
+            <Modal
+              title={`Confirm ${isActive == 1 ? "Reactivate" : "Deactivate"}`}
+              open={isModalOpen}
+              onOk={() => {
+                setIsModalOpen(false);
+                onAction(
+                  isActive == 1 ? "active" : "deactive",
+                  promotionId as string
+                );
+              }}
+              onCancel={() => setIsModalOpen(false)}
+            >
+              Are you sure {isActive == 1 ? "reactivate" : "deactivate"}{" "}
+              {contentModal}
+            </Modal>
+          </>
         )}
         {typeof step === "number" && totalSteps && step && totalSteps > 1 && (
           <>
@@ -90,6 +108,16 @@ const TitleLine: React.FC<TitleProps> = ({
             disabled={isDisableCreate}
           >
             {createButtonText}
+          </Button>
+        )}
+        {onEdit && isShowEdit && (
+          <Button
+            icon={<EditOutlined />}
+            onClick={onEdit}
+            color="primary"
+            variant="outlined"
+          >
+            Edit
           </Button>
         )}
       </div>
