@@ -112,16 +112,24 @@ const PromotionForm: FC<Props> = ({
           promotionType: initData.promotion_type,
           use_other_promotion: initData.can_apply_combine,
           use_coupon: initData.coupon_ids && initData?.coupon_ids?.length > 0,
+          use_coupon_list: initData?.coupon_ids,
         },
         step2: {
-          promotion_scope: initData.promotion_scope || undefined,
-          minimun_item_in_cart: initData?.minimum_item_quantity || undefined,
-          max_usage: initData?.max_usage || undefined,
-          max_discount_value: initData?.max_discount_value || undefined,
-          minimun_order_value: initData?.minimum_order_amount || undefined,
-          buy_x: initData.promotion_item_condition?.buy_quantity || undefined,
-          get_y: initData.promotion_item_condition?.get_quantity || undefined,
-          discount_value: initData?.discount_value || undefined,
+          promotion_scope: initData.promotion_scope,
+          minimun_item_in_cart: initData?.minimum_item_quantity,
+          max_usage: initData?.max_usage,
+          max_discount_value: initData?.max_discount_value,
+          minimun_order_value: initData?.minimum_order_amount,
+          buy_x: String(initData.promotion_item_condition?.buy_quantity),
+          get_y: String(initData.promotion_item_condition?.get_quantity),
+          discount_value: initData?.discount_value,
+          menu_item_select_discount: initData?.accept_for_items,
+          menu_item_select_buyX: [
+            initData?.promotion_item_condition?.buy_item_id,
+          ],
+          menu_item_select_getY: [
+            initData?.promotion_item_condition?.get_item_id,
+          ],
         },
       });
       setDataMenuItemSeleted({

@@ -54,7 +54,7 @@ const CouponCreatePage = () => {
       );
     }
     if (allFormValues?.step2?.accept_for_items) {
-      couponData.accept_for_items = allFormValues.step2.accept_for_items.trim();
+      couponData.accept_for_items = allFormValues.step2.accept_for_items;
     }
     if (allFormValues?.step2?.promotion_id) {
       couponData.promotion_id = String(allFormValues.step2.promotion_id);
@@ -67,10 +67,10 @@ const CouponCreatePage = () => {
       .validateFields()
       .then(() => {
         const payloadData = handleModifyDataCoupon();
-        console.log("payloadData", payloadData);
         const storeId =
           localStorage.getItem("storeId") ||
           "550e8400-e29b-41d4-a716-446655440000";
+        console.log("payloadData", payloadData);
         dispatch(createCouponStart({ couponData: payloadData, storeId }));
       })
       .catch((error) => {

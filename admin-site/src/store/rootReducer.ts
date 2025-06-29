@@ -16,6 +16,7 @@ import promotionDetailSlice from "./slices/promotion/promotionDetailSlice";
 import couponListValidSlice from "./slices/coupon/couponListValidSlice";
 import promotionUpdateSlice from "./slices/promotion/promotionUpdateSlice";
 import changeStatusPromotionSlice from "./slices/promotion/promotionChangeStatusSlice";
+import categoryListSlice from "./slices/category/categoryListSlice";
 
 const rootReducer = combineReducers({
   promotion: promotionSlice,
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   couponValid: couponListValidSlice,
   promotionUpdate: promotionUpdateSlice,
   changeStatusPromotion: changeStatusPromotionSlice,
+  categoryList: categoryListSlice,
 });
 
 export default rootReducer;

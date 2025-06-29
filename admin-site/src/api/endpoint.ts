@@ -27,6 +27,9 @@ const endpoints = {
     assignPromotion: (storeId: string) =>
       `/admin/coupon/${storeId}/assign-promotion`,
   },
+  category: {
+    list: () => "/Category/categories",
+  },
 };
 
 export default endpoints;

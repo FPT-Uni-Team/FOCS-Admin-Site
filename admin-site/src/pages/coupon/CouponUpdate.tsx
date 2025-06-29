@@ -3,14 +3,11 @@ import { useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TitleLine from "../../components/common/Title/TitleLine";
 import CouponCreateForm from "../../components/coupon/couponCreate/CouponCreateForm";
-import {
-  createCouponStart,
-  resetCreateCoupon,
-} from "../../store/slices/coupon/couponCreateSlice";
+
 import {
   CouponStatusLabel,
-  type CouponCreateRequest,
   type CouponDetailType,
+  type CouponUpdateRequest,
 } from "../../type/coupon/coupon";
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
@@ -19,7 +16,10 @@ import {
   clearCouponDetail,
   fetchCouponDetailStart,
 } from "../../store/slices/coupon/couponDetailSlice";
-import { clearUpdateCouponState } from "../../store/slices/coupon/couponUpdateSlice";
+import {
+  clearUpdateCouponState,
+  updateCouponStart,
+} from "../../store/slices/coupon/couponUpdateSlice";
 import { checkCanEdit } from "../../helper/checkStatus";
 
 const CouponUpdatePage = () => {
@@ -30,10 +30,9 @@ const CouponUpdatePage = () => {
   const { coupon } = useAppSelector((state) => state.couponDetail);
   const { success, error } = useAppSelector((state) => state.couponUpdate);
 
-  const handleModifyDataCoupon = useCallback((): CouponCreateRequest => {
+  const handleModifyDataCoupon = useCallback((): CouponUpdateRequest => {
     const allFormValues = form.getFieldsValue();
-    console.log("allFormValues", allFormValues);
-    const couponData: CouponCreateRequest = {
+    const couponData: CouponUpdateRequest = {
       coupon_type: allFormValues?.step1?.coupon_type,
       description: allFormValues?.step1?.description?.trim(),
       discount_type: allFormValues?.step1?.discount_type,
@@ -60,7 +59,7 @@ const CouponUpdatePage = () => {
       );
     }
     if (allFormValues?.step2?.accept_for_items) {
-      couponData.accept_for_items = allFormValues.step2.accept_for_items.trim();
+      couponData.accept_for_items = allFormValues.step2.accept_for_items;
     }
     if (allFormValues?.step2?.promotion_id) {
       couponData.promotion_id = String(allFormValues.step2.promotion_id);
@@ -73,28 +72,26 @@ const CouponUpdatePage = () => {
       .validateFields()
       .then(() => {
         const payloadData = handleModifyDataCoupon();
-        console.log("payloadData", payloadData);
-        const storeId =
-          localStorage.getItem("storeId") ||
-          "550e8400-e29b-41d4-a716-446655440000";
-        dispatch(createCouponStart({ couponData: payloadData, storeId }));
+        dispatch(
+          updateCouponStart({
+            couponData: payloadData,
+            couponId: couponId as string,
+          })
+        );
       })
-      .catch((error) => {
-        console.log("Validation failed:", error);
-      });
-  }, [dispatch, form, handleModifyDataCoupon]);
+      .catch(() => {});
+  }, [couponId, dispatch, form, handleModifyDataCoupon]);
 
   useEffect(() => {
     if (success) {
-      showNotification("success", "Create coupon success!");
-      dispatch(resetCreateCoupon());
-      navigate("/coupons");
+      showNotification("success", "Update coupon success!");
+      navigate(`/coupons/${couponId}`);
     }
-  }, [dispatch, navigate, success]);
+  }, [couponId, dispatch, navigate, success]);
 
   useEffect(() => {
     if (error) {
-      showNotification("error", error);
+      showNotification("error", "Update coupon error!");
     }
   }, [error]);
 
@@ -107,10 +104,6 @@ const CouponUpdatePage = () => {
       dispatch(clearUpdateCouponState());
     };
   }, [couponId, dispatch]);
-
-  useEffect(() => {
-    dispatch(resetCreateCoupon());
-  }, [dispatch]);
 
   return (
     <>

@@ -2,8 +2,8 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type {
   CouponAdminDTO,
   CouponListParams,
-  CouponListResponse,
 } from "../../../type/coupon/coupon";
+import type { ListPageResponse } from "../../../type/common/common";
 
 interface CouponListState {
   coupons: CouponAdminDTO[];
@@ -41,10 +41,10 @@ const couponSlice = createSlice({
       state.error = null;
       state.params = action.payload || initialState.params;
     },
-    fetchCouponsSuccess: (state, action: PayloadAction<CouponListResponse>) => {
+    fetchCouponsSuccess: (state, action: PayloadAction<ListPageResponse>) => {
       state.loading = false;
       state.coupons = action.payload.items;
-      state.total = action.payload.totalCount;
+      state.total = action.payload.total_count;
       state.error = null;
     },
     fetchCouponsFailure: (state, action: PayloadAction<string>) => {

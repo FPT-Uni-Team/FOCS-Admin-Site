@@ -1,4 +1,4 @@
-import { useEffect, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import {
   promotionOptions,
   type PromotionPayload,
@@ -20,6 +20,9 @@ import dayjs from "dayjs";
 import TableReuse from "../Table/TableReuse";
 import { columnsCouponListNoSort } from "../Columns/Colums";
 import styles from "../../promotion/promotionForm/PromotionForm.module.scss";
+import type { CouponAdminDTO } from "../../../type/coupon/coupon";
+import type { SelectedTableItems } from "../../promotion/promotionForm/PromotionForm";
+import clsx from "clsx";
 
 interface Props {
   dataGeneral: PromotionPayload;
@@ -28,6 +31,12 @@ interface Props {
 
 const GeneralTab: FC<Props> = ({ dataGeneral, form }) => {
   const useCoupon = Form.useWatch(["step1", "use_coupon"], form);
+  const [dataCouponSeleted, setDataCouponSeleted] = useState<
+    SelectedTableItems<CouponAdminDTO>
+  >({
+    keys: [],
+    items: [],
+  });
   useEffect(() => {
     if (dataGeneral) {
       form.setFieldsValue({
@@ -40,10 +49,16 @@ const GeneralTab: FC<Props> = ({ dataGeneral, form }) => {
           use_other_promotion: dataGeneral.can_apply_combine,
           use_coupon:
             dataGeneral.coupon_ids && dataGeneral?.coupon_ids?.length > 0,
+          use_coupon_list: dataGeneral?.coupon_ids,
         },
+      });
+      setDataCouponSeleted({
+        keys: dataGeneral?.coupon_ids || [],
+        items: dataGeneral?.coupon_lists || [],
       });
     }
   }, [dataGeneral, form]);
+
   return (
     <Form form={form} layout="vertical" name="promotionDetailForm" colon={true}>
       <Row gutter={36}>
@@ -115,13 +130,13 @@ const GeneralTab: FC<Props> = ({ dataGeneral, form }) => {
       {useCoupon && (
         <Form.Item name={["step1", "use_coupon_list"]}>
           <Row>
-            <div>
-              <div>
+            <div className={clsx(styles.customTableSelect, styles.marginItem)}>
+              <div className={styles.titleSelectCustom}>
                 <Typography.Title level={5}>Select Coupon</Typography.Title>
               </div>
               <TableReuse
                 columns={columnsCouponListNoSort}
-                dataSource={[]}
+                dataSource={dataCouponSeleted.items}
                 rowKey="id"
                 pagination={{
                   pageSize: 5,

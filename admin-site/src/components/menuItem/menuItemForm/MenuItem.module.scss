@@ -1,0 +1,22 @@
+.flexClass {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.customSwitch {
+  height: 100%;
+}
+
+.customTableSelect {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  .titleSelectCustom {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+.marginItem {
+  margin-top: 10px;
+}

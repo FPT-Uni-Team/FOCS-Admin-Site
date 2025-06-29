@@ -5,6 +5,7 @@ import authSaga from "./sagas/auth/authSaga";
 import couponSaga from "./sagas/coupon/couponSaga";
 
 import { watchMenuSaga } from "./sagas/menu/menuItemSaga";
+import { watchCategorySaga } from "./sagas/category/categorySaga";
 
 export default function* rootSaga() {
   yield all([
@@ -12,6 +13,7 @@ export default function* rootSaga() {
     fork(authSaga),
     fork(couponSaga),
     fork(watchMenuSaga),
+    fork(watchCategorySaga),
     // add saga
   ]);
 }

@@ -32,6 +32,18 @@ const defaultFormatFilters = (filters: Record<string, unknown>) => {
     delete formatted.date;
   }
 
+  if (
+    typeof filters.is_available === "string" &&
+    filters.is_available.length > 0
+  ) {
+    formatted.is_available = filters.is_available === "true" ? true : false;
+  } else if (
+    typeof filters.is_active === "string" &&
+    filters.is_active.length > 0
+  ) {
+    formatted.is_active = filters.is_active === "true" ? true : false;
+  }
+
   Object.keys(formatted).forEach((key) => {
     if (formatted[key] === undefined || formatted[key] === null) {
       delete formatted[key];
