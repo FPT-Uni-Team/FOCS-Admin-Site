@@ -8,7 +8,10 @@ import type { FormInstance } from "antd";
 import TableReuse from "../Table/TableReuse";
 import { columnsMenuItemNoSort } from "../Columns/Colums";
 import styles from "../../promotion/promotionForm/PromotionForm.module.scss";
-import type { SelectedTableItems } from "../../promotion/promotionForm/PromotionForm";
+import type {
+  SelectedTableItems,
+  SelectedTableItemsBuyXGetY,
+} from "../../promotion/promotionForm/PromotionForm";
 import type { MenuListDataType } from "../../../type/menu/menu";
 
 interface Props {
@@ -25,6 +28,17 @@ const ConditionApplication: FC<Props> = ({ dataGeneral, form }) => {
     keys: [],
     items: [],
   });
+  const [dataMenuItemSeletedBuyXGetY, setDataMenuItemSeletedBuyXGetY] =
+    useState<SelectedTableItemsBuyXGetY>({
+      BuyX: {
+        items: [],
+        keys: [],
+      },
+      GetY: {
+        items: [],
+        keys: [],
+      },
+    });
 
   const showMenuItemSelection = promotionScope === 0;
 
@@ -40,11 +54,34 @@ const ConditionApplication: FC<Props> = ({ dataGeneral, form }) => {
           buy_x: dataGeneral.promotion_item_condition?.buy_quantity,
           get_y: dataGeneral.promotion_item_condition?.get_quantity,
           discount_value: dataGeneral.discount_value,
+          menu_item_select_discount: dataGeneral?.accept_for_items,
+          menu_item_select_buyX:
+            dataGeneral?.promotion_item_condition?.buy_item_id,
+          menu_item_select_getY:
+            dataGeneral?.promotion_item_condition?.get_item_id,
         },
       });
       setDataMenuItemSeleted({
         keys: dataGeneral.accept_for_items || [],
         items: dataGeneral.accept_for_items_lists || [],
+      });
+      setDataMenuItemSeletedBuyXGetY({
+        BuyX: {
+          items: dataGeneral?.promotion_item_condition?.buy_item
+            ? [dataGeneral.promotion_item_condition.buy_item]
+            : [],
+          keys: dataGeneral?.promotion_item_condition?.buy_item_id
+            ? [dataGeneral.promotion_item_condition.buy_item_id]
+            : [],
+        },
+        GetY: {
+          items: dataGeneral?.promotion_item_condition?.get_item
+            ? [dataGeneral.promotion_item_condition.get_item]
+            : [],
+          keys: dataGeneral?.promotion_item_condition?.get_item_id
+            ? [dataGeneral.promotion_item_condition.get_item_id]
+            : [],
+        },
       });
     }
   }, [dataGeneral, form]);
@@ -319,7 +356,7 @@ const ConditionApplication: FC<Props> = ({ dataGeneral, form }) => {
 
                   <TableReuse
                     columns={columnsMenuItemNoSort}
-                    dataSource={[]}
+                    dataSource={dataMenuItemSeletedBuyXGetY.BuyX.items}
                     rowKey="menuId"
                     pagination={false}
                   />
@@ -334,7 +371,7 @@ const ConditionApplication: FC<Props> = ({ dataGeneral, form }) => {
                   </div>
                   <TableReuse
                     columns={columnsMenuItemNoSort}
-                    dataSource={[]}
+                    dataSource={dataMenuItemSeletedBuyXGetY.GetY.items}
                     rowKey="menuId"
                     pagination={false}
                   />

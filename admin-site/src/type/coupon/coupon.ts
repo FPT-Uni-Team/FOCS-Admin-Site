@@ -111,43 +111,43 @@ export const couponConditionOptions = Object.values(CouponConditionType).map(
 
 // Main coupon creation request interface
 export interface CouponCreateRequest {
-  id?: string; // Optional - Guid?
-  code?: string; // Required if coupon_type is Manual, omit for AutoGenerate
-  coupon_type: CouponCreationType; // Required - enum
-  description: string; // Required
-  discount_type: DiscountType; // Required - enum
-  value: number; // Required - discount value
-  start_date: string; // Required - DateTime
-  end_date: string; // Required - DateTime
-  status?: CouponStatus; // Optional - computed based on business logic
-  max_usage: number; // Required
-  count_used: number; // Required - initialized as 0
-  max_usage_per_user?: number; // Optional
-  accept_for_items?: string; // Optional
-  coupon_condition: CouponConditionRequest; // Required
-  is_active: boolean; // Required
-  promotion_id?: string; // Optional - Guid?
-  store_id?: string; // Optional - will be added by service
-  user_id?: string; // Optional - will be added by service
+  id?: string;
+  code?: string;
+  coupon_type: CouponCreationType;
+  description: string;
+  discount_type: DiscountType;
+  value: number;
+  start_date: string;
+  end_date: string;
+  status?: CouponStatus;
+  max_usage: number;
+  count_used: number;
+  max_usage_per_user?: number;
+  accept_for_items?: string;
+  coupon_condition: CouponConditionRequest;
+  is_active: boolean;
+  promotion_id?: string;
+  store_id?: string;
+  user_id?: string;
 }
 
 export interface CouponUpdateRequest {
   id?: string;
-  code: string; // Required and not empty if CouponType is Manual
-  coupon_type: CouponCreationType; // Required - enum value
-  description: string; // Required - Description of coupon
-  discount_type: DiscountType; // Required - enum value
-  value: number; // Required - Discount value
-  start_date: string; // Required - DateTime - Start time when the coupon becomes active
-  end_date: string; // Required - DateTime - Expiry time of the coupon
-  status?: CouponStatus; // Optional - Don't have to input
-  max_usage: number; // Required - Maximum times the coupon can be used
-  count_used: number; // Required - Number of time coupon been used
-  max_usage_per_user?: number; // Optional - Max usage per user
-  accept_for_items?: string; // Optional - Assign this coupon for specific item in menu
-  coupon_condition: CouponConditionRequest; // Required - See below
-  is_active: boolean; // Required - Coupon available
-  promotion_id?: string; // Optional - Guid? - ID of the promotion this coupon is linked to
+  code?: string;
+  coupon_type: CouponCreationType;
+  description: string;
+  discount_type: DiscountType;
+  value: number;
+  start_date: string;
+  end_date: string;
+  status?: CouponStatus;
+  max_usage: number;
+  count_used: number;
+  max_usage_per_user?: number;
+  accept_for_items?: string;
+  coupon_condition: CouponConditionRequest;
+  is_active: boolean;
+  promotion_id?: string;
 }
 
 export interface CouponListDataType {

@@ -1,31 +1,35 @@
 .custom-tag {
   padding: 1px 4px;
-}
-
-.custom-ongoing {
   font-weight: 500;
-  background-color: #e7ffde;
-  color: #50923d;
-  border: 1px solid #50923d;
-}
+  border: 1px solid;
 
-.custom-expired {
-  font-weight: 500;
-  background-color: #ffe9c8;
-  color: #ff9800;
-  border: 1px solid #ff9800;
-}
+  &.ongoing {
+    background-color: #e7ffde;
+    color: #50923d;
+    border-color: #50923d;
+  }
 
-.custom-notstart {
-  font-weight: 500;
-  background-color: #f1eeee;
-  color: black;
-  border: 1px solid #ccc;
-}
+  &.expired {
+    background-color: #ffe9c8;
+    color: #ff9800;
+    border-color: #ff9800;
+  }
 
-.custom-unavailable {
-  font-weight: 500;
-  background-color: #ffb9b9;
-  color: #a40000;
-  border: 1px solid red;
+  &.notstart {
+    background-color: #f1eeee;
+    color: black;
+    border-color: #ccc;
+  }
+
+  &.unavailable {
+    background-color: #ffb9b9;
+    color: #a40000;
+    border-color: red;
+  }
+
+  &.available {
+    background-color: #e6f4ff;
+    color: #1890ff;
+    border-color: #1890ff;
+  }
 }

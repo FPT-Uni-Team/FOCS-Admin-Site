@@ -37,6 +37,8 @@ const CouponDetailPage = () => {
       );
   }, [success, couponId, dispatch]);
 
+  console.log("coupon", coupon);
+
   return (
     <>
       <TitleLine

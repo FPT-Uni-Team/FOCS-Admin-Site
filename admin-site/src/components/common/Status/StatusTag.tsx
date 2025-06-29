@@ -13,6 +13,7 @@ const statusColorMap: Record<string, string> = {
   notstart: "Not Start",
   unavailable: "UnAvailable",
   upcoming: "Up Coming",
+  available: "Available",
 };
 
 const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
@@ -22,7 +23,7 @@ const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
     return <Tag color="default">{status}</Tag>;
   }
   return (
-    <Tag className={clsx(styles[`custom-${normalized}`], styles["custom-tag"])}>
+    <Tag className={clsx(styles[`${normalized}`], styles["custom-tag"])}>
       {statusInfo || status}
     </Tag>
   );

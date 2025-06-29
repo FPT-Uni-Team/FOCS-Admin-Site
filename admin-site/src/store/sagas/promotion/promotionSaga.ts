@@ -105,6 +105,7 @@ function* fetchPromotionDetail(
       const responseMenuItems = yield call(() =>
         getListMenuItemsIds(response?.data?.accept_for_items as string[])
       );
+
       const dataMappedMenuItems = objectMapper(
         Array.isArray(responseMenuItems.data)
           ? responseMenuItems.data
@@ -125,6 +126,7 @@ function* fetchPromotionDetail(
           response?.data?.promotion_item_condition?.get_item_id,
         ] as string[])
       );
+
       const dataMappedMenuItemByGet = objectMapper(
         Array.isArray(responseMenuItemByGet.data)
           ? responseMenuItemByGet.data

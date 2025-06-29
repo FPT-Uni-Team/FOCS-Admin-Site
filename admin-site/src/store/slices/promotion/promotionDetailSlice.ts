@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import type { PromotionPayload } from "../../../type/promotion/promotion";
 
 interface PromotionDetail {
@@ -27,10 +27,7 @@ const promotionDetailSlice = createSlice({
       },
       prepare: (payload: string) => ({ payload }),
     },
-    fetchPromotionDetailSuccess: (
-      state,
-      action: PayloadAction<PromotionPayload>
-    ) => {
+    fetchPromotionDetailSuccess: (state, action) => {
       state.loading = false;
       state.success = true;
       state.promotion = action.payload;

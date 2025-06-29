@@ -1,27 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import TitleLine from "../../components/common/Title/TitleLine";
-import PromotionList from "../../components/promotion/promotionList/PromotionList";
 import { useAppDispatch } from "../../hooks/redux";
-import { fetchPromotionsStart } from "../../store/slices/promotion/promotionListSlice";
 import type { PromotionListParams } from "../../type/promotion/promotion";
+import { fetchMenuItemsStart } from "../../store/slices/menuItem/menuItemSlice";
+import MenuItemList from "../../components/menuItem/menuItemList/MenuItemList";
 
-const PromotionListPage = () => {
+const MenuItemPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const fetchData = async (params: PromotionListParams) => {
-    dispatch(fetchPromotionsStart(params));
+    dispatch(fetchMenuItemsStart(params));
   };
   return (
     <>
       <TitleLine
-        title="Promotions List"
+        title="Menu Item List"
         onCreate={() => {
-          navigate("/menu-item/create");
+          navigate("/menu-items/create");
         }}
       />
-      <PromotionList fetchData={fetchData} />
+      <MenuItemList fetchData={fetchData} />
     </>
   );
 };
 
-export default PromotionListPage;
+export default MenuItemPage;

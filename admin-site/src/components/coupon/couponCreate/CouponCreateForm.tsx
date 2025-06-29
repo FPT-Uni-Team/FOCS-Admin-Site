@@ -394,7 +394,7 @@ const CouponCreateForm: React.FC<Props> = ({
         </Col>
       </Row>
 
-      <Form.Item name={["step2", "menu_item_select_discount"]}>
+      <Form.Item name={["step2", "accept_for_items"]}>
         <Row>
           <div className={styles.customTableSelect}>
             <div className={styles.titleSelectCustom}>
@@ -422,7 +422,7 @@ const CouponCreateForm: React.FC<Props> = ({
                   });
                   form.setFieldsValue({
                     step2: {
-                      menu_item_select_discount: keys,
+                      accept_for_items: keys,
                     },
                   });
                 }}

@@ -14,6 +14,54 @@ import {
   type PromotionListDataType,
 } from "../../../type/promotion/promotion";
 import StatusTag from "../Status/StatusTag";
+import { formatPrice } from "../../../helper/formatPrice";
+import type { CategoryListDataType } from "../../../type/category/category";
+
+export const columnsMenuItem: ColumnsType<MenuListDataType> = [
+  {
+    title: "Menu item name",
+    dataIndex: "menuName",
+    key: "name",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (_, record) => {
+      return (
+        <CustomLink
+          title={record.menuName}
+          href={`/categories/${record.menuId}`}
+        />
+      );
+    },
+    sorter: true,
+  },
+  {
+    title: "Menu Base Price",
+    dataIndex: "menuBasePrice",
+    key: "base_price",
+    sorter: true,
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (value: number) => {
+      return formatPrice(value);
+    },
+  },
+  {
+    title: "Status",
+    dataIndex: "isAvailable",
+    key: "is_available",
+    render: (_, record) => {
+      return (
+        <StatusTag status={record.isAvailable ? "available" : "unavailable"} />
+      );
+    },
+  },
+];
 
 export const columnsMenuItemNoSort = [
   {
@@ -34,11 +82,6 @@ export const columnsMenuItemNoSort = [
     title: "Status",
     dataIndex: "isAvailable",
     key: "is_available",
-  },
-  {
-    title: "Menu category",
-    dataIndex: "menuCategoryId",
-    key: "menu_category_id",
   },
 ];
 
@@ -290,6 +333,58 @@ export const columnsPromotionListNoSort: ColumnsType<PromotionListDataType> = [
     key: "end_date",
     render: (text: string) => {
       return formatDate(text);
+    },
+  },
+];
+
+export const columnsCategory: ColumnsType<CategoryListDataType> = [
+  {
+    title: "Category name",
+    dataIndex: "name",
+    key: "name",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (_, record) => {
+      return (
+        <CustomLink title={record.name} href={`categories/${record.id}`} />
+      );
+    },
+    sorter: true,
+  },
+  {
+    title: "Status",
+    dataIndex: "is_active",
+    key: "is_active",
+    render: (_, record) => {
+      return (
+        <StatusTag status={record.is_active ? "available" : "unavailable"} />
+      );
+    },
+  },
+];
+
+export const columnsCategoryNoSort: ColumnsType<CategoryListDataType> = [
+  {
+    title: "Category name",
+    dataIndex: "name",
+    key: "name",
+    render: (_, record) => {
+      return (
+        <CustomLink title={record.name} href={`categories/${record.id}`} />
+      );
+    },
+  },
+  {
+    title: "Status",
+    dataIndex: "is_active",
+    key: "is_active",
+    render: (_, record) => {
+      return (
+        <StatusTag status={record.is_active ? "available" : "unavailable"} />
+      );
     },
   },
 ];

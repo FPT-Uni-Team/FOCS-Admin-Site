@@ -1,4 +1,9 @@
-import { UserOutlined } from "@ant-design/icons";
+import {
+  AppstoreOutlined,
+  GiftOutlined,
+  ProfileOutlined,
+  TagOutlined,
+} from "@ant-design/icons";
 import {
   lazy,
   type JSX,
@@ -24,6 +29,13 @@ const CouponUpdatePage = lazy(() => import("../pages/coupon/CouponUpdate"));
 const CouponAssignPage = lazy(() => import("../pages/coupon/CouponAssign"));
 const LoginPage = lazy(() => import("../pages/login/LoginPage"));
 const CouponDetailPage = lazy(() => import("../pages/coupon/CouponDetail"));
+const MenuItemListPage = lazy(() => import("../pages/menuItem/MenuItemList"));
+const CategoryListPage = lazy(
+  () => import("../pages/category/CategoryListPage")
+);
+const MenuItemCreatePage = lazy(
+  () => import("../pages/menuItem/MenuItemCreate")
+);
 
 export interface AppRoute {
   path: string;
@@ -40,7 +52,7 @@ export const routes: AppRoute[] = [
     path: "/promotions",
     component: PromotionListPage,
     label: "Promotions",
-    icon: <UserOutlined />,
+    icon: <TagOutlined />,
   },
   {
     path: "/promotions/:promotionId",
@@ -68,7 +80,7 @@ export const routes: AppRoute[] = [
     path: "/coupons",
     component: CouponListPage,
     label: "Coupons",
-    icon: <UserOutlined />,
+    icon: <GiftOutlined />,
   },
   {
     path: "/coupons/create",
@@ -92,6 +104,23 @@ export const routes: AppRoute[] = [
     path: "/coupons/assign",
     component: CouponAssignPage,
     label: "Assign Coupons to Promotion",
+    hidden: true,
+  },
+  {
+    path: "/menu-items",
+    component: MenuItemListPage,
+    label: "Menu Item",
+    icon: <ProfileOutlined />,
+  },
+  {
+    path: "/categories",
+    component: CategoryListPage,
+    label: "Category",
+    icon: <AppstoreOutlined />,
+  },
+  {
+    path: "/menu-items/create",
+    component: MenuItemCreatePage,
     hidden: true,
   },
 ];

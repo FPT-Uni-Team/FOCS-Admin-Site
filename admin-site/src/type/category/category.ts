@@ -1,9 +1,8 @@
-export interface MenuListDataType {
-  menuId: string;
-  menuName: string;
-  menuDescription: string;
-  menuBasePrice: number;
-  isAvailable: boolean;
+export interface CategoryListDataType {
+  id: string;
+  name: string;
+  description: string;
+  is_active: boolean;
 }
 
 export const StatusType = {
@@ -13,7 +12,7 @@ export const StatusType = {
 
 export type StatusType = (typeof StatusType)[keyof typeof StatusType];
 
-export const statusOptions = [
+export const statusOptionsCategory = [
   { value: "", label: "All Type" },
   ...Object.entries(StatusType).map(([key, value]) => {
     return {

@@ -1,27 +1,16 @@
+import { call, put, takeLatest, all, type Effect } from "redux-saga/effects";
 import {
-  call,
-  put,
-  takeLatest,
-  takeEvery,
-  all,
-  type Effect,
-} from "redux-saga/effects";
-import {
-  getCouponList,
   getCouponDetail,
   createCoupon,
   updateCoupon,
   deleteCoupon,
-  trackCouponUsage,
   setCouponStatus,
-  assignCouponsToPromotion,
   couponService,
 } from "../../../services/couponService";
 import {
   fetchCouponsStart,
   fetchCouponsSuccess,
   fetchCouponsFailure,
-  addNewCouponToList,
 } from "../../slices/coupon/couponListSlice";
 import {
   deleteCouponStart,
@@ -43,36 +32,21 @@ import {
   updateCouponSuccess,
   updateCouponFailure,
 } from "../../slices/coupon/couponUpdateSlice";
-import {
-  trackUsageRequest,
-  trackUsageSuccess,
-  trackUsageFailure,
-} from "../../slices/coupon/couponTrackUsageSlice";
+
 import {
   setCouponStatusRequest,
   setCouponStatusSuccess,
   setCouponStatusFailure,
 } from "../../slices/coupon/couponSetStatusSlice";
-import type { TrackUsageRequestPayload } from "../../slices/coupon/couponTrackUsageSlice";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type {
-  CouponListParams,
-  CouponListResponse,
   CouponDetailType,
   CouponCreateRequest,
   CouponUpdateRequest,
-  CouponStatus,
   SetCouponStatusResponse,
-  TrackCouponUsageResponse,
-  CouponAssignRequest,
-  CouponAssignResponse,
 } from "../../../type/coupon/coupon";
 import type { SetCouponStatusRequestPayload } from "../../slices/coupon/couponSetStatusSlice";
-import {
-  assignCouponsStart,
-  assignCouponsSuccess,
-  assignCouponsFailure,
-} from "../../slices/coupon/couponAssignSlice";
+
 import type {
   ListPageParams,
   ListPageResponse,
@@ -102,24 +76,21 @@ interface ApiError {
   };
 }
 
-const { getListValidCoupon } = couponService;
+const { getListValidCoupon, getCouponList } = couponService;
 const { getListMenuItemsIds } = menuItemService;
 const { getPromotionDetail } = promotionService;
 
 function* handleFetchCoupons(
-  action: PayloadAction<CouponListParams | undefined>
-) {
+  action: PayloadAction<ListPageParams | undefined>
+): Generator<Effect, void, AxiosResponse<ListPageResponse>> {
   try {
-    const params = action.payload || {
-      page: 1,
-      page_size: 10,
-    };
-
-    const response: CouponListResponse = yield call(getCouponList, params);
-    yield put(fetchCouponsSuccess(response));
+    const response = yield call(
+      getCouponList,
+      action.payload as ListPageParams
+    );
+    yield put(fetchCouponsSuccess(response.data));
   } catch (error: unknown) {
     const err = error as ApiError;
-
     yield put(fetchCouponsFailure(err as string));
   }
 }
@@ -147,18 +118,20 @@ function* handleFetchCouponDetail(
   try {
     const { couponId } = action.payload;
     const response = yield call(getCouponDetail, couponId);
-    console.log("dataResponse", response);
     let dataResponse = response;
     if (response?.accept_for_items && response?.accept_for_items.length > 0) {
       const responseMenuItems = yield call(() =>
         getListMenuItemsIds(response?.accept_for_items as string[])
       );
+
       const dataMappedMenuItems = objectMapper(
-        Array.isArray(responseMenuItems)
-          ? responseMenuItems
-          : [responseMenuItems],
+        Array.isArray(responseMenuItems.data)
+          ? responseMenuItems.data
+          : [responseMenuItems.data],
         fieldMap
       );
+
+      console.log("dataMappedMenuItems", dataMappedMenuItems);
 
       dataResponse = {
         ...dataResponse,
@@ -170,7 +143,7 @@ function* handleFetchCouponDetail(
       const responsePromotion = yield call(() =>
         getPromotionDetail(response?.promotion_id)
       );
-      const dataMappedMenuItems = objectMapper(
+      const dataMappedPromotion = objectMapper(
         Array.isArray(responsePromotion.data)
           ? responsePromotion.data
           : [responsePromotion.data],
@@ -179,9 +152,10 @@ function* handleFetchCouponDetail(
 
       dataResponse = {
         ...dataResponse,
-        promotion: dataMappedMenuItems as PromotionListDataType[],
+        promotion: dataMappedPromotion as PromotionListDataType[],
       };
     }
+
     console.log("dataResponse", dataResponse);
     yield put(fetchCouponDetailSuccess(dataResponse));
   } catch (error: unknown) {
@@ -197,45 +171,6 @@ function* handleCreateCoupon(
     const { couponData } = action.payload;
     const response = yield call(createCoupon, couponData);
     yield put(createCouponSuccess(response as Record<string, unknown>));
-
-    const now = new Date();
-    const startDate = new Date(couponData.start_date);
-    const endDate = new Date(couponData.end_date);
-
-    let status: CouponStatus = 2;
-    if (now < startDate) {
-      status = 1;
-    } else if (now > endDate) {
-      status = 3;
-    }
-
-    const responseData = response as {
-      id?: string;
-      coupon_id?: string;
-      [key: string]: unknown;
-    };
-    const newCouponForList = {
-      id: responseData?.id || responseData?.coupon_id || `temp-${Date.now()}`,
-      code: couponData.code || `AUTO-${Date.now()}`,
-      description: couponData.description,
-      discount_type: couponData.discount_type,
-      value: couponData.value,
-      start_date: couponData.start_date,
-      end_date: couponData.end_date,
-      max_usage: couponData.max_usage,
-      count_used: 0,
-      is_active: couponData.is_active,
-      status: status,
-    };
-
-    yield put(addNewCouponToList(newCouponForList));
-
-    yield put(
-      fetchCouponsStart({
-        page: 1,
-        page_size: 10,
-      })
-    );
   } catch (error: unknown) {
     const err = error as ApiError;
     yield put(createCouponFailure(err as string));
@@ -250,15 +185,6 @@ function* handleUpdateCoupon(
 
     const response = yield call(updateCoupon, couponId, couponData);
     yield put(updateCouponSuccess(response as Record<string, unknown>));
-
-    yield put(fetchCouponDetailStart({ storeId: "", couponId }));
-
-    yield put(
-      fetchCouponsStart({
-        page: 1,
-        page_size: 10,
-      })
-    );
   } catch (error: unknown) {
     const err = error as ApiError;
     yield put(updateCouponFailure(err as string));
@@ -273,33 +199,10 @@ function* handleDeleteCoupon(
 
     yield call(deleteCoupon, couponId);
     yield put(deleteCouponSuccess({ couponId }));
-
-    yield put(
-      fetchCouponsStart({
-        page: 1,
-        page_size: 10,
-      })
-    );
   } catch (error: unknown) {
     const err = error as ApiError;
 
     yield put(deleteCouponFailure(err as string));
-  }
-}
-
-function* handleTrackCouponUsage(
-  action: PayloadAction<TrackUsageRequestPayload>
-): Generator<unknown, void, unknown> {
-  try {
-    const { couponId, userId } = action.payload;
-
-    const response = yield call(trackCouponUsage, couponId, userId);
-
-    yield put(trackUsageSuccess(response as TrackCouponUsageResponse));
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to preview coupon usage";
-    yield put(trackUsageFailure(errorMessage));
   }
 }
 
@@ -317,42 +220,9 @@ function* handleSetCouponStatus(
         couponId,
       })
     );
-
-    yield put(
-      fetchCouponsStart({
-        page: 1,
-        page_size: 10,
-      })
-    );
   } catch (error: unknown) {
     const err = error as ApiError;
     yield put(setCouponStatusFailure({ error: err as string }));
-  }
-}
-
-function* handleAssignCoupons(
-  action: PayloadAction<{ storeId: string; assignRequest: CouponAssignRequest }>
-): Generator<unknown, void, unknown> {
-  try {
-    const { storeId, assignRequest } = action.payload;
-
-    const response = yield call(
-      assignCouponsToPromotion,
-      storeId,
-      assignRequest
-    );
-
-    yield put(assignCouponsSuccess(response as CouponAssignResponse));
-
-    yield put(
-      fetchCouponsStart({
-        page: 1,
-        page_size: 10,
-      })
-    );
-  } catch (error: unknown) {
-    const err = error as ApiError;
-    yield put(assignCouponsFailure(err as string));
   }
 }
 
@@ -367,11 +237,9 @@ export default function* couponSaga() {
     }),
     takeLatest(updateCouponStart.type, handleUpdateCoupon),
     takeLatest(deleteCouponStart.type, handleDeleteCoupon),
-    takeEvery(trackUsageRequest.type, handleTrackCouponUsage),
     takeLatest(setCouponStatusRequest.type, function* (action) {
       yield* withGlobalLoading(handleSetCouponStatus, action);
     }),
-    takeLatest(assignCouponsStart.type, handleAssignCoupons),
     takeLatest(fetchCouponsValidStart.type, handleFetchCouponsVadlid),
   ]);
 }
