@@ -1,31 +1,31 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { MenuListDataType } from "../../../type/menu/menu";
 import {
   defaultParams,
   type ListPageParams,
 } from "../../../type/common/common";
+import type { StaffDataType } from "../../../type/staff/staff";
 
-interface MenuItemListState {
-  menuItems: MenuListDataType[];
+interface StaffListState {
+  staff: StaffDataType[];
   loading: boolean;
   error: string | null;
   params: ListPageParams;
   total: number;
 }
 
-const initialState: MenuItemListState = {
-  menuItems: [],
+const initialState: StaffListState = {
+  staff: [],
   loading: false,
   error: null,
   params: defaultParams(),
   total: 0,
 };
 
-const menuItemSlice = createSlice({
-  name: "menuItemList",
+const staffListSlice = createSlice({
+  name: "staffList",
   initialState,
   reducers: {
-    fetchMenuItemsStart: (
+    fetchStaffListStart: (
       state,
       action: PayloadAction<ListPageParams | undefined>
     ) => {
@@ -33,30 +33,30 @@ const menuItemSlice = createSlice({
       state.error = null;
       state.params = action.payload || initialState.params;
     },
-    fetchMenuItemsSuccess: (
+    fetchStaffListSuccess: (
       state,
       action: PayloadAction<{
-        menuItems: MenuListDataType[];
+        staffs: StaffDataType[];
         total: number;
       }>
     ) => {
       state.loading = false;
-      state.menuItems = action.payload.menuItems;
+      state.staff = action.payload.staffs;
       state.error = null;
       state.total = action.payload.total;
     },
-    fetchMenuItemsFailure: (state, action: PayloadAction<string>) => {
+    fetchStaffListFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
-      state.menuItems = [];
+      state.staff = [];
       state.total = 0;
     },
   },
 });
 
 export const {
-  fetchMenuItemsStart,
-  fetchMenuItemsSuccess,
-  fetchMenuItemsFailure,
-} = menuItemSlice.actions;
-export default menuItemSlice.reducer;
+  fetchStaffListStart,
+  fetchStaffListSuccess,
+  fetchStaffListFailure,
+} = staffListSlice.actions;
+export default staffListSlice.reducer;

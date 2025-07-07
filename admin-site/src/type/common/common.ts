@@ -34,3 +34,15 @@ export interface ListPageResponse {
   page_size: number;
   items: [];
 }
+
+export const defaultParams = (page_size = 10) => {
+  return {
+    page: 1,
+    page_size,
+    search_by: "",
+    search_value: "",
+    sort_by: "",
+    sort_order: "",
+    filters: {},
+  };
+};

@@ -1,27 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import TitleLine from "../../components/common/Title/TitleLine";
 import { useAppDispatch } from "../../hooks/redux";
+import { fetchStaffListStart } from "../../store/slices/staff/staffListSlice";
 import type { ListPageParams } from "../../type/common/common";
-import { fetchCategoriesStart } from "../../store/slices/category/categoryListSlice";
-import CategoryList from "../../components/category/categoryList/CategoryList";
+import StaffList from "../../components/staff/staffList/StaffList";
 
-const CategoryPage = () => {
+const StaffListPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const fetchData = async (params: ListPageParams) => {
-    dispatch(fetchCategoriesStart(params));
+    dispatch(fetchStaffListStart(params));
   };
   return (
     <>
       <TitleLine
-        title="Category List"
+        title="Staff List"
         onCreate={() => {
-          navigate("/categories/create");
+          navigate("/staffs/create");
         }}
       />
-      <CategoryList fetchData={fetchData} />
+      <StaffList fetchData={fetchData} />
     </>
   );
 };
 
-export default CategoryPage;
+export default StaffListPage;

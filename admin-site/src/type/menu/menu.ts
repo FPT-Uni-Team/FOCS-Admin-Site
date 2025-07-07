@@ -1,3 +1,5 @@
+import type { VariantGroup } from "../variant/variant";
+
 export interface MenuListDataType {
   menuId: string;
   menuName: string;
@@ -22,3 +24,23 @@ export const statusOptions = [
     };
   }),
 ];
+
+export interface MenuItem {
+  id?: string;
+  name?: string;
+  description?: string;
+  images?: string | [];
+  base_price?: number;
+  is_available?: boolean;
+  store_id?: string;
+  category_ids?: [];
+  variant_groups?: VariantGroup[];
+}
+
+export interface MenuItemCreatePayload {
+  data: MenuItem;
+  images: {
+    images: [];
+    mainImages: [];
+  };
+}

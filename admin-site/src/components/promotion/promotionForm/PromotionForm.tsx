@@ -23,7 +23,6 @@ import {
 import { useEffect, useState, type FC } from "react";
 import StepBlock from "../../common/Step/StepBlock";
 import { PlusOutlined } from "@ant-design/icons";
-import ModalMenuItem from "../../common/modal/ModalMenuItem";
 import TableReuse from "../../common/Table/TableReuse";
 import type { MenuListDataType } from "../../../type/menu/menu";
 import {
@@ -31,8 +30,9 @@ import {
   columnsMenuItemNoSort,
 } from "../../common/Columns/Colums";
 import clsx from "clsx";
-import ModalCouponList from "../../common/modal/ModalCouponList";
 import type { CouponAdminDTO } from "../../../type/coupon/coupon";
+import ModalCouponList from "../../common/Modal/ModalCouponList";
+import ModalMenuItem from "../../common/Modal/ModalMenuItem";
 
 interface Props {
   title?: string;

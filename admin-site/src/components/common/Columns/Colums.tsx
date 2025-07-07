@@ -16,6 +16,11 @@ import {
 import StatusTag from "../Status/StatusTag";
 import { formatPrice } from "../../../helper/formatPrice";
 import type { CategoryListDataType } from "../../../type/category/category";
+import { Space, Typography } from "antd";
+import type { Variant, VariantGroup } from "../../../type/variant/variant";
+import TableReuse from "../Table/TableReuse";
+import type { StaffDataType } from "../../../type/staff/staff";
+const { Text } = Typography;
 
 export const columnsMenuItem: ColumnsType<MenuListDataType> = [
   {
@@ -31,7 +36,7 @@ export const columnsMenuItem: ColumnsType<MenuListDataType> = [
       return (
         <CustomLink
           title={record.menuName}
-          href={`/categories/${record.menuId}`}
+          href={`/menu-items/${record.menuId}`}
         />
       );
     },
@@ -348,9 +353,7 @@ export const columnsCategory: ColumnsType<CategoryListDataType> = [
       "ascend" as SortOrder,
     ],
     render: (_, record) => {
-      return (
-        <CustomLink title={record.name} href={`categories/${record.id}`} />
-      );
+      return <CustomLink title={record.name} href={`/${record.id}`} />;
     },
     sorter: true,
   },
@@ -386,5 +389,123 @@ export const columnsCategoryNoSort: ColumnsType<CategoryListDataType> = [
         <StatusTag status={record.is_active ? "available" : "unavailable"} />
       );
     },
+  },
+];
+
+export const getColumnsVariantGroupNoEdit: ColumnsType<VariantGroup> = [
+  {
+    title: "Variant Group Name",
+    dataIndex: "group_name",
+    key: "group_name",
+    render: (text: string) => <Text strong>{text}</Text>,
+  },
+  {
+    title: "Min Select",
+    dataIndex: "min_select",
+    key: "min_select",
+    align: "center",
+  },
+  {
+    title: "Max Select",
+    dataIndex: "max_select",
+    key: "max_select",
+    align: "center",
+  },
+];
+
+export const expandedRowRenderNoEdit = (group: VariantGroup) => {
+  const variantColumns: ColumnsType<Variant> = [
+    {
+      title: "Variant Name",
+      dataIndex: "name",
+      key: "name",
+      render: (text: string, record: Variant) => (
+        <Space>
+          <Text>{text}</Text>
+          {!record.is_available && <Text type="secondary">(Unavailable)</Text>}
+        </Space>
+      ),
+    },
+    {
+      title: "Prep Time (min)",
+      dataIndex: "prep_per_time",
+      key: "prep_per_time",
+      align: "center",
+      render: (prep: number) => `${prep}′`,
+    },
+
+    {
+      title: "Qty / Time",
+      dataIndex: "quantity_per_time",
+      key: "quantity_per_time",
+      align: "center",
+      render: (qty: number) => (qty !== undefined ? qty : "-"),
+    },
+
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      render: (price: number) => {
+        return (
+          <Text type="success">
+            {price > 0 ? `+${price.toLocaleString()}đ` : "-"}
+          </Text>
+        );
+      },
+    },
+  ];
+
+  return (
+    <TableReuse
+      columns={variantColumns}
+      dataSource={group.variants}
+      rowKey="id"
+      pagination={false}
+    />
+  );
+};
+
+export const columnsStaffList: ColumnsType<StaffDataType> = [
+  {
+    title: "First Name",
+    dataIndex: "first_name",
+    key: "first_name",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (_, record) => {
+      return (
+        <CustomLink
+          title={record.first_name}
+          href={`/staffs/${record.id}`}
+          key={record.id}
+        />
+      );
+    },
+    sorter: true,
+  },
+  {
+    title: "Last Name",
+    dataIndex: "last_name",
+    key: "last_name",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    sorter: true,
+  },
+  {
+    title: "Phone Number",
+    dataIndex: "phone_number",
+    key: "phone_number",
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
   },
 ];

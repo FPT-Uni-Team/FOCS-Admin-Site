@@ -1,16 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import TitleLine from "../../components/common/Title/TitleLine";
 import { useAppDispatch } from "../../hooks/redux";
-import type { PromotionListParams } from "../../type/promotion/promotion";
 import { fetchMenuItemsStart } from "../../store/slices/menuItem/menuItemSlice";
 import MenuItemList from "../../components/menuItem/menuItemList/MenuItemList";
+import type { ListPageParams } from "../../type/common/common";
+import { useCallback } from "react";
 
 const MenuItemPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const fetchData = async (params: PromotionListParams) => {
-    dispatch(fetchMenuItemsStart(params));
-  };
+  const fetchData = useCallback(
+    async (params: ListPageParams) => {
+      dispatch(fetchMenuItemsStart(params));
+    },
+    [dispatch]
+  );
   return (
     <>
       <TitleLine

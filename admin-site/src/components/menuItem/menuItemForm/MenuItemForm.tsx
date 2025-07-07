@@ -6,7 +6,6 @@ import {
   Switch,
   Typography,
   type FormInstance,
-  Image,
 } from "antd";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
 import { Form } from "antd";
@@ -16,16 +15,22 @@ import clsx from "clsx";
 import TableReuse from "../../common/Table/TableReuse";
 import { columnsCategoryNoSort } from "../../common/Columns/Colums";
 import { PlusOutlined } from "@ant-design/icons";
-import ModalCategoryList from "../../common/modal/ModalCategoriesList";
-import { useState } from "react";
+import ModalCategoryList from "../../common/Modal/ModalCategoriesList";
+import { useEffect, useState } from "react";
 import type { SelectedTableItems } from "../../promotion/promotionForm/PromotionForm";
 import type { CategoryListDataType } from "../../../type/category/category";
 import ImageUploaderGrid from "../../common/Image/ImageUploaderGrid";
+import VariantManagement from "../../common/Modal/ModalSelectVariantList";
+import type { VariantGroup } from "../../../type/variant/variant";
+import type { MenuItem } from "../../../type/menu/menu";
+import ImageUpdateGrid from "../../common/Image/ImageUpdateGrid";
 interface Props {
   mode?: "Update" | "Create";
   form: FormInstance;
+  initData?: MenuItem;
 }
-const MenuItemForm: React.FC<Props> = ({ mode = "Create", form }) => {
+
+const MenuItemForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
   const [showModalCategory, setShowModalCategory] = useState<boolean>(false);
   const [dataCategorySeleted, setDataCategorySeleted] = useState<
     SelectedTableItems<CategoryListDataType>
@@ -33,6 +38,22 @@ const MenuItemForm: React.FC<Props> = ({ mode = "Create", form }) => {
     keys: [],
     items: [],
   });
+
+  const onSaveSelection = (variantGroup: VariantGroup[]) => {
+    form.setFieldValue("variant_groups", variantGroup);
+  };
+
+  useEffect(() => {
+    if (initData && mode == "Update") {
+      form.setFieldsValue({
+        name: initData.name,
+        description: initData.description,
+        base_price: initData.base_price,
+        is_available: initData.is_available,
+      });
+    }
+  }, [initData, form, mode]);
+
   return (
     <Row gutter={12}>
       <Col span={16}>
@@ -105,7 +126,7 @@ const MenuItemForm: React.FC<Props> = ({ mode = "Create", form }) => {
             <Row>
               <Col span={24}>
                 <Form.Item
-                  name="category_list"
+                  name="category_ids"
                   rules={[
                     {
                       validator: (_, value) => {
@@ -149,8 +170,8 @@ const MenuItemForm: React.FC<Props> = ({ mode = "Create", form }) => {
                                 keys,
                                 items,
                               });
-                              form.setFieldsValue({ category_list: keys });
-                              form.validateFields(["category_list"]);
+                              form.setFieldsValue({ category_ids: keys });
+                              form.validateFields(["category_ids"]);
                             }}
                           />
                         </>
@@ -168,13 +189,29 @@ const MenuItemForm: React.FC<Props> = ({ mode = "Create", form }) => {
                 </Form.Item>
               </Col>
             </Row>
+            <Row>
+              <Col span={24}>
+                <Form.Item name="variant_groups">
+                  <Row>
+                    <div
+                      className={clsx(
+                        styles.customTableSelect,
+                        styles.marginItem
+                      )}
+                    >
+                      <VariantManagement onSaveSelection={onSaveSelection} />
+                    </div>
+                  </Row>
+                </Form.Item>
+              </Col>
+            </Row>
           </Form>
         </ContentInner>
       </Col>
       <Col span={8}>
         <div style={{ minHeight: "fit-content" }}>
           <ContentInner>
-            <ImageUploaderGrid />
+            {mode == "Create" ? <ImageUploaderGrid /> : <ImageUpdateGrid />}
           </ContentInner>
         </div>
       </Col>

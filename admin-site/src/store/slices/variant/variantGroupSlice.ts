@@ -1,31 +1,31 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { MenuListDataType } from "../../../type/menu/menu";
 import {
   defaultParams,
   type ListPageParams,
 } from "../../../type/common/common";
+import type { VariantGroup } from "../../../type/variant/variant";
 
-interface MenuItemListState {
-  menuItems: MenuListDataType[];
+interface VariantGroupListState {
+  variantGroupsList: VariantGroup[];
   loading: boolean;
   error: string | null;
   params: ListPageParams;
   total: number;
 }
 
-const initialState: MenuItemListState = {
-  menuItems: [],
+const initialState: VariantGroupListState = {
+  variantGroupsList: [],
   loading: false,
   error: null,
   params: defaultParams(),
   total: 0,
 };
 
-const menuItemSlice = createSlice({
-  name: "menuItemList",
+const variantGroupSlice = createSlice({
+  name: "variantGroupList",
   initialState,
   reducers: {
-    fetchMenuItemsStart: (
+    fetchVariantGroupsStart: (
       state,
       action: PayloadAction<ListPageParams | undefined>
     ) => {
@@ -33,30 +33,30 @@ const menuItemSlice = createSlice({
       state.error = null;
       state.params = action.payload || initialState.params;
     },
-    fetchMenuItemsSuccess: (
+    fetchVariantGroupsSuccess: (
       state,
       action: PayloadAction<{
-        menuItems: MenuListDataType[];
+        menuItems: VariantGroup[];
         total: number;
       }>
     ) => {
       state.loading = false;
-      state.menuItems = action.payload.menuItems;
+      state.variantGroupsList = action.payload.menuItems;
       state.error = null;
       state.total = action.payload.total;
     },
-    fetchMenuItemsFailure: (state, action: PayloadAction<string>) => {
+    fetchVariantGroupsFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
-      state.menuItems = [];
+      state.variantGroupsList = [];
       state.total = 0;
     },
   },
 });
 
 export const {
-  fetchMenuItemsStart,
-  fetchMenuItemsSuccess,
-  fetchMenuItemsFailure,
-} = menuItemSlice.actions;
-export default menuItemSlice.reducer;
+  fetchVariantGroupsStart,
+  fetchVariantGroupsSuccess,
+  fetchVariantGroupsFailure,
+} = variantGroupSlice.actions;
+export default variantGroupSlice.reducer;
