@@ -6,23 +6,21 @@ import {
   type ImageFile,
 } from "../../context/ImageUploadContext";
 import { useEffect, useState } from "react";
+// import { showNotification } from "../../components/common/Notification/ToastCustom";
 import type { VariantGroup } from "../../type/variant/variant";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import {
-  createMenuItemStart,
-  resetMenuItemCreate,
-} from "../../store/slices/menuItem/menuItemCreateSlice";
-import { showNotification } from "../../components/common/Notification/ToastCustom";
-import { useNavigate } from "react-router-dom";
+import { createMenuItemStart } from "../../store/slices/menuItem/menuItemCreateSlice";
+import { fetchMenuItemDetailStart } from "../../store/slices/menuItem/menuItemDetailSlice";
+import { useParams } from "react-router-dom";
 // import type { MenuItemCreatePayload } from "../../type/menu/menu";
 
-const MenuItemCreatePage = () => {
+const MenuItemUpdatePage = () => {
   const [form] = useForm();
   const [images, setImages] = useState<ImageFile[]>([]);
   const [mainImages, setMainImages] = useState<boolean[]>([]);
   const dispatch = useAppDispatch();
-  const { success, error } = useAppSelector((state) => state.menuItemCreate);
-  const navigate = useNavigate();
+  const { menuItemId } = useParams();
+  const { menuItem } = useAppSelector((state) => state.menuItemDetail);
 
   const handleModifyData = () => {
     const allFormValues = form.getFieldsValue();
@@ -64,31 +62,25 @@ const MenuItemCreatePage = () => {
       })
       .catch(() => {});
   };
-
   useEffect(() => {
-    if (success) {
-      showNotification("success", "Create promotion success!");
-      dispatch(resetMenuItemCreate());
-      navigate("/menu-items");
-    }
-  }, [dispatch, navigate, success]);
+    dispatch(fetchMenuItemDetailStart(menuItemId || ""));
+  }, [dispatch, menuItemId]);
 
-  useEffect(() => {
-    if (error) {
-      showNotification("error", error);
-      dispatch(resetMenuItemCreate());
-    }
-  }, [dispatch, error]);
   return (
     <>
-      <TitleLine title="New Menu Item" onCreate={handleSubMit} />
+      <TitleLine
+        title={menuItem.name}
+        status={menuItem.is_available ? "Available" : "UnAvailable"}
+        createButtonText="Update"
+        onCreate={handleSubMit}
+      />
       <ImageUploadContext.Provider
         value={{ images, setImages, mainImages, setMainImages }}
       >
-        <MenuItemForm form={form} />
+        <MenuItemForm form={form} mode="Update" initData={menuItem} />
       </ImageUploadContext.Provider>
     </>
   );
 };
 
-export default MenuItemCreatePage;
+export default MenuItemUpdatePage;

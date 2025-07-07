@@ -2,6 +2,8 @@ export const checkActive = (status: string) => {
   switch (status) {
     case "UnAvailable":
       return 1;
+    case "Available":
+      return 0;
     case "Not Start":
       return 0;
     case "On Going":
@@ -16,6 +18,8 @@ export const checkShowEdit = (status: string) => {
   switch (status) {
     case "UnAvailable":
       return false;
+    case "Available":
+      return true;
     case "Not Start":
       return true;
     case "On Going":

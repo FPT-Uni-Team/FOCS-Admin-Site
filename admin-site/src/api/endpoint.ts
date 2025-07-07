@@ -7,8 +7,13 @@ const endpoints = {
     change: (action: string, id: string) => `admin/promotion/${action}/${id}`,
   },
   menuItem: {
-    list: (storeId: string) => `/admin/menu-items?storeId=${storeId}`,
+    list: () => `/admin/menu-item/list`,
     listByIds: () => "/admin/menu-item-list",
+    create: () => `/admin/menu-item`,
+    detail: (params: string) => `/admin/menu-item/${params}`,
+    images: (params: string) => `/MenuItem/product/images/${params}`,
+    variantGroups: (params: string) =>
+      `/menu/menu-items/${params}/variant-groups`,
   },
   auth: {
     login: () => "/me/login",
@@ -16,7 +21,7 @@ const endpoints = {
   },
   coupon: {
     listValid: () => "/admin/coupons/available",
-    listByIds: () => "admin/coupons/by-ids",
+    listByIds: () => "/admin/coupons/by-ids",
     list: (storeId: string) => `/admin/coupons/${storeId}`,
     detail: (id: string) => `/admin/coupon/${id}`,
     create: () => `/admin/coupon`,
@@ -29,6 +34,19 @@ const endpoints = {
   },
   category: {
     list: () => "/Category/categories",
+    create: () => "/Category",
+    detail: (params: string) => `/Category/${params}`,
+    update: (param: string) => `Category/${param}`,
+    change: (action: string, id: string) => `/Category/${action}/${id}`,
+  },
+  variant: {
+    list: () => "/variant-group/variants",
+  },
+  image: {
+    upload: () => "/MenuItem/upload",
+  },
+  staff: {
+    list: () => `/staff/list`,
   },
 };
 

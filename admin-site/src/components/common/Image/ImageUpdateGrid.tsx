@@ -20,9 +20,8 @@ import {
 
 const MAX_IMAGES = 4;
 
-const ImageUploaderGrid = () => {
+const ImageUpdateGrid = () => {
   const { images, setImages, mainImages, setMainImages } = useImageUpload();
-
   useEffect(() => {
     return () => {
       images.forEach((file) => URL.revokeObjectURL(file.preview as string));
@@ -32,15 +31,11 @@ const ImageUploaderGrid = () => {
   const handleUpload: UploadProps["customRequest"] = ({ file, onSuccess }) => {
     if (images.length < MAX_IMAGES) {
       const previewUrl = URL.createObjectURL(file as File);
-
       const newImageFile = Object.assign(file as File, {
         preview: previewUrl,
       }) as ImageFile;
-
       setImages((prev) => [...prev, newImageFile]);
-
       setMainImages((prev) => [...prev, false]);
-
       onSuccess?.("ok");
     }
   };
@@ -100,7 +95,7 @@ const ImageUploaderGrid = () => {
                     className={styles.starIcon}
                     onClick={() => toggleMainImage(i)}
                   />
-                )}{" "}
+                )}
               </>
             ) : (
               "Empty"
@@ -112,4 +107,4 @@ const ImageUploaderGrid = () => {
   );
 };
 
-export default ImageUploaderGrid;
+export default ImageUpdateGrid;

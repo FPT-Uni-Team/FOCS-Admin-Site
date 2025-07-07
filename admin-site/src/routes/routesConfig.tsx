@@ -1,8 +1,11 @@
 import {
   AppstoreOutlined,
+  BranchesOutlined,
+  DeploymentUnitOutlined,
   GiftOutlined,
   ProfileOutlined,
   TagOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import {
   lazy,
@@ -36,6 +39,22 @@ const CategoryListPage = lazy(
 const MenuItemCreatePage = lazy(
   () => import("../pages/menuItem/MenuItemCreate")
 );
+const MenuItemDetailPage = lazy(
+  () => import("../pages/menuItem/MenuItemDetail")
+);
+const MenuItemUpdatePage = lazy(
+  () => import("../pages/menuItem/MenuItemUpdate")
+);
+const CategoryCreatePage = lazy(
+  () => import("../pages/category/CategoryCreatePage")
+);
+const CategoryDetailPage = lazy(
+  () => import("../pages/category/CategoryDetailPage")
+);
+const CategoryUpdatePage = lazy(
+  () => import("../pages/category/CategoryUpdatePage")
+);
+const StaffListPage = lazy(() => import("../pages/staff/StaffListPage"));
 
 export interface AppRoute {
   path: string;
@@ -113,15 +132,61 @@ export const routes: AppRoute[] = [
     icon: <ProfileOutlined />,
   },
   {
+    path: "/menu-items/:menuItemId",
+    component: MenuItemDetailPage,
+    hidden: true,
+  },
+  {
     path: "/categories",
     component: CategoryListPage,
     label: "Category",
     icon: <AppstoreOutlined />,
   },
   {
+    path: "/categories/create",
+    component: CategoryCreatePage,
+    label: "Category",
+    hidden: true,
+  },
+  {
+    path: "/categories/:categoryId",
+    component: CategoryDetailPage,
+    label: "Category",
+    hidden: true,
+  },
+  {
+    path: "/categories/update/:categoryId",
+    component: CategoryUpdatePage,
+    label: "Category",
+    hidden: true,
+  },
+  {
     path: "/menu-items/create",
     component: MenuItemCreatePage,
     hidden: true,
+  },
+  {
+    path: "/menu-items/update/:menuItemId",
+    component: MenuItemUpdatePage,
+    hidden: true,
+  },
+  {
+    path: "/staff",
+    component: StaffListPage,
+    label: "Staff",
+    icon: <UserOutlined />,
+  },
+  {
+    path: "/variantGroup",
+    component: StaffListPage,
+    label: "Variant Group",
+    icon: <BranchesOutlined />,
+  },
+  {
+    path: "/variant",
+    component: StaffListPage,
+    label: "Variant",
+    icon: <DeploymentUnitOutlined />,
   },
 ];
 

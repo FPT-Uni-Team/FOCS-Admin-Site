@@ -17,6 +17,14 @@ import couponListValidSlice from "./slices/coupon/couponListValidSlice";
 import promotionUpdateSlice from "./slices/promotion/promotionUpdateSlice";
 import changeStatusPromotionSlice from "./slices/promotion/promotionChangeStatusSlice";
 import categoryListSlice from "./slices/category/categoryListSlice";
+import variantGroupSlice from "./slices/variant/variantGroupSlice";
+import menuItemCreateSlice from "./slices/menuItem/menuItemCreateSlice";
+import menuItemDetailSlice from "./slices/menuItem/menuItemDetailSlice";
+import categoryCreateSlice from "./slices/category/categoryCreateSlice";
+import categoryDetailSlice from "./slices/category/categoryDetailSlice";
+import changeCategoryStatusSlice from "./slices/category/categoryChangeStatusSlice";
+import categoryUpdateSlice from "./slices/category/categoryUpdateSlice";
+import staffListSlice from "./slices/staff/staffListSlice";
 
 const rootReducer = combineReducers({
   promotion: promotionSlice,
@@ -37,6 +45,14 @@ const rootReducer = combineReducers({
   promotionUpdate: promotionUpdateSlice,
   changeStatusPromotion: changeStatusPromotionSlice,
   categoryList: categoryListSlice,
+  variantGroup: variantGroupSlice,
+  menuItemCreate: menuItemCreateSlice,
+  menuItemDetail: menuItemDetailSlice,
+  categoryCreate: categoryCreateSlice,
+  categoryDetail: categoryDetailSlice,
+  changeCategoryStatus: changeCategoryStatusSlice,
+  categoryUpdate: categoryUpdateSlice,
+  staffList: staffListSlice,
 });
 
 export default rootReducer;
