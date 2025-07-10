@@ -14,7 +14,7 @@ import {
 } from "../../store/slices/menuItem/menuItemCreateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 import { useNavigate } from "react-router-dom";
-// import type { MenuItemCreatePayload } from "../../type/menu/menu";
+import type { MenuItemCreatePayload } from "../../type/menu/menu";
 
 const MenuItemCreatePage = () => {
   const [form] = useForm();
@@ -40,7 +40,7 @@ const MenuItemCreatePage = () => {
             is_required: group.is_required,
             min_select: group.min_select,
             max_select: group.max_select,
-            variant_ids: group.variants.map((item) => ({
+            variants: group.variants.map((item) => ({
               id: item.id,
               is_available: item.is_available,
               prep_per_time: item.prep_per_time,
@@ -56,18 +56,19 @@ const MenuItemCreatePage = () => {
     };
   };
   const handleSubMit = () => {
+    dispatch(resetMenuItemCreate());
     form
       .validateFields()
       .then(() => {
         const payloadData = handleModifyData();
-        dispatch(createMenuItemStart(payloadData as any));
+        dispatch(createMenuItemStart(payloadData as MenuItemCreatePayload));
       })
       .catch(() => {});
   };
 
   useEffect(() => {
     if (success) {
-      showNotification("success", "Create promotion success!");
+      showNotification("success", "Create menu item success!");
       dispatch(resetMenuItemCreate());
       navigate("/menu-items");
     }

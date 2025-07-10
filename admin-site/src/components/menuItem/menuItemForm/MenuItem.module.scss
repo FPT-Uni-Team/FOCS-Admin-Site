@@ -7,6 +7,16 @@
   height: 100%;
 }
 
+.deleteIcon {
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.deleteIcon:hover {
+  color: red;
+}
+
 .customTableSelect {
   display: flex;
   flex-direction: column;

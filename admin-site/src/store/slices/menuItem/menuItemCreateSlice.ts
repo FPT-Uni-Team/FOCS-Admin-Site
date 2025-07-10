@@ -28,18 +28,19 @@ const menuItemCreateSlice = createSlice({
   name: "menuItemCreate",
   initialState,
   reducers: {
-    createMenuItemStart: {
-      reducer: (state) => {
-        state.loading = true;
-        state.success = false;
-        state.error = null;
-      },
-      prepare: (payload: MenuItemCreatePayload) => ({ payload }),
+    createMenuItemStart: (
+      state,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _action: PayloadAction<MenuItemCreatePayload>
+    ) => {
+      state.loading = true;
+      state.success = false;
+      state.error = null;
     },
-    createMenuItemSuccess: (state, action: PayloadAction<MenuItem>) => {
+
+    createMenuItemSuccess: (state) => {
       state.loading = false;
       state.success = true;
-      state.menuItemSuccess = action.payload;
     },
     createMenuItemFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;

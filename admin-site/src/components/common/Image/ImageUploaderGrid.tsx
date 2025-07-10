@@ -1,18 +1,13 @@
 import { Image, Upload, Button } from "antd";
-
 import {
   PlusOutlined,
   CloseOutlined,
   StarOutlined,
   StarFilled,
 } from "@ant-design/icons";
-
 import { useEffect } from "react";
-
 import type { UploadProps } from "antd";
-
 import styles from "./ImageUploaderGrid.module.scss";
-
 import {
   useImageUpload,
   type ImageFile,
@@ -32,15 +27,11 @@ const ImageUploaderGrid = () => {
   const handleUpload: UploadProps["customRequest"] = ({ file, onSuccess }) => {
     if (images.length < MAX_IMAGES) {
       const previewUrl = URL.createObjectURL(file as File);
-
       const newImageFile = Object.assign(file as File, {
         preview: previewUrl,
       }) as ImageFile;
-
       setImages((prev) => [...prev, newImageFile]);
-
       setMainImages((prev) => [...prev, false]);
-
       onSuccess?.("ok");
     }
   };

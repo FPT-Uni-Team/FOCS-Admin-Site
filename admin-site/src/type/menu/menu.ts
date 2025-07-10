@@ -1,3 +1,4 @@
+import type { CategoryListDataType } from "../category/category";
 import type { VariantGroup } from "../variant/variant";
 
 export interface MenuListDataType {
@@ -34,6 +35,7 @@ export interface MenuItem {
   is_available?: boolean;
   store_id?: string;
   category_ids?: [];
+  categories?: CategoryListDataType[];
   variant_groups?: VariantGroup[];
 }
 
@@ -43,4 +45,45 @@ export interface MenuItemCreatePayload {
     images: [];
     mainImages: [];
   };
+}
+
+export interface BackendImage {
+  url: string;
+  id?: string;
+  is_main: boolean;
+}
+
+export interface MenuItemUpdatePayload {
+  data: MenuItem;
+  images: {
+    files: File[];
+    metadata: ImageMetadata[];
+  };
+}
+
+export interface ImageMetadata {
+  id: string | null;
+  isMain: boolean;
+  isDeleted: boolean;
+}
+
+export interface ImageItem {
+  id: string | null;
+  url: string | null;
+  file: File | null;
+  preview: string;
+  isMain: boolean;
+  isDeleted: boolean;
+  isNew: boolean;
+}
+
+export interface ImageUploaderGridRef {
+  getImagesDataForUpload: () => { files: File[]; metadata: ImageMetadata[] };
+  hasChanges: () => boolean;
+}
+
+export interface ImageUpdateGridProps {
+  initialImages?: BackendImage[];
+  onUploadAllClick?: (files: File[], metadata: ImageMetadata[]) => void;
+  isUploadingImages?: boolean;
 }

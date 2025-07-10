@@ -15,6 +15,7 @@ interface ModalCategoryProps extends ModalProps {
   selectedData: CategoryListDataType[];
   selectedDataKey: React.Key[];
   singleSelectMode?: boolean;
+  mode?: "Create" | "Update";
 }
 
 const ModalCategoryList: FC<ModalCategoryProps> = ({
@@ -22,6 +23,7 @@ const ModalCategoryList: FC<ModalCategoryProps> = ({
   selectedData,
   selectedDataKey,
   singleSelectMode,
+  mode = "Create",
   ...modalProps
 }) => {
   const { loading, categories, total } = useAppSelector(
@@ -56,9 +58,10 @@ const ModalCategoryList: FC<ModalCategoryProps> = ({
     onChange: onRowSelectionChange,
     getCheckboxProps: (record: CategoryListDataType) => ({
       disabled:
-        singleSelectMode &&
-        selectedCategoryKeys.length > 0 &&
-        !selectedCategoryKeys.includes(record.id),
+        (mode === "Update" && selectedDataKey.includes(record.id)) ||
+        (singleSelectMode &&
+          selectedCategoryKeys.length > 0 &&
+          !selectedCategoryKeys.includes(record.id)),
     }),
   };
 
@@ -87,7 +90,22 @@ const ModalCategoryList: FC<ModalCategoryProps> = ({
   return (
     <Modal
       {...modalProps}
-      onOk={() => handleSubmitModal(selectedCategory, selectedCategoryKeys)}
+      onOk={() => {
+        const filteredItems =
+          mode === "Update"
+            ? selectedCategory.filter(
+                (item) => !selectedDataKey.includes(item.id)
+              )
+            : selectedCategory;
+
+        const filteredKeys =
+          mode === "Update"
+            ? selectedCategoryKeys.filter(
+                (key) => !selectedDataKey.includes(key)
+              )
+            : selectedCategoryKeys;
+        handleSubmitModal(filteredItems, filteredKeys);
+      }}
       centered
     >
       <FilterReuse

@@ -10,7 +10,11 @@ export const store = configureStore({
     getDefaultMiddleware({
       thunk: false,
       serializableCheck: {
-        ignoredActions: ["persist/PERSIST"],
+        ignoredActions: [
+          "persist/PERSIST",
+          "menuItemCreate/createMenuItemStart",
+        ],
+        ignoredPaths: ["menuItemCreate.images"],
       },
     }).concat(sagaMiddleware),
 });
