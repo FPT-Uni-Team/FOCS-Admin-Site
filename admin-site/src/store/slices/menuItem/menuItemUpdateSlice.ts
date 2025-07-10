@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { MenuItem, MenuItemCreatePayload } from "../../../type/menu/menu";
+import type { MenuItem } from "../../../type/menu/menu";
 
 interface MenuItemUpdateState {
   loading: boolean;
@@ -34,7 +34,7 @@ const menuItemUpdateSlice = createSlice({
         state.success = false;
         state.error = null;
       },
-      prepare: (payload: MenuItemCreatePayload) => ({ payload }),
+      prepare: (payload: MenuItem) => ({ payload }),
     },
     updateMenuItemSuccess: (state, action: PayloadAction<MenuItem>) => {
       state.loading = false;

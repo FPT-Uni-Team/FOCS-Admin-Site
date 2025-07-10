@@ -26,6 +26,12 @@ import {
   fetchMenuItemDetailSuccess,
 } from "../../slices/menuItem/menuItemDetailSlice";
 import type { VariantGroup } from "../../../type/variant/variant";
+import type { CategoryListDataType } from "../../../type/category/category";
+import {
+  updateMenuItemFailure,
+  updateMenuItemStart,
+  updateMenuItemSuccess,
+} from "../../slices/menuItem/menuItemUpdateSlice";
 
 const {
   getListMenuItems,
@@ -34,6 +40,8 @@ const {
   menuItemDetail,
   menuItemImage,
   menuItemGroups,
+  menuItemCategory,
+  menuItemUpdate,
 } = menuItemService;
 
 function* fetchMenuItemList(
@@ -56,52 +64,54 @@ function* fetchMenuItemCreate(
 ): Generator<Effect, void, AxiosResponse<MenuItem>> {
   try {
     const response = yield call(() => createMenuItem(action.payload.data));
-    const menuItemId = response.data.id;
+    const menuItemId = response.data;
     yield call(uploadImageMenuItem, {
       images: action.payload.images.images,
       mainImages: action.payload.images.mainImages,
       menuItemId: menuItemId as string,
     });
-    yield put(createMenuItemSuccess(response.data));
+    yield put(createMenuItemSuccess());
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    const errorMsg =
-      error.response.data.fieldName +
-      " " +
-      error.response.data.message.toLowerCase();
-    yield put(createMenuItemFailure(errorMsg as string));
+    // const errorMsg = error.errors.Description;
+    console.log(error);
+    yield put(createMenuItemFailure("Create Failed" as string));
   }
 }
 
 function* fetchMenuItemUpdate(
-  action: PayloadAction<MenuItemCreatePayload>
+  action: PayloadAction<MenuItem>
 ): Generator<Effect, void, AxiosResponse<MenuItem>> {
   try {
-    const response = yield call(() => createMenuItem(action.payload.data));
-    const menuItemId = response.data.id;
-    yield call(uploadImageMenuItem, {
-      images: action.payload.images.images,
-      mainImages: action.payload.images.mainImages,
-      menuItemId: menuItemId as string,
-    });
-    yield put(createMenuItemSuccess(response.data));
+    console.log(action.payload);
+    const response = yield call(() =>
+      menuItemUpdate({
+        menuItemId: action.payload.id as string,
+        data: action.payload,
+      })
+    );
+    console.log("response", response);
+    yield put(updateMenuItemSuccess(response.data));
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : "Failed to fetch users";
-    yield put(createMenuItemFailure(errorMessage));
+    yield put(updateMenuItemFailure(errorMessage));
   }
 }
 
 function* fetchMenuItemDetail(
   action: PayloadAction<string>
-): Generator<Effect, void, AxiosResponse<MenuItem>> {
+): Generator<Effect, void, AxiosResponse<unknown>> {
   try {
     const response = yield call(() => menuItemDetail(action.payload));
-    const menuItemDetailData = response.data;
+    const menuItemDetailData = response.data as MenuItem;
     const responseImage = yield call(() => menuItemImage(action.payload));
     menuItemDetailData.images = responseImage.data as [];
     const responseVariant = yield call(() => menuItemGroups(action.payload));
     menuItemDetailData.variant_groups = responseVariant.data as VariantGroup[];
+    const responseCategory = yield call(() => menuItemCategory(action.payload));
+    menuItemDetailData.categories =
+      responseCategory.data as CategoryListDataType[];
     yield put(fetchMenuItemDetailSuccess(menuItemDetailData));
   } catch {
     yield put(fetchMenuItemDetailFailed());
@@ -115,5 +125,8 @@ export function* watchMenuSaga() {
   });
   yield takeLatest(fetchMenuItemDetailStart.type, function* (action) {
     yield* withGlobalLoading(fetchMenuItemDetail, action);
+  });
+  yield takeLatest(updateMenuItemStart.type, function* (action) {
+    yield* withGlobalLoading(fetchMenuItemUpdate, action);
   });
 }

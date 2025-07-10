@@ -35,6 +35,10 @@ const MenuItemDetailForm: React.FC<Props> = ({ form, menuItemDetail }) => {
         base_price: menuItemDetail.base_price,
         is_available: menuItemDetail.is_available,
       });
+      setDataCategorySeleted({
+        keys: (menuItemDetail.categories || []).map((item) => item.id),
+        items: menuItemDetail.categories || [],
+      });
     }
   }, [menuItemDetail, form]);
 

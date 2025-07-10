@@ -11,9 +11,21 @@ const endpoints = {
     listByIds: () => "/admin/menu-item-list",
     create: () => `/admin/menu-item`,
     detail: (params: string) => `/admin/menu-item/${params}`,
-    images: (params: string) => `/MenuItem/product/images/${params}`,
+    update: (params: string) => `/admin/menu-item/${params}`,
+    images: (params: string) => `/admin/menu-item/${params}/images`,
     variantGroups: (params: string) =>
-      `/menu/menu-items/${params}/variant-groups`,
+      `/admin/menu-item/${params}/variant-groups`,
+    createVariantGroups: (params: string) =>
+      `/admin/menu-item/${params}/variant-group/variants`,
+    menuItemCategory: (params: string) =>
+      `/menu-item-category/menu-item/${params}/categories`,
+    menuItemAssignCategory: (params: string) =>
+      `/menu-item-category/assign-to-menu-item/${params}`,
+    menuItemDeleteCategory: () => `/menu-item-category/remove-from-product`,
+    menuItemDeleteGroupVariant: (params: string) =>
+      `/admin/menu-item/${params}/variant-groups`,
+    menuItemDeleteVariant: (params: string) =>
+      `/admin/menu-item/${params}/product-variants`,
   },
   auth: {
     login: () => "/me/login",
@@ -40,10 +52,10 @@ const endpoints = {
     change: (action: string, id: string) => `/Category/${action}/${id}`,
   },
   variant: {
-    list: () => "/variant-group/variants",
+    list: () => "/admin/variant-group/variants",
   },
   image: {
-    upload: () => "/MenuItem/upload",
+    upload: () => "/admin/menu-item/sync-images",
   },
   staff: {
     list: () => `/staff/list`,

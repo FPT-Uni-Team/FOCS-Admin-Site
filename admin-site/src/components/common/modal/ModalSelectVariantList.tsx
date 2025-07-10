@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Checkbox,
   Space,
@@ -26,10 +26,18 @@ type SelectedVariants = Record<string, string[]>;
 
 interface VariantSelectionModalProps {
   onSaveSelection: (selectedData: VariantGroup[]) => void;
+  initData?: VariantGroup[];
+  onDeleteVariantGroup?: (groupId: string) => void;
+  onDeleteVariant?: (groupId: string, variantId: string) => void;
+  isloading?: boolean;
 }
 
 const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
   onSaveSelection,
+  initData = [],
+  onDeleteVariantGroup,
+  onDeleteVariant,
+  isloading,
 }) => {
   const dispatch = useAppDispatch();
   const [form] = useForm();
@@ -38,7 +46,16 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
   );
   const [params] = useState<ListPageParams>(defaultParams(1000));
 
-  const [variantGroups, setVariantGroups] = useState<VariantGroup[]>([]);
+  const [displayVariantGroups, setDisplayVariantGroups] = useState<
+    VariantGroup[]
+  >([]);
+  const [initialSelectedGroupIds, setInitialSelectedGroupIds] = useState<
+    Set<string>
+  >(new Set());
+  const [initialSelectedVariantIds, setInitialSelectedVariantIds] = useState<
+    Set<string>
+  >(new Set());
+
   const [cachedSelectedVariants, setCachedSelectedVariants] =
     useState<SelectedVariants>({});
 
@@ -55,12 +72,23 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
     record.id === editingKey;
   const isEditingVariant = (record: Variant) => record.id === editingVariantKey;
 
+  const isInitialItem = useCallback(
+    (id: string, isVariant: boolean = false): boolean => {
+      return isVariant
+        ? initialSelectedVariantIds.has(id)
+        : initialSelectedGroupIds.has(id);
+    },
+    [initialSelectedGroupIds, initialSelectedVariantIds]
+  );
+
   const edit = (record: VariantGroup) => {
+    if (isInitialItem(record.id)) return;
     form.setFieldsValue({ ...record });
     setEditingKey(record.id);
   };
 
   const editVariant = (record: Variant) => {
+    if (isInitialItem(record.id, true)) return;
     form.setFieldsValue({ ...record });
     setEditingVariantKey(record.id);
   };
@@ -73,7 +101,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
   const save = async (id: string) => {
     try {
       const row = (await form.validateFields()) as VariantGroup;
-      const newData = [...variantGroups];
+      const newData = [...displayVariantGroups];
       const index = newData.findIndex((item) => id === item.id);
       if (index > -1) {
         const item = newData[index];
@@ -81,11 +109,11 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
           ...item,
           ...row,
         });
-        setVariantGroups(newData);
+        setDisplayVariantGroups(newData);
         setEditingKey("");
       } else {
         newData.push(row);
-        setVariantGroups(newData);
+        setDisplayVariantGroups(newData);
         setEditingKey("");
       }
     } catch (errInfo) {
@@ -96,7 +124,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
   const saveVariant = async (groupId: string, variantId: string) => {
     try {
       const row = (await form.validateFields()) as Variant;
-      const newVariantGroups = variantGroups.map((group) => {
+      const newVariantGroups = displayVariantGroups.map((group) => {
         if (group.id === groupId) {
           const newVariants = group.variants.map((variant) =>
             variant.id === variantId ? { ...variant, ...row } : variant
@@ -105,7 +133,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
         }
         return group;
       });
-      setVariantGroups(newVariantGroups);
+      setDisplayVariantGroups(newVariantGroups);
       setEditingVariantKey("");
     } catch (errInfo) {
       console.log("Validate Failed:", errInfo);
@@ -113,7 +141,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
   };
 
   const isAllVariantsSelected = (groupId: string): boolean => {
-    const group = variantGroups.find((g) => g.id === groupId);
+    const group = displayVariantGroups.find((g) => g.id === groupId);
     if (!group) return false;
     const availableVariantIds = group.variants
       .filter((v) => v.is_available)
@@ -128,7 +156,9 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
   };
 
   const handleGroupSelect = (groupId: string, checked: boolean) => {
-    const group = variantGroups.find((g) => g.id === groupId);
+    if (!checked && isInitialItem(groupId)) return;
+
+    const group = displayVariantGroups.find((g) => g.id === groupId);
     if (!group) return;
 
     setSelectedVariants((prev) => {
@@ -142,6 +172,19 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
         delete newSelection[groupId];
       }
 
+      if (isInitialItem(groupId)) {
+        const initialGroupVariants =
+          initData.find((g) => g.id === groupId)?.variants || [];
+        if (!newSelection[groupId]) {
+          newSelection[groupId] = [];
+        }
+        initialGroupVariants.forEach((variant) => {
+          if (!newSelection[groupId].includes(variant.id)) {
+            newSelection[groupId].push(variant.id);
+          }
+        });
+      }
+
       return newSelection;
     });
   };
@@ -151,6 +194,8 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
     variantId: string,
     checked: boolean
   ) => {
+    if (!checked && isInitialItem(variantId, true)) return;
+
     setSelectedVariants((prev) => {
       const newSelection = { ...prev };
       if (checked) {
@@ -163,7 +208,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
       } else {
         newSelection[groupId] =
           newSelection[groupId]?.filter((id) => id !== variantId) || [];
-        if (newSelection[groupId].length === 0) {
+        if (newSelection[groupId].length === 0 && !isInitialItem(groupId)) {
           delete newSelection[groupId];
         }
       }
@@ -184,7 +229,8 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
       disabled:
         !isSelectionMode ||
         record.variants.every((v) => !v.is_available) ||
-        isEditing(record),
+        isEditing(record) ||
+        isInitialItem(record.id),
       indeterminate:
         selectedVariants[record.id]?.length > 0 &&
         !isAllVariantsSelected(record.id),
@@ -195,7 +241,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
           const newSelection = { ...prev };
           if (selected) {
             selectedRows.forEach((group) => {
-              if (!isEditing(group)) {
+              if (!isEditing(group) && !isInitialItem(group.id)) {
                 const availableVariantIds = group.variants
                   .filter((v) => v.is_available)
                   .map((v) => v.id);
@@ -206,8 +252,8 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
             });
           } else {
             Object.keys(selectedVariants).forEach((groupId) => {
-              const group = variantGroups.find((g) => g.id === groupId);
-              if (group && !isEditing(group)) {
+              const group = displayVariantGroups.find((g) => g.id === groupId);
+              if (group && !isEditing(group) && !isInitialItem(groupId)) {
                 delete newSelection[groupId];
               }
             });
@@ -233,7 +279,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
       align: "center",
       render: (text: number, record: VariantGroup) => {
         const editable = isEditing(record);
-        return editable ? (
+        return editable && !isInitialItem(record.id) ? (
           <Form.Item
             name="min_select"
             style={{ margin: 0 }}
@@ -259,7 +305,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
       align: "center",
       render: (text: number, record: VariantGroup) => {
         const editable = isEditing(record);
-        return editable ? (
+        return editable && !isInitialItem(record.id) ? (
           <Form.Item
             name="max_select"
             style={{ margin: 0 }}
@@ -285,7 +331,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
       align: "center",
       render: (checked: boolean, record: VariantGroup) => {
         const editable = isEditing(record);
-        return editable ? (
+        return editable && !isInitialItem(record.id) ? (
           <Form.Item
             name="is_required"
             valuePropName="checked"
@@ -299,46 +345,57 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
       },
     },
     {
-      title: "Selected",
-      key: "selected",
-      width: 100,
-      align: "center",
-      render: (_, record) => {
-        const selectedCount = selectedVariants[record.id]?.length || 0;
-        const availableCount = record.variants.filter(
-          (v) => v.is_available
-        ).length;
-        return `${selectedCount}/${availableCount}`;
-      },
-    },
-    {
       title: "Action",
       dataIndex: "action",
       width: 150,
       align: "center",
       render: (_, record: VariantGroup) => {
         const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link
-              onClick={() => save(record.id)}
-              style={{ marginRight: 8 }}
-            >
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link
-            disabled={
-              editingKey !== "" || editingVariantKey !== "" || isSelectionMode
-            }
-            onClick={() => edit(record)}
-          >
-            Edit
-          </Typography.Link>
+        const isInitial = isInitialItem(record.id);
+
+        return (
+          <Space>
+            {editable && !isInitial ? (
+              <>
+                <Typography.Link
+                  onClick={() => save(record.id)}
+                  style={{ marginRight: 8 }}
+                >
+                  Save
+                </Typography.Link>
+                <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+                  <a>Cancel</a>
+                </Popconfirm>
+              </>
+            ) : (
+              <>
+                {!isInitial && (
+                  <Typography.Link
+                    disabled={
+                      editingKey !== "" ||
+                      editingVariantKey !== "" ||
+                      isSelectionMode
+                    }
+                    onClick={() => edit(record)}
+                  >
+                    Edit
+                  </Typography.Link>
+                )}
+                {isInitial && (
+                  <Popconfirm
+                    title="Sure to delete this variant group?"
+                    onConfirm={() => onDeleteVariantGroup?.(record.id)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Button type="link" danger>
+                      Delete
+                    </Button>
+                  </Popconfirm>
+                )}
+              </>
+            )}
+          </Space>
         );
       },
     },
@@ -367,7 +424,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
         width: 100,
         render: (prep: number, record: Variant) => {
           const editable = isEditingVariant(record);
-          return editable ? (
+          return editable && !isInitialItem(record.id, true) ? (
             <Form.Item
               name="prep_per_time"
               style={{ margin: 0 }}
@@ -395,7 +452,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
         align: "center",
         render: (qty: number, record: Variant) => {
           const editable = isEditingVariant(record);
-          return editable ? (
+          return editable && !isInitialItem(record.id, true) ? (
             <Form.Item
               name="quantity_per_time"
               style={{ margin: 0 }}
@@ -434,7 +491,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
         align: "center",
         render: (available: boolean, record: Variant) => {
           const editable = isEditingVariant(record);
-          return editable ? (
+          return editable && !isInitialItem(record.id, true) ? (
             <Form.Item
               name="is_available"
               valuePropName="checked"
@@ -454,9 +511,11 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
         align: "center",
         render: (_, variant: Variant) => {
           const editable = isEditingVariant(variant);
+          const isInitial = isInitialItem(variant.id, true);
+
           return (
             <Space>
-              {editable ? (
+              {editable && !isInitial ? (
                 <>
                   <Typography.Link
                     onClick={() => saveVariant(group.id, variant.id)}
@@ -483,19 +542,34 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
                     disabled={
                       !variant.is_available ||
                       editingVariantKey !== "" ||
-                      !isSelectionMode
+                      !isSelectionMode ||
+                      isInitial
                     }
                   />
-                  <Typography.Link
-                    disabled={
-                      editingKey !== "" ||
-                      editingVariantKey !== "" ||
-                      isSelectionMode
-                    }
-                    onClick={() => editVariant(variant)}
-                  >
-                    Edit
-                  </Typography.Link>
+                  {!isInitial && (
+                    <Typography.Link
+                      disabled={
+                        editingKey !== "" ||
+                        editingVariantKey !== "" ||
+                        isSelectionMode
+                      }
+                      onClick={() => editVariant(variant)}
+                    >
+                      Edit
+                    </Typography.Link>
+                  )}
+                  {isInitial && (
+                    <Popconfirm
+                      title="Sure to delete this variant?"
+                      onConfirm={() => onDeleteVariant?.(group.id, variant.id)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button type="link" danger>
+                        Delete
+                      </Button>
+                    </Popconfirm>
+                  )}
                 </>
               )}
             </Space>
@@ -519,36 +593,92 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
   }, [dispatch, params]);
 
   useEffect(() => {
-    if (variantGroupsList) {
-      setVariantGroups(variantGroupsList);
+    if (variantGroupsList || initData) {
+      const mergedGroups: VariantGroup[] = [];
+      const tempGroupIds = new Set<string>();
+      const tempVariantIds = new Set<string>();
+      const initialSelection: SelectedVariants = {};
+
+      initData.forEach((initGroup) => {
+        const copiedInitGroup: VariantGroup = {
+          ...initGroup,
+          variants: initGroup.variants.map((v) => ({ ...v })),
+        };
+        mergedGroups.push(copiedInitGroup);
+        tempGroupIds.add(initGroup.id);
+        if (!initialSelection[initGroup.id]) {
+          initialSelection[initGroup.id] = [];
+        }
+        initGroup.variants.forEach((initVariant) => {
+          tempVariantIds.add(initVariant.id);
+          initialSelection[initGroup.id].push(initVariant.id);
+        });
+      });
+
+      if (variantGroupsList) {
+        variantGroupsList.forEach((apiGroup) => {
+          if (!tempGroupIds.has(apiGroup.id)) {
+            mergedGroups.push({
+              ...apiGroup,
+              variants: apiGroup.variants.map((v) => ({ ...v })),
+            });
+          } else {
+            const existingGroupIndex = mergedGroups.findIndex(
+              (g) => g.id === apiGroup.id
+            );
+            if (existingGroupIndex > -1) {
+              const existingGroup = mergedGroups[existingGroupIndex];
+
+              apiGroup.variants.forEach((apiVariant) => {
+                if (!tempVariantIds.has(apiVariant.id)) {
+                  existingGroup.variants.push({ ...apiVariant });
+                }
+              });
+            }
+          }
+        });
+      }
+
+      setDisplayVariantGroups(mergedGroups);
+      setInitialSelectedGroupIds(tempGroupIds);
+      setInitialSelectedVariantIds(tempVariantIds);
+      setSelectedVariants(initialSelection);
     }
-  }, [variantGroupsList]);
+  }, [variantGroupsList, initData]);
 
   const handleSaveAndExitSelectionMode = () => {
-    const dataToSave = variantGroups
-      .filter((group) => selectedVariants[group.id]?.length > 0)
-      .map((group) => {
-        const selectedIds = selectedVariants[group.id];
-        const selectedVariantsData = group.variants
-          .filter((variant) => selectedIds.includes(variant.id))
-          .map((variant) => ({
+    const dataToSave: VariantGroup[] = [];
+
+    displayVariantGroups.forEach((group) => {
+      const currentSelectedVariantIds = selectedVariants[group.id] || [];
+
+      const variantsToInclude = group.variants.filter((variant) => {
+        return (
+          (isInitialItem(variant.id, true) &&
+            currentSelectedVariantIds.includes(variant.id)) ||
+          (!isInitialItem(variant.id, true) &&
+            currentSelectedVariantIds.includes(variant.id))
+        );
+      });
+
+      if (isInitialItem(group.id) || variantsToInclude.length > 0) {
+        dataToSave.push({
+          id: group.id,
+          group_name: group.group_name,
+          is_required: group.is_required,
+          min_select: group.min_select || 0,
+          max_select: group.max_select || 0,
+          variants: variantsToInclude.map((variant) => ({
             id: variant.id,
             name: variant.name,
             price: variant.price,
             prep_per_time: variant.prep_per_time || 0,
             quantity_per_time: variant.quantity_per_time || 0,
             is_available: variant.is_available,
-          }));
-
-        return {
-          id: group.id,
-          group_name: group.group_name,
-          is_required: group.is_required,
-          min_select: group.min_select || 0,
-          max_select: group.max_select || 0,
-          variants: selectedVariantsData,
-        };
-      });
+          })),
+        });
+      }
+    });
 
     onSaveSelection(dataToSave);
     setIsSelectionMode(false);
@@ -589,19 +719,23 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
       </div>
 
       <TableReuse
-        loading={loading}
+        loading={loading || isloading}
         columns={columns}
-        dataSource={variantGroups}
+        dataSource={displayVariantGroups}
         rowKey="id"
         expandable={{
           expandedRowRender,
           rowExpandable: (record) => record.variants.length > 0,
         }}
         pagination={false}
-        rowSelection={{
-          type: "checkbox",
-          ...groupRowSelection,
-        }}
+        rowSelection={
+          isSelectionMode
+            ? {
+                type: "checkbox",
+                ...groupRowSelection,
+              }
+            : undefined
+        }
       />
     </Form>
   );
