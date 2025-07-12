@@ -12,8 +12,8 @@ interface UploadImageMenuItemParams {
 }
 export interface metadataImage {
   id: null | string;
-  isDeleted: boolean;
-  isMain: boolean;
+  is_deleted: boolean;
+  is_main: boolean;
 }
 
 const menuItemService = {
@@ -31,6 +31,8 @@ const menuItemService = {
     axiosClient.get(endpoints.menuItem.variantGroups(params)),
   menuItemUpdate: (params: { menuItemId: string; data: MenuItem }) =>
     axiosClient.put(endpoints.menuItem.update(params.menuItemId), params.data),
+  changeStatus: (action: string, id: string) =>
+    axiosClient.put(endpoints.menuItem.change(action, id)),
   createMenuItemGroupsVariant: (params: {
     menuItemId: string;
     data: VariantGroup;
@@ -88,8 +90,8 @@ const menuItemService = {
     params.mainImages.forEach((isMain) => {
       metadata.push({
         id: null,
-        isDeleted: false,
-        isMain,
+        is_deleted: false,
+        is_main: isMain,
       });
     });
     formData.append("metadata", JSON.stringify(metadata));

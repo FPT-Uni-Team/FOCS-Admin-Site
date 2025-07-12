@@ -96,10 +96,14 @@ function* handleFetchCoupons(
 }
 
 function* handleFetchCouponsVadlid(
-  action: PayloadAction<ListPageParams>
+  action: PayloadAction<{
+    params: ListPageParams;
+    promotionId?: string;
+  }>
 ): Generator<Effect, void, AxiosResponse<ListPageResponse>> {
   try {
-    const response = yield call(getListValidCoupon, action.payload);
+    const { params, promotionId } = action.payload;
+    const response = yield call(getListValidCoupon, params, promotionId);
     yield put(
       fetchCouponsValidSuccess({
         coupons: response.data.items,
@@ -131,8 +135,6 @@ function* handleFetchCouponDetail(
         fieldMap
       );
 
-      console.log("dataMappedMenuItems", dataMappedMenuItems);
-
       dataResponse = {
         ...dataResponse,
         accept_for_items_list: dataMappedMenuItems as MenuListDataType[],
@@ -156,7 +158,6 @@ function* handleFetchCouponDetail(
       };
     }
 
-    console.log("dataResponse", dataResponse);
     yield put(fetchCouponDetailSuccess(dataResponse));
   } catch (error: unknown) {
     const err = error as ApiError;

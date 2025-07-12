@@ -340,6 +340,7 @@ const PromotionForm: FC<Props> = ({
                   {showModalCoupon && (
                     <>
                       <ModalCouponList
+                        promotionId={initData?.id}
                         open={showModalCoupon}
                         width={1000}
                         onCancel={() => setShowModalCoupon(false)}

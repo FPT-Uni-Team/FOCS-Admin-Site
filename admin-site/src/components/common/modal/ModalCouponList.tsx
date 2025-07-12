@@ -16,6 +16,7 @@ interface MenuItemSelectionModalProps extends ModalProps {
   selectedData: CouponAdminDTO[];
   selectedDataKey: React.Key[];
   singleSelectMode?: boolean;
+  promotionId?: string;
 }
 
 const ModalCouponList: React.FC<MenuItemSelectionModalProps> = ({
@@ -23,6 +24,7 @@ const ModalCouponList: React.FC<MenuItemSelectionModalProps> = ({
   selectedData,
   selectedDataKey,
   singleSelectMode = false,
+  promotionId,
   ...modalProps
 }) => {
   const dispatch = useAppDispatch();
@@ -82,8 +84,13 @@ const ModalCouponList: React.FC<MenuItemSelectionModalProps> = ({
   }, []);
 
   useEffect(() => {
-    dispatch(fetchCouponsValidStart(params));
-  }, [dispatch, params]);
+    dispatch(
+      fetchCouponsValidStart({
+        params,
+        promotionId,
+      })
+    );
+  }, [dispatch, params, promotionId]);
 
   return (
     <Modal

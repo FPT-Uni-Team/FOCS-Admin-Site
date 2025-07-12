@@ -3,6 +3,7 @@ import type {
   CouponAdminDTO,
   CouponListParams,
 } from "../../../type/coupon/coupon";
+import type { ListPageParams } from "../../../type/common/common";
 
 interface CouponListState {
   coupons: CouponAdminDTO[];
@@ -34,11 +35,14 @@ const couponListValidSlice = createSlice({
   reducers: {
     fetchCouponsValidStart: (
       state,
-      action: PayloadAction<CouponListParams | undefined>
+      action: PayloadAction<{
+        params: ListPageParams;
+        promotionId?: string;
+      }>
     ) => {
       state.loading = true;
       state.error = null;
-      state.params = action.payload || initialState.params;
+      state.params = action.payload.params || initialState.params;
     },
     fetchCouponsValidSuccess: (
       state,

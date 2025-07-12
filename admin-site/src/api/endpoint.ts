@@ -8,7 +8,7 @@ const endpoints = {
   },
   menuItem: {
     list: () => `/admin/menu-item/list`,
-    listByIds: () => "/admin/menu-item-list",
+    listByIds: () => "/admin/menu-item/bulk",
     create: () => `/admin/menu-item`,
     detail: (params: string) => `/admin/menu-item/${params}`,
     update: (params: string) => `/admin/menu-item/${params}`,
@@ -26,13 +26,17 @@ const endpoints = {
       `/admin/menu-item/${params}/variant-groups`,
     menuItemDeleteVariant: (params: string) =>
       `/admin/menu-item/${params}/product-variants`,
+    change: (action: string, id: string) => `admin/menu-item/${action}/${id}`,
   },
   auth: {
     login: () => "/me/login",
     refresh: () => "/me/refresh-token",
   },
   coupon: {
-    listValid: () => "/admin/coupons/available",
+    listValid: (promotionId?: string) => {
+      const baseUrl = "/admin/coupons/available";
+      return promotionId ? `${baseUrl}/${promotionId}` : baseUrl;
+    },
     listByIds: () => "/admin/coupons/by-ids",
     list: (storeId: string) => `/admin/coupons/${storeId}`,
     detail: (id: string) => `/admin/coupon/${id}`,

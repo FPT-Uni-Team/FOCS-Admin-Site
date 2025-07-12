@@ -32,6 +32,7 @@ import {
   updateMenuItemStart,
   updateMenuItemSuccess,
 } from "../../slices/menuItem/menuItemUpdateSlice";
+import { changeStatusMenuItemStart } from "../../action/menuItemAction";
 
 const {
   getListMenuItems,
@@ -118,6 +119,20 @@ function* fetchMenuItemDetail(
   }
 }
 
+function* changeStatusWorker(
+  action: ReturnType<typeof changeStatusMenuItemStart>
+) {
+  const { category, menuItemId } = action.payload;
+  const status = category === "deactive" ? "disable" : "enable";
+
+  try {
+    yield call(() => menuItemService.changeStatus(status, menuItemId));
+    yield put(fetchMenuItemDetailStart(menuItemId));
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export function* watchMenuSaga() {
   yield takeLatest(fetchMenuItemsStart.type, fetchMenuItemList);
   yield takeLatest(createMenuItemStart.type, function* (action) {
@@ -128,5 +143,8 @@ export function* watchMenuSaga() {
   });
   yield takeLatest(updateMenuItemStart.type, function* (action) {
     yield* withGlobalLoading(fetchMenuItemUpdate, action);
+  });
+  yield takeLatest(changeStatusMenuItemStart.type, function* (action) {
+    yield* withGlobalLoading(changeStatusWorker, action);
   });
 }
