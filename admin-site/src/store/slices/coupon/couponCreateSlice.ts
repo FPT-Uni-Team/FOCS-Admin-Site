@@ -15,11 +15,6 @@ const initialState: CouponCreateState = {
   createdCoupon: null,
 };
 
-interface CreateCouponPayload {
-  couponData: CouponCreateRequest;
-  storeId: string;
-}
-
 const couponCreateSlice = createSlice({
   name: "couponCreate",
   initialState,
@@ -31,9 +26,12 @@ const couponCreateSlice = createSlice({
         state.success = false;
         state.createdCoupon = null;
       },
-      prepare: (payload: CreateCouponPayload) => ({ payload }),
+      prepare: (payload: CouponCreateRequest) => ({ payload }),
     },
-    createCouponSuccess: (state, action: PayloadAction<Record<string, unknown>>) => {
+    createCouponSuccess: (
+      state,
+      action: PayloadAction<Record<string, unknown>>
+    ) => {
       state.loading = false;
       state.success = true;
       state.createdCoupon = action.payload;
@@ -61,4 +59,4 @@ export const {
   resetCreateCoupon,
 } = couponCreateSlice.actions;
 
-export default couponCreateSlice.reducer; 
+export default couponCreateSlice.reducer;

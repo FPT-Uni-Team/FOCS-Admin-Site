@@ -33,8 +33,9 @@ const CouponUpdatePage = () => {
   const handleModifyDataCoupon = useCallback((): CouponUpdateRequest => {
     const allFormValues = form.getFieldsValue();
     const couponData: CouponUpdateRequest = {
-      coupon_type: allFormValues?.step1?.coupon_type,
+      coupon_type: 1,
       description: allFormValues?.step1?.description?.trim(),
+      code: coupon?.code,
       discount_type: allFormValues?.step1?.discount_type,
       value: Number(allFormValues?.step1?.value),
       start_date: allFormValues?.step1?.start_date?.format(
@@ -43,16 +44,9 @@ const CouponUpdatePage = () => {
       end_date: allFormValues?.step1?.end_date?.format("YYYY-MM-DD HH:mm:ss"),
       max_usage: Number(allFormValues?.step2?.max_usage) || 1,
       count_used: 0,
-      coupon_condition: {
-        condition_type: allFormValues?.step2?.condition_type,
-        value: Number(allFormValues?.step2?.condition_value) || 0,
-      },
       is_active: Boolean(allFormValues?.step2?.is_active),
     };
 
-    if (allFormValues?.step1?.coupon_type === 1) {
-      couponData.code = allFormValues?.step1?.code?.trim();
-    }
     if (allFormValues?.step2?.max_usage_per_user) {
       couponData.max_usage_per_user = Number(
         allFormValues?.step2?.max_usage_per_user
@@ -64,8 +58,18 @@ const CouponUpdatePage = () => {
     if (allFormValues?.step2?.promotion_id) {
       couponData.promotion_id = String(allFormValues.step2.promotion_id);
     }
+    if (allFormValues?.step2?.minimum_order_amount) {
+      couponData.minimum_order_amount = Number(
+        allFormValues?.step2?.minimum_order_amount
+      );
+    }
+    if (allFormValues?.step2?.minimum_item_quantity) {
+      couponData.minimum_item_quantity = Number(
+        allFormValues?.step2?.minimum_item_quantity
+      );
+    }
     return couponData;
-  }, [form]);
+  }, [coupon?.code, form]);
 
   const handleUpdateCoupon = useCallback(() => {
     form

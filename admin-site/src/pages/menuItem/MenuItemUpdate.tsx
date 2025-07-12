@@ -28,7 +28,6 @@ const MenuItemUpdatePage = () => {
   const [isLoadingCategory, setIsLoadingCategory] = useState(false);
   const [isLoadingVariant, setIsLoadingVariant] = useState(false);
   const navigate = useNavigate();
-
   const {
     updateImageMenuItem,
     menuItemAssignCategory,
@@ -187,7 +186,7 @@ const MenuItemUpdatePage = () => {
       try {
         await createMenuItemGroupsVariant({
           menuItemId: menuItemId as string,
-          data: variantGroup?.[0] || [],
+          data: variantGroup || [],
         });
         const responseGroups = await menuItemGroups(menuItemId as string);
         menuItemFormRef.current?.setVariantGroupsData(responseGroups.data);

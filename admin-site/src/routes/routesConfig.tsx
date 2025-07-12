@@ -29,7 +29,6 @@ const PromotionUpdatePage = lazy(
 const CouponListPage = lazy(() => import("../pages/coupon/CouponList"));
 const CouponCreatePage = lazy(() => import("../pages/coupon/CouponCreate"));
 const CouponUpdatePage = lazy(() => import("../pages/coupon/CouponUpdate"));
-const CouponAssignPage = lazy(() => import("../pages/coupon/CouponAssign"));
 const LoginPage = lazy(() => import("../pages/login/LoginPage"));
 const CouponDetailPage = lazy(() => import("../pages/coupon/CouponDetail"));
 const MenuItemListPage = lazy(() => import("../pages/menuItem/MenuItemList"));
@@ -117,12 +116,6 @@ export const routes: AppRoute[] = [
     path: "/coupons/:couponId/edit",
     component: CouponUpdatePage,
     label: "Update Coupon",
-    hidden: true,
-  },
-  {
-    path: "/coupons/assign",
-    component: CouponAssignPage,
-    label: "Assign Coupons to Promotion",
     hidden: true,
   },
   {

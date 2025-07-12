@@ -616,7 +616,7 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
       });
 
       if (variantGroupsList) {
-        variantGroupsList.forEach((apiGroup) => {
+        variantGroupsList.forEach((apiGroup: VariantGroup) => {
           if (!tempGroupIds.has(apiGroup.id)) {
             mergedGroups.push({
               ...apiGroup,

@@ -35,11 +35,13 @@ const menuItemService = {
     axiosClient.put(endpoints.menuItem.change(action, id)),
   createMenuItemGroupsVariant: (params: {
     menuItemId: string;
-    data: VariantGroup;
+    data: VariantGroup[];
   }) =>
     axiosClient.post(
       endpoints.menuItem.createVariantGroups(params.menuItemId),
-      params.data
+      {
+        variant_groups_variants: params.data,
+      }
     ),
   menuItemCategory: (params: string) =>
     axiosClient.post(endpoints.menuItem.menuItemCategory(params)),

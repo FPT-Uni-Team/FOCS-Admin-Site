@@ -48,16 +48,16 @@ export const couponStatusOptions = [
 ];
 
 export const CouponCreationType = {
-  AutoGenerate: 0,
   Manual: 1,
+  AutoGenerate: 0,
 } as const;
 
 export type CouponCreationType =
   (typeof CouponCreationType)[keyof typeof CouponCreationType];
 
 export const CouponCreationTypeLabel: Record<CouponCreationType, string> = {
-  [CouponCreationType.AutoGenerate]: "Auto Generate Code",
   [CouponCreationType.Manual]: "Manual Input Code",
+  [CouponCreationType.AutoGenerate]: "Auto Generate Code",
 };
 
 export const couponCreationOptions = Object.values(CouponCreationType).map(
@@ -120,12 +120,13 @@ export interface CouponCreateRequest {
   start_date: string;
   end_date: string;
   status?: CouponStatus;
-  max_usage: number;
-  count_used: number;
+  max_usage?: number;
+  count_used?: number;
   max_usage_per_user?: number;
   accept_for_items?: string;
-  coupon_condition: CouponConditionRequest;
-  is_active: boolean;
+  minimum_order_amount?: number;
+  minimum_item_quantity?: number;
+  is_active?: boolean;
   promotion_id?: string;
   store_id?: string;
   user_id?: string;
@@ -145,7 +146,8 @@ export interface CouponUpdateRequest {
   count_used: number;
   max_usage_per_user?: number;
   accept_for_items?: string;
-  coupon_condition: CouponConditionRequest;
+  minimum_order_amount?: number;
+  minimum_item_quantity?: number;
   is_active: boolean;
   promotion_id?: string;
 }
@@ -175,7 +177,6 @@ export interface CouponListParams {
 }
 
 export interface CouponDetailType {
-  [x: string]: any;
   id: string;
   code: string;
   coupon_type: number;
@@ -194,10 +195,6 @@ export interface CouponDetailType {
   promotion_id: string;
   status: number;
   promotion?: PromotionListDataType[];
-  coupon_condition?: {
-    condition_type: number;
-    value: number;
-  };
 }
 
 export interface PagedResult<T> {

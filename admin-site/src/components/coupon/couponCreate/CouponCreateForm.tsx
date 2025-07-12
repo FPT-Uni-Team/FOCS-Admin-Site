@@ -18,7 +18,6 @@ import {
   CouponConditionType,
   couponCreationOptions,
   discountTypeOptions,
-  couponConditionOptions,
   type CouponDetailType,
 } from "../../../type/coupon/coupon";
 import { getDisabledTime, validateDate } from "../../../helper/formatDate";
@@ -51,7 +50,6 @@ const CouponCreateForm: React.FC<Props> = ({
 }) => {
   const couponType = Form.useWatch(["step1", "coupon_type"], form);
   const discountType = Form.useWatch(["step1", "discount_type"], form);
-  const conditionType = Form.useWatch(["step2", "condition_type"], form);
   const [showModalMenuItem, setShowModalMenuItem] = useState<boolean>(false);
   const [showModalPromotion, setShowModalPromotion] = useState<boolean>(false);
 
@@ -94,10 +92,10 @@ const CouponCreateForm: React.FC<Props> = ({
         step2: {
           max_usage: couponDetail.max_usage,
           is_active: couponDetail.is_active,
-          condition_type: couponDetail.coupon_condition?.condition_type,
-          condition_value: couponDetail.coupon_condition?.value,
           accept_for_items: couponDetail.accept_for_items,
           promotion_id: couponDetail.promotion_id,
+          minimum_item_quantity: couponDetail.minimum_item_quantity,
+          minimum_order_amount: couponDetail.minimum_order_amount,
         },
       });
       setDataPromotionSeleted({
@@ -127,47 +125,51 @@ const CouponCreateForm: React.FC<Props> = ({
         },
       }}
     >
-      <Row gutter={36}>
-        <Col span={12}>
-          <Form.Item
-            label="Coupon Code Type"
-            name={["step1", "coupon_type"]}
-            rules={[
-              {
-                required: true,
-                message: "Please select coupon code type!",
-              },
-            ]}
-          >
-            <Select
-              placeholder="Select coupon type"
-              options={couponCreationOptions}
-              disabled={disableField}
-            />
-          </Form.Item>
-        </Col>
-        {couponType === CouponCreationType.Manual && (
+      {mode == "Update" ? (
+        <></>
+      ) : (
+        <Row gutter={36}>
           <Col span={12}>
             <Form.Item
-              label="Coupon Code"
-              name={["step1", "code"]}
+              label="Coupon Code Type"
+              name={["step1", "coupon_type"]}
               rules={[
-                { required: true, message: "Please enter coupon code!" },
                 {
-                  pattern: /^[A-Z0-9]+$/,
-                  message: "Only uppercase letters and numbers allowed",
+                  required: true,
+                  message: "Please select coupon code type!",
                 },
               ]}
             >
-              <Input
-                placeholder="Enter coupon code (e.g., SUMMER2024)"
-                maxLength={20}
+              <Select
+                placeholder="Select coupon type"
+                options={couponCreationOptions}
                 disabled={disableField}
               />
             </Form.Item>
           </Col>
-        )}
-      </Row>
+          {couponType === CouponCreationType.Manual && (
+            <Col span={12}>
+              <Form.Item
+                label="Coupon Code"
+                name={["step1", "code"]}
+                rules={[
+                  { required: true, message: "Please enter coupon code!" },
+                  {
+                    pattern: /^[A-Z0-9]+$/,
+                    message: "Only uppercase letters and numbers allowed",
+                  },
+                ]}
+              >
+                <Input
+                  placeholder="Enter coupon code (e.g., SUMMER2024)"
+                  maxLength={20}
+                  disabled={disableField}
+                />
+              </Form.Item>
+            </Col>
+          )}
+        </Row>
+      )}
 
       <Row gutter={36}>
         <Col span={24}>
@@ -320,47 +322,28 @@ const CouponCreateForm: React.FC<Props> = ({
       <Row gutter={36}>
         <Col span={12}>
           <Form.Item
-            label="Condition Type"
-            name={["step2", "condition_type"]}
-            rules={[
-              {
-                required: true,
-                message: "Please select condition type!",
-              },
-            ]}
+            label="Minimum Order Value"
+            name={["step2", "minimum_order_amount"]}
+            normalize={(value) => {
+              const rawValue = value.replace(/\./g, "").replace(/[^0-9]/g, "");
+              const formatted = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+              return formatted;
+            }}
           >
-            <Select
-              placeholder="Select condition type"
-              options={couponConditionOptions}
+            <Input
+              addonBefore={<>VND</>}
+              placeholder="Enter value"
+              style={{ width: "100%" }}
               disabled={disableField}
-            ></Select>
+            />
           </Form.Item>
         </Col>
         <Col span={6}>
           <Form.Item
-            label={
-              conditionType === CouponConditionType.MinOrderAmount
-                ? "Minimum Order Value (VND)"
-                : "Minimum Items Quantity"
-            }
-            name={["step2", "condition_value"]}
-            rules={[
-              {
-                required: true,
-                message: "Please enter condition value!",
-              },
-            ]}
+            label="Minimum Items Quantity"
+            name={["step2", "minimum_item_quantity"]}
             normalize={(value) => {
-              let formatted;
-              if (conditionType === CouponConditionType.MinOrderAmount) {
-                const rawValue = value
-                  .replace(/\./g, "")
-                  .replace(/[^0-9]/g, "");
-                formatted = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-              } else {
-                formatted = value.replace(/\./g, "").replace(/[^0-9]/g, "");
-              }
-              return formatted;
+              return value.replace(/\./g, "").replace(/[^0-9]/g, "");
             }}
           >
             <Input

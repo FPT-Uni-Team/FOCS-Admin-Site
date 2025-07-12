@@ -14,10 +14,8 @@ import dayjs from "dayjs";
 import {
   CouponCreationType,
   DiscountType,
-  CouponConditionType,
   couponCreationOptions,
   discountTypeOptions,
-  couponConditionOptions,
   type CouponDetailType,
 } from "../../../type/coupon/coupon";
 import styles from "./CouponDetail.module.scss";
@@ -39,7 +37,6 @@ interface Props {
 const CouponDetail: React.FC<Props> = ({ form, couponDetail }) => {
   const couponType = Form.useWatch(["step1", "coupon_type"], form);
   const discountType = Form.useWatch(["step1", "discount_type"], form);
-  const conditionType = Form.useWatch(["step2", "condition_type"], form);
 
   const [dataMenuItemSeleted, setDataMenuItemSeleted] = useState<
     SelectedTableItems<MenuListDataType>
@@ -74,10 +71,10 @@ const CouponDetail: React.FC<Props> = ({ form, couponDetail }) => {
         step2: {
           max_usage: couponDetail.max_usage,
           is_active: couponDetail.is_active,
-          condition_type: couponDetail.coupon_condition?.condition_type,
-          condition_value: couponDetail.coupon_condition?.value,
           accept_for_items: couponDetail.accept_for_items,
           promotion_id: couponDetail.promotion_id,
+          minimum_item_quantity: couponDetail.minimum_item_quantity,
+          minimum_order_amount: couponDetail.minimum_order_amount,
         },
       });
       setDataPromotionSeleted({
@@ -106,11 +103,7 @@ const CouponDetail: React.FC<Props> = ({ form, couponDetail }) => {
         {couponType === CouponCreationType.Manual && (
           <Col span={12}>
             <Form.Item label="Coupon Code" name={["step1", "code"]}>
-              <Input
-                placeholder="Enter coupon code (e.g., SUMMER2024)"
-                maxLength={20}
-                disabled
-              />
+              <Input maxLength={20} disabled />
             </Form.Item>
           </Col>
         )}
@@ -119,11 +112,7 @@ const CouponDetail: React.FC<Props> = ({ form, couponDetail }) => {
       <Row gutter={36}>
         <Col span={24}>
           <Form.Item label="Coupon Description" name={["step1", "description"]}>
-            <TextArea
-              placeholder="Enter coupon description"
-              rows={4}
-              disabled
-            />
+            <TextArea rows={4} disabled />
           </Form.Item>
         </Col>
       </Row>
@@ -154,11 +143,7 @@ const CouponDetail: React.FC<Props> = ({ form, couponDetail }) => {
       <Row gutter={36}>
         <Col span={12}>
           <Form.Item label="Discount Type" name={["step1", "discount_type"]}>
-            <Select
-              placeholder="Select discount type"
-              options={discountTypeOptions}
-              disabled
-            ></Select>
+            <Select options={discountTypeOptions} disabled></Select>
           </Form.Item>
         </Col>
         <Col span={6}>
@@ -182,11 +167,6 @@ const CouponDetail: React.FC<Props> = ({ form, couponDetail }) => {
               addonBefore={
                 discountType === DiscountType.Percent ? <>%</> : <>VND</>
               }
-              placeholder={
-                discountType === DiscountType.Percent
-                  ? "Enter percentage (0-100)"
-                  : "Enter amount"
-              }
               style={{ width: "100%" }}
               disabled
             />
@@ -196,40 +176,27 @@ const CouponDetail: React.FC<Props> = ({ form, couponDetail }) => {
 
       <Row gutter={36}>
         <Col span={12}>
-          <Form.Item label="Condition Type" name={["step2", "condition_type"]}>
-            <Select
-              placeholder="Select condition type"
-              options={couponConditionOptions}
-              disabled
-            ></Select>
+          <Form.Item
+            label="Minimum Order Value"
+            name={["step2", "minimum_order_amount"]}
+            normalize={(value) => {
+              const rawValue = value.replace(/\./g, "").replace(/[^0-9]/g, "");
+              const formatted = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+              return formatted;
+            }}
+          >
+            <Input style={{ width: "100%" }} disabled addonBefore={<>VND</>} />
           </Form.Item>
         </Col>
         <Col span={6}>
           <Form.Item
-            label={
-              conditionType === CouponConditionType.MinOrderAmount
-                ? "Minimum Order Value (VND)"
-                : "Minimum Items Quantity"
-            }
-            name={["step2", "condition_value"]}
+            label="Minimum Items Quantity"
+            name={["step2", "minimum_item_quantity"]}
             normalize={(value) => {
-              let formatted;
-              if (conditionType === CouponConditionType.MinOrderAmount) {
-                const rawValue = value
-                  .replace(/\./g, "")
-                  .replace(/[^0-9]/g, "");
-                formatted = rawValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-              } else {
-                formatted = value.replace(/\./g, "").replace(/[^0-9]/g, "");
-              }
-              return formatted;
+              return value.replace(/\./g, "").replace(/[^0-9]/g, "");
             }}
           >
-            <Input
-              placeholder="Enter value"
-              style={{ width: "100%" }}
-              disabled
-            />
+            <Input style={{ width: "100%" }} disabled />
           </Form.Item>
         </Col>
         <Col span={6}>
@@ -241,11 +208,7 @@ const CouponDetail: React.FC<Props> = ({ form, couponDetail }) => {
               return formatted;
             }}
           >
-            <Input
-              placeholder="Enter max usage"
-              style={{ width: "100%" }}
-              disabled
-            />
+            <Input style={{ width: "100%" }} disabled />
           </Form.Item>
         </Col>
       </Row>
