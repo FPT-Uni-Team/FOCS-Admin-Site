@@ -24,7 +24,7 @@ import { getDisabledTime, validateDate } from "../../../helper/formatDate";
 import styles from "./CouponCreateForm.module.scss";
 import TextArea from "antd/es/input/TextArea";
 import { PlusOutlined } from "@ant-design/icons";
-import ModalMenuItem from "../../common/Modal/ModalMenuItem";
+import ModalMenuItem from "../../common/modal/ModalMenuItem";
 import TableReuse from "../../common/Table/TableReuse";
 import {
   columnsMenuItemNoSort,
@@ -33,7 +33,7 @@ import {
 import type { MenuListDataType } from "../../../type/menu/menu";
 import type { SelectedTableItems } from "../../promotion/promotionForm/PromotionForm";
 import type { PromotionListDataType } from "../../../type/promotion/promotion";
-import ModalPromotionList from "../../common/Modal/ModalPromotionList";
+import ModalPromotionList from "../../common/modal/ModalPromotionList";
 
 interface Props {
   form: FormInstance;

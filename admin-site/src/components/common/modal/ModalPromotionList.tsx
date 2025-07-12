@@ -1,16 +1,16 @@
 import { type FC, useCallback, useEffect, useState } from "react";
-import TableReuse from "../../common/Table/TableReuse";
+import TableReuse from "../Table/TableReuse";
 import {
   promotionStatusOptions,
   promotionTypeOptions,
   type PromotionListDataType,
 } from "../../../type/promotion/promotion";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import FilterReuse from "../../common/Filter/FilterReuse";
+import FilterReuse from "../Filter/FilterReuse";
 import type { ListPageParams, SelectConfig } from "../../../type/common/common";
-import { createOnTableChangeHandler } from "../../common/Table/HandleTableChange/HandleTableChange";
+import { createOnTableChangeHandler } from "../Table/HandleTableChange/HandleTableChange";
 import { createOnFilterHandler } from "../../../helper/formatFilters";
-import { columnsPromotionList } from "../../common/Columns/Colums";
+import { columnsPromotionList } from "../Columns/Colums";
 import { Modal, type ModalProps } from "antd";
 import { fetchPromotionsStart } from "../../../store/slices/promotion/promotionListSlice";
 interface ModalPromotionListProps extends ModalProps {

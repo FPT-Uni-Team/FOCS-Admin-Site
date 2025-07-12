@@ -15,7 +15,7 @@ import clsx from "clsx";
 import TableReuse from "../../common/Table/TableReuse";
 import { columnsCategoryNoSort } from "../../common/Columns/Colums";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import ModalCategoryList from "../../common/Modal/ModalCategoryList";
+import ModalCategoryList from "../../common/modal/ModalCategoryList";
 import {
   useEffect,
   useRef,
@@ -26,7 +26,7 @@ import {
 import type { SelectedTableItems } from "../../promotion/promotionForm/PromotionForm";
 import type { CategoryListDataType } from "../../../type/category/category";
 
-import VariantManagement from "../../common/Modal/ModalSelectVariantList";
+import VariantManagement from "../../common/modal/ModalSelectVariantList";
 import type { VariantGroup } from "../../../type/variant/variant";
 import type {
   BackendImage,
