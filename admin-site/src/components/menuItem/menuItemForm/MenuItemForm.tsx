@@ -15,7 +15,7 @@ import clsx from "clsx";
 import TableReuse from "../../common/Table/TableReuse";
 import { columnsCategoryNoSort } from "../../common/Columns/Colums";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import ModalCategoryList from "../../common/Modal/ModalCategoriesList";
+import ModalCategoryList from "../../common/Modal/ModalCategoryList";
 import {
   useEffect,
   useRef,
