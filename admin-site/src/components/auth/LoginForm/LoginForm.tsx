@@ -18,32 +18,37 @@ const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   return (
     <div className={styles.loginFormContainer}>
-      <Card title="Chào mừng trở lại" className={styles.loginCard}>
+      <Card title="Welcome Back" className={styles.loginCard}>
         <Form layout="vertical" onFinish={onSubmit} form={form}>
           <div className={styles.formFields}>
             <Form.Item
               name="email"
               rules={[
-                { required: true, message: "Vui lòng nhập email!" },
-                { type: "email", message: "Email không hợp lệ!" },
+                { required: true, message: "Please enter your email!" },
+                { type: "email", message: "Invalid email address!" },
               ]}
             >
               <Input
                 type="email"
-                placeholder="Nhập email của bạn"
+                placeholder="Enter your email"
                 prefix={<UserOutlined />}
               />
             </Form.Item>
+
             <Form.Item
               name="password"
               rules={[
-                { required: true, message: "Vui lòng nhập mật khẩu!" },
-                { min: 6, message: "Mật khẩu tối thiểu 6 ký tự!" },
+                { required: true, message: "Please enter your password!" },
+                {
+                  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/,
+                  message:
+                    "Password must be at least 6 characters long, and include at least 1 lowercase letter, 1 uppercase letter, and 1 digit.",
+                },
               ]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
-                placeholder="Nhập mật khẩu"
+                placeholder="Enter your password"
               />
             </Form.Item>
           </div>
@@ -57,7 +62,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
               disabled={loading}
               className={styles.loginButton}
             >
-              {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+              {loading ? "Logging in..." : "Log In"}
             </Button>
           </Form.Item>
           {error && <Alert message={error} type="error" showIcon />}

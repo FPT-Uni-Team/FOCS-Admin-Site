@@ -63,8 +63,8 @@ export interface MenuItemUpdatePayload {
 
 export interface ImageMetadata {
   id: string | null;
-  isMain: boolean;
-  isDeleted: boolean;
+  is_main: boolean;
+  is_deleted: boolean;
 }
 
 export interface ImageItem {

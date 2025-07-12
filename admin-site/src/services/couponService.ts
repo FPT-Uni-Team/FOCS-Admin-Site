@@ -11,8 +11,8 @@ import type {
 const fake_stroreId = "550e8400-e29b-41d4-a716-446655440000";
 
 export const couponService = {
-  getListValidCoupon: (params: ListPageParams) =>
-    axiosClient.post(endpoints.coupon.listValid(), params),
+  getListValidCoupon: (params: ListPageParams, promotionId?: string) =>
+    axiosClient.post(endpoints.coupon.listValid(promotionId), params),
   getListCouponByIDs: (params: string[]) =>
     axiosClient.post(endpoints.coupon.listByIds(), params),
   getCouponList: (params: ListPageParams) =>
@@ -115,7 +115,6 @@ export const createCoupon = async (couponData: CouponCreateRequest) => {
     requestBody.promotion_id = couponData.promotion_id;
   }
 
-  console.log("requestBody", requestBody);
   try {
     const response = await axiosClient.post(
       endpoints.coupon.create(),

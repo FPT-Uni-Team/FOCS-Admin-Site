@@ -10,6 +10,7 @@ import { fetchMenuItemDetailStart } from "../../store/slices/menuItem/menuItemDe
 import { useNavigate, useParams } from "react-router-dom";
 import { checkActive, checkShowEdit } from "../../helper/checkStatus";
 import MenuItemDetailForm from "../../components/menuItem/menuItemDetail/MenuItemDetailForm";
+import { changeStatusMenuItemStart } from "../../store/action/menuItemAction";
 
 const MenuItemDetailPage = () => {
   const [form] = useForm();
@@ -20,7 +21,12 @@ const MenuItemDetailPage = () => {
   const dispatch = useAppDispatch();
   const { menuItem } = useAppSelector((state) => state.menuItemDetail);
 
-  const fetchChangeStatusMenuItem = () => {};
+  const fetchChangeStatusMenuItem = async (
+    category: string,
+    menuItemId: string
+  ) => {
+    dispatch(changeStatusMenuItemStart({ category, menuItemId }));
+  };
 
   useEffect(() => {
     dispatch(fetchMenuItemDetailStart(menuItemId || ""));

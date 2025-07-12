@@ -26,7 +26,6 @@ const CouponCreatePage = () => {
 
   const handleModifyDataCoupon = useCallback((): CouponCreateRequest => {
     const allFormValues = form.getFieldsValue();
-    console.log("allFormValues", allFormValues);
     const couponData: CouponCreateRequest = {
       coupon_type: allFormValues?.step1?.coupon_type,
       description: allFormValues?.step1?.description?.trim(),
@@ -70,7 +69,6 @@ const CouponCreatePage = () => {
         const storeId =
           localStorage.getItem("storeId") ||
           "550e8400-e29b-41d4-a716-446655440000";
-        console.log("payloadData", payloadData);
         dispatch(createCouponStart({ couponData: payloadData, storeId }));
       })
       .catch((error) => {
