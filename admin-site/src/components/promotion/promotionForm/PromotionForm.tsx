@@ -31,8 +31,8 @@ import {
 } from "../../common/Columns/Colums";
 import clsx from "clsx";
 import type { CouponAdminDTO } from "../../../type/coupon/coupon";
-import ModalCouponList from "../../common/Modal/ModalCouponList";
-import ModalMenuItem from "../../common/Modal/ModalMenuItem";
+import ModalCouponList from "../../common/modal/ModalCouponList";
+import ModalMenuItem from "../../common/modal/ModalMenuItem";
 
 interface Props {
   title?: string;

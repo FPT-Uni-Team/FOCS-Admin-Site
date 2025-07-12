@@ -1,11 +1,11 @@
 import { type FC, useCallback, useEffect, useState } from "react";
-import TableReuse from "../../common/Table/TableReuse";
+import TableReuse from "../Table/TableReuse";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import FilterReuse from "../../common/Filter/FilterReuse";
+import FilterReuse from "../Filter/FilterReuse";
 import type { ListPageParams } from "../../../type/common/common";
-import { createOnTableChangeHandler } from "../../common/Table/HandleTableChange/HandleTableChange";
+import { createOnTableChangeHandler } from "../Table/HandleTableChange/HandleTableChange";
 import { createOnFilterHandler } from "../../../helper/formatFilters";
-import { columnsCategory } from "../../common/Columns/Colums";
+import { columnsCategory } from "../Columns/Colums";
 import { Modal, type ModalProps } from "antd";
 import type { CategoryListDataType } from "../../../type/category/category";
 import { fetchCategoriesStart } from "../../../store/slices/category/categoryListSlice";
