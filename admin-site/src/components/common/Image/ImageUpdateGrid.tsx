@@ -50,14 +50,14 @@ const ImageUpdateGrid = forwardRef<ImageUploaderGridRef, ImageUpdateGridProps>(
             filesToUpload.push(img.file!);
             metadata.push({
               id: null,
-              isMain: img.isMain,
-              isDeleted: false,
+              is_main: img.isMain,
+              is_deleted: false,
             });
           } else if (!img.isNew) {
             metadata.push({
               id: img.id,
-              isMain: img.isMain,
-              isDeleted: img.isDeleted,
+              is_main: img.isMain,
+              is_deleted: img.isDeleted,
             });
           }
         });

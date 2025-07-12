@@ -8,7 +8,6 @@ import couponUpdateReducer from "./slices/coupon/couponUpdateSlice";
 import couponDeleteReducer from "./slices/coupon/couponDeleteSlice";
 import couponTrackUsageReducer from "./slices/coupon/couponTrackUsageSlice";
 import couponSetStatusReducer from "./slices/coupon/couponSetStatusSlice";
-import couponAssignReducer from "./slices/coupon/couponAssignSlice";
 import menuItemSlice from "./slices/menuItem/menuItemSlice";
 import promotionCreateSlice from "./slices/promotion/promotionCreateSlice";
 import loadingSlice from "./slices/loading/loadingSlice";
@@ -37,7 +36,6 @@ const rootReducer = combineReducers({
   couponDelete: couponDeleteReducer,
   couponTrackUsage: couponTrackUsageReducer,
   couponSetStatus: couponSetStatusReducer,
-  couponAssign: couponAssignReducer,
   menuItem: menuItemSlice,
   createPromotion: promotionCreateSlice,
   loadingGlobal: loadingSlice,

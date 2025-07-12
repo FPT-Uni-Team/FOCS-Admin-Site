@@ -37,13 +37,8 @@ const CouponCreatePage = () => {
       end_date: allFormValues?.step1?.end_date?.format("YYYY-MM-DD HH:mm:ss"),
       max_usage: Number(allFormValues?.step2?.max_usage) || 1,
       count_used: 0,
-      coupon_condition: {
-        condition_type: allFormValues?.step2?.condition_type,
-        value: Number(allFormValues?.step2?.condition_value) || 0,
-      },
       is_active: Boolean(allFormValues?.step2?.is_active),
     };
-
     if (allFormValues?.step1?.coupon_type === 1) {
       couponData.code = allFormValues?.step1?.code?.trim();
     }
@@ -58,6 +53,16 @@ const CouponCreatePage = () => {
     if (allFormValues?.step2?.promotion_id) {
       couponData.promotion_id = String(allFormValues.step2.promotion_id);
     }
+
+    if (allFormValues?.step2?.minimum_order_amount) {
+      couponData.minimum_order_amount =
+        allFormValues?.step2?.minimum_order_amount;
+    }
+    if (allFormValues?.step2?.minimum_item_quantity) {
+      couponData.minimum_item_quantity = Number(
+        allFormValues?.step2?.minimum_item_quantity
+      );
+    }
     return couponData;
   }, [form]);
 
@@ -66,10 +71,7 @@ const CouponCreatePage = () => {
       .validateFields()
       .then(() => {
         const payloadData = handleModifyDataCoupon();
-        const storeId =
-          localStorage.getItem("storeId") ||
-          "550e8400-e29b-41d4-a716-446655440000";
-        dispatch(createCouponStart({ couponData: payloadData, storeId }));
+        dispatch(createCouponStart(payloadData));
       })
       .catch((error) => {
         console.log("Validation failed:", error);
@@ -98,7 +100,7 @@ const CouponCreatePage = () => {
         createButtonText="Create"
       />
       <ContentInner>
-        <CouponCreateForm form={form} />
+        <CouponCreateForm form={form} mode="Create" />
       </ContentInner>
     </>
   );

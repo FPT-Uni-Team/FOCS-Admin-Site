@@ -1,6 +1,5 @@
 import { call, put, takeLatest, all, type Effect } from "redux-saga/effects";
 import {
-  getCouponDetail,
   createCoupon,
   updateCoupon,
   deleteCoupon,
@@ -76,7 +75,7 @@ interface ApiError {
   };
 }
 
-const { getListValidCoupon, getCouponList } = couponService;
+const { getListValidCoupon, getCouponList, couponDetail } = couponService;
 const { getListMenuItemsIds } = menuItemService;
 const { getPromotionDetail } = promotionService;
 
@@ -118,14 +117,17 @@ function* handleFetchCouponsVadlid(
 
 function* handleFetchCouponDetail(
   action: PayloadAction<{ storeId: string; couponId: string }>
-): Generator<Effect, void, CouponDetailType> {
+): Generator<Effect, void, AxiosResponse<CouponDetailType>> {
   try {
     const { couponId } = action.payload;
-    const response = yield call(getCouponDetail, couponId);
-    let dataResponse = response;
-    if (response?.accept_for_items && response?.accept_for_items.length > 0) {
+    const responseRequest = yield call(couponDetail, couponId);
+    let dataResponse = responseRequest.data;
+    if (
+      dataResponse?.accept_for_items &&
+      dataResponse?.accept_for_items.length > 0
+    ) {
       const responseMenuItems = yield call(() =>
-        getListMenuItemsIds(response?.accept_for_items as string[])
+        getListMenuItemsIds(dataResponse?.accept_for_items as string[])
       );
 
       const dataMappedMenuItems = objectMapper(
@@ -134,16 +136,15 @@ function* handleFetchCouponDetail(
           : [responseMenuItems.data],
         fieldMap
       );
-
       dataResponse = {
         ...dataResponse,
         accept_for_items_list: dataMappedMenuItems as MenuListDataType[],
       };
     }
 
-    if (response?.promotion_id) {
+    if (dataResponse?.promotion_id) {
       const responsePromotion = yield call(() =>
-        getPromotionDetail(response?.promotion_id)
+        getPromotionDetail(dataResponse?.promotion_id)
       );
       const dataMappedPromotion = objectMapper(
         Array.isArray(responsePromotion.data)
@@ -166,11 +167,10 @@ function* handleFetchCouponDetail(
 }
 
 function* handleCreateCoupon(
-  action: PayloadAction<{ couponData: CouponCreateRequest; storeId: string }>
+  action: PayloadAction<CouponCreateRequest>
 ): Generator<unknown, void, unknown> {
   try {
-    const { couponData } = action.payload;
-    const response = yield call(createCoupon, couponData);
+    const response = yield call(createCoupon, action.payload);
     yield put(createCouponSuccess(response as Record<string, unknown>));
   } catch (error: unknown) {
     const err = error as ApiError;
