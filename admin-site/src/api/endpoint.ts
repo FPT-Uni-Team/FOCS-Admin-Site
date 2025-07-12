@@ -1,68 +1,76 @@
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+
 const endpoints = {
   promotion: {
-    list: () => `/admin/promotion/list`,
-    create: () => `/admin/promotion`,
-    detail: (params: string) => `/admin/promotion/${params}`,
-    update: (params: string) => `/admin/promotion/${params}`,
-    change: (action: string, id: string) => `admin/promotion/${action}/${id}`,
+    list: () => `${API_BASE_URL}/admin/promotion/list`,
+    create: () => `${API_BASE_URL}/admin/promotion`,
+    detail: (params: string) => `${API_BASE_URL}/admin/promotion/${params}`,
+    update: (params: string) => `${API_BASE_URL}/admin/promotion/${params}`,
+    change: (action: string, id: string) =>
+      `${API_BASE_URL}/admin/promotion/${action}/${id}`,
   },
   menuItem: {
-    list: () => `/admin/menu-item/list`,
-    listByIds: () => "/admin/menu-item/bulk",
-    create: () => `/admin/menu-item`,
-    detail: (params: string) => `/admin/menu-item/${params}`,
-    update: (params: string) => `/admin/menu-item/${params}`,
-    images: (params: string) => `/admin/menu-item/${params}/images`,
+    list: () => `${API_BASE_URL}/admin/menu-item/list`,
+    listByIds: () => `${API_BASE_URL}/admin/menu-item/bulk`,
+    create: () => `${API_BASE_URL}/admin/menu-item`,
+    detail: (params: string) => `${API_BASE_URL}/admin/menu-item/${params}`,
+    update: (params: string) => `${API_BASE_URL}/admin/menu-item/${params}`,
+    images: (params: string) =>
+      `${API_BASE_URL}/admin/menu-item/${params}/images`,
     variantGroups: (params: string) =>
-      `/admin/menu-item/${params}/variant-groups`,
+      `${API_BASE_URL}/admin/menu-item/${params}/variant-groups`,
     createVariantGroups: (params: string) =>
-      `/admin/menu-item/${params}/variant-group/variants`,
+      `${API_BASE_URL}/admin/menu-item/${params}/variant-group/variants`,
     menuItemCategory: (params: string) =>
-      `/menu-item-category/menu-item/${params}/categories`,
+      `${API_BASE_URL}/menu-item-category/menu-item/${params}/categories`,
     menuItemAssignCategory: (params: string) =>
-      `/menu-item-category/assign-to-menu-item/${params}`,
-    menuItemDeleteCategory: () => `/menu-item-category/remove-from-product`,
+      `${API_BASE_URL}/menu-item-category/assign-to-menu-item/${params}`,
+    menuItemDeleteCategory: () =>
+      `${API_BASE_URL}/menu-item-category/remove-from-product`,
     menuItemDeleteGroupVariant: (params: string) =>
-      `/admin/menu-item/${params}/variant-groups`,
+      `${API_BASE_URL}/admin/menu-item/${params}/variant-groups`,
     menuItemDeleteVariant: (params: string) =>
-      `/admin/menu-item/${params}/product-variants`,
-    change: (action: string, id: string) => `admin/menu-item/${action}/${id}`,
+      `${API_BASE_URL}/admin/menu-item/${params}/product-variants`,
+    change: (action: string, id: string) =>
+      `${API_BASE_URL}/admin/menu-item/${action}/${id}`,
   },
   auth: {
-    login: () => "/me/login",
-    refresh: () => "/me/refresh-token",
+    login: () => `${API_BASE_URL}/me/login`,
+    refresh: () => `${API_BASE_URL}/me/refresh-token`,
   },
   coupon: {
     listValid: (promotionId?: string) => {
-      const baseUrl = "/admin/coupons/available";
+      const baseUrl = `${API_BASE_URL}/admin/coupons/available`;
       return promotionId ? `${baseUrl}/${promotionId}` : baseUrl;
     },
-    listByIds: () => "/admin/coupons/by-ids",
-    list: (storeId: string) => `/admin/coupons/${storeId}`,
-    detail: (id: string) => `/admin/coupon/${id}`,
-    create: () => `/admin/coupon`,
-    update: (id: string) => `/admin/coupon/${id}`,
-    delete: (id: string) => `/admin/coupon/${id}`,
-    trackUsage: (id: string) => `/admin/coupon/${id}/track-usage`,
-    setStatus: (id: string) => `/admin/coupon/${id}/status`,
+    listByIds: () => `${API_BASE_URL}/admin/coupons/by-ids`,
+    list: (storeId: string) => `${API_BASE_URL}/admin/coupons/${storeId}`,
+    detail: (id: string) => `${API_BASE_URL}/admin/coupon/${id}`,
+    create: () => `${API_BASE_URL}/admin/coupon`,
+    update: (id: string) => `${API_BASE_URL}/admin/coupon/${id}`,
+    delete: (id: string) => `${API_BASE_URL}/admin/coupon/${id}`,
+    trackUsage: (id: string) =>
+      `${API_BASE_URL}/admin/coupon/${id}/track-usage`,
+    setStatus: (id: string) => `${API_BASE_URL}/admin/coupon/${id}/status`,
     assignPromotion: (storeId: string) =>
-      `/admin/coupon/${storeId}/assign-promotion`,
+      `${API_BASE_URL}/admin/coupon/${storeId}/assign-promotion`,
   },
   category: {
-    list: () => "/Category/categories",
-    create: () => "/Category",
-    detail: (params: string) => `/Category/${params}`,
-    update: (param: string) => `Category/${param}`,
-    change: (action: string, id: string) => `/Category/${action}/${id}`,
+    list: () => `${API_BASE_URL}/Category/categories`,
+    create: () => `${API_BASE_URL}/Category`,
+    detail: (params: string) => `${API_BASE_URL}/Category/${params}`,
+    update: (param: string) => `${API_BASE_URL}/Category/${param}`,
+    change: (action: string, id: string) =>
+      `${API_BASE_URL}/Category/${action}/${id}`,
   },
   variant: {
-    list: () => "/admin/variant-group/variants",
+    list: () => `${API_BASE_URL}/admin/variant-group/variants`,
   },
   image: {
-    upload: () => "/admin/menu-item/sync-images",
+    upload: () => `${API_BASE_URL}/admin/menu-item/sync-images`,
   },
   staff: {
-    list: () => `/staff/list`,
+    list: () => `${API_BASE_URL}/staff/list`,
   },
 };
 
