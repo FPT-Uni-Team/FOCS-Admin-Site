@@ -54,6 +54,9 @@ const CategoryUpdatePage = lazy(
   () => import("../pages/category/CategoryUpdatePage")
 );
 const StaffListPage = lazy(() => import("../pages/staff/StaffListPage"));
+const StaffCreatePage = lazy(() => import("../pages/staff/StaffCreatePage"));
+const StaffDetailPage = lazy(() => import("../pages/staff/StaffDetailPage"));
+const StaffUpdatePage = lazy(() => import("../pages/staff/StaffUpdatePage"));
 
 export interface AppRoute {
   path: string;
@@ -164,10 +167,25 @@ export const routes: AppRoute[] = [
     hidden: true,
   },
   {
-    path: "/staff",
+    path: "/staffs",
     component: StaffListPage,
     label: "Staff",
     icon: <UserOutlined />,
+  },
+  {
+    path: "/staffs/create",
+    component: StaffCreatePage,
+    hidden: true,
+  },
+  {
+    path: "/staffs/:staffId",
+    component: StaffDetailPage,
+    hidden: true,
+  },
+  {
+    path: "/staffs/update/:staffId",
+    component: StaffUpdatePage,
+    hidden: true,
   },
   {
     path: "/variantGroup",

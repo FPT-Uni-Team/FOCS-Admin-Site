@@ -1,6 +1,5 @@
 import { type FC, useEffect, useState } from "react";
 import TableReuse from "../../common/Table/TableReuse";
-import { type PromotionListParams } from "../../../type/promotion/promotion";
 import { useAppSelector } from "../../../hooks/redux";
 import FilterReuse from "../../common/Filter/FilterReuse";
 import type { ListPageParams } from "../../../type/common/common";
@@ -10,7 +9,7 @@ import { createOnFilterHandler } from "../../../helper/formatFilters";
 import { columnsStaffList } from "../../common/Columns/Colums";
 import type { StaffDataType } from "../../../type/staff/staff";
 interface StaffListProps {
-  fetchData: (params: PromotionListParams) => void;
+  fetchData: (params: ListPageParams) => void;
 }
 
 const StaffList: FC<StaffListProps> = ({ fetchData }) => {

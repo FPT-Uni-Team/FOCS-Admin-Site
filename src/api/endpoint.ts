@@ -71,6 +71,9 @@ const endpoints = {
   },
   staff: {
     list: () => `${API_BASE_URL}/staff/list`,
+    create: () => `${API_BASE_URL}/staff`,
+    detail: (id: string) => `${API_BASE_URL}/staff/${id}`,
+    update: (id: string) => `${API_BASE_URL}/staff/${id}`,
   },
 };
 

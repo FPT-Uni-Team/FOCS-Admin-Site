@@ -353,7 +353,7 @@ export const columnsCategory: ColumnsType<CategoryListDataType> = [
       "ascend" as SortOrder,
     ],
     render: (_, record) => {
-      return <CustomLink title={record.name} href={`/${record.id}`} />;
+      return <CustomLink title={record.name} href={`${record.id}`} />;
     },
     sorter: true,
   },

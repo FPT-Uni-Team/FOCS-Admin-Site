@@ -25,6 +25,9 @@ import changeCategoryStatusSlice from "./slices/category/categoryChangeStatusSli
 import categoryUpdateSlice from "./slices/category/categoryUpdateSlice";
 import staffListSlice from "./slices/staff/staffListSlice";
 import menuItemUpdateSlice from "./slices/menuItem/menuItemUpdateSlice";
+import staffCreateSlice from "./slices/staff/staffCreateSlice";
+import staffDetailSlice from "./slices/staff/staffDetailSlice";
+import staffUpdateSlice from "./slices/staff/staffUpdateSlice";
 
 const rootReducer = combineReducers({
   promotion: promotionSlice,
@@ -53,6 +56,9 @@ const rootReducer = combineReducers({
   categoryUpdate: categoryUpdateSlice,
   staffList: staffListSlice,
   menuItemUpdate: menuItemUpdateSlice,
+  staffCreate: staffCreateSlice,
+  staffDetail: staffDetailSlice,
+  staffUpdate: staffUpdateSlice,
 });
 
 export default rootReducer;
