@@ -20,6 +20,7 @@ const CategoryPage = () => {
         }}
       />
       <CategoryList fetchData={fetchData} />
+      <>Test</>
     </>
   );
 };
