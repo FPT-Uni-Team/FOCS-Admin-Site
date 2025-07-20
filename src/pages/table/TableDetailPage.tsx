@@ -1,4 +1,3 @@
-import { useForm } from "antd/es/form/Form";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TitleLine from "../../components/common/Title/TitleLine";
@@ -9,7 +8,6 @@ import { TableStatusLabel } from "../../type/table/table";
 import { checkActive, checkShowEdit } from "../../helper/checkStatus";
 
 const TableDetailPage = () => {
-  const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { tableId } = useParams<{ tableId: string }>();
@@ -47,7 +45,7 @@ const TableDetailPage = () => {
           TableStatusLabel[table.status as keyof typeof TableStatusLabel]
         )}
       />
-      <TableDetail form={form} tableDetail={table} />
+      <TableDetail tableDetail={table} />
     </>
   );
 };
