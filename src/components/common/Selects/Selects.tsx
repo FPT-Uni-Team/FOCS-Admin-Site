@@ -1,6 +1,7 @@
 import { statusOptionsCategory } from "../../../type/category/category";
 import type { SelectConfig } from "../../../type/common/common";
 import { statusOptions } from "../../../type/menu/menu";
+import { tableStatusOptions } from "../../../type/table/table";
 
 export const selectConfigsMenuStatus: SelectConfig[] = [
   {
@@ -19,5 +20,15 @@ export const selectConfigsCategoryStatus: SelectConfig[] = [
     label: "Category Status",
     placeholder: "Select Category Status",
     options: statusOptionsCategory,
+  },
+];
+
+export const selectConfigsTableStatus: SelectConfig[] = [
+  {
+    name: "status",
+    type: "select", 
+    label: "Table Status",
+    placeholder: "Select Table Status",
+    options: tableStatusOptions,
   },
 ];

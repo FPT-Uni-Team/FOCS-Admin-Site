@@ -75,6 +75,9 @@ const endpoints = {
     detail: (id: string) => `${API_BASE_URL}/staff/${id}`,
     update: (id: string) => `${API_BASE_URL}/staff/${id}`,
   },
+  table: {
+    list: () => `${API_BASE_URL}/manager/tables`,
+  },
 };
 
 export default endpoints;
