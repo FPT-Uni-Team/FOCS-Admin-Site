@@ -522,6 +522,15 @@ export const columnsTableList: ColumnsType<TableDataType> = [
       "descend" as SortOrder,
       "ascend" as SortOrder,
     ],
+    render: (_, record) => {
+      return (
+        <CustomLink
+          title={`Table ${record.table_number}`}
+          href={`/tables/${record.id}`}
+          key={record.id}
+        />
+      );
+    },
     sorter: true,
   },
   {
