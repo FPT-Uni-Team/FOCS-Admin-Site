@@ -14,17 +14,28 @@ const statusColorMap: Record<string, string> = {
   unavailable: "UnAvailable",
   upcoming: "Up Coming",
   available: "Available",
+  occupied: "Occupied",
+  reserved: "Reserved",
+  maintenance: "Maintenance",
+  unknown: "Unknown",
 };
 
 const StatusTag: React.FC<StatusTagProps> = ({ status }) => {
-  const normalized = status.replace(" ", "").toLowerCase();
-  const statusInfo = statusColorMap[normalized];
-  if (!statusInfo) {
-    return <Tag color="default">{status}</Tag>;
+  if (status === null || status === undefined) {
+    return <Tag color="default">Unknown</Tag>;
   }
+
+  const statusString = String(status);
+  const normalized = statusString.replace(/ /g, "").toLowerCase();
+  const statusInfo = statusColorMap[normalized];
+
+  if (!statusInfo) {
+    return <Tag color="default">{statusString}</Tag>;
+  }
+
   return (
     <Tag className={clsx(styles[`${normalized}`], styles["custom-tag"])}>
-      {statusInfo || status}
+      {statusInfo || statusString}
     </Tag>
   );
 };

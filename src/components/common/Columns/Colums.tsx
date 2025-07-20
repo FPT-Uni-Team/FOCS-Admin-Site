@@ -20,6 +20,8 @@ import { Space, Typography } from "antd";
 import type { Variant, VariantGroup } from "../../../type/variant/variant";
 import TableReuse from "../Table/TableReuse";
 import type { StaffDataType } from "../../../type/staff/staff";
+import type { TableDataType } from "../../../type/table/table";
+import { TableStatusLabel } from "../../../type/table/table";
 const { Text } = Typography;
 
 export const columnsMenuItem: ColumnsType<MenuListDataType> = [
@@ -507,5 +509,45 @@ export const columnsStaffList: ColumnsType<StaffDataType> = [
     title: "Email",
     dataIndex: "email",
     key: "email",
+  },
+];
+
+export const columnsTableList: ColumnsType<TableDataType> = [
+  {
+    title: "Table Number",
+    dataIndex: "table_number",
+    key: "table_number",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    sorter: true,
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (status: number) => {
+      const statusLabel = TableStatusLabel[status as keyof typeof TableStatusLabel];
+      if (!statusLabel) {
+        return <StatusTag status="unknown" />;
+      }
+      return <StatusTag status={statusLabel.toLowerCase()} />;
+    },
+    sorter: true,
+  },
+  {
+    title: "Active",
+    dataIndex: "is_active",
+    key: "is_active",
+    render: (isActive: boolean) => (
+      <StatusTag status={isActive ? "available" : "unavailable"} />
+    ),
   },
 ];

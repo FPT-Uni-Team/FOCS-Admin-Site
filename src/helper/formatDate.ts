@@ -10,12 +10,31 @@ interface DateValidationOptions {
 }
 
 export const formatDate = (date: string | Date): string => {
-  const d = new Date(date);
-  return d.toLocaleDateString("vi-VN", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
+  if (!date) return "N/A";
+  
+  try {
+    let dateStr: string;
+    
+    if (typeof date === 'string') {
+      dateStr = date.replace(/\.\d+$/, '');
+    } else {
+      dateStr = date.toString();
+    }
+    
+    const d = new Date(dateStr);
+    
+    if (isNaN(d.getTime())) {
+      return "Invalid Date";
+    }
+    
+    return d.toLocaleDateString("vi-VN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  } catch {
+    return "Invalid Date";
+  }
 };
 
 export const getDisabledTime = (currentDate?: dayjs.Dayjs) => {
