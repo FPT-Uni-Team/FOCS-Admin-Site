@@ -1,6 +1,6 @@
 import axiosClient from "../api/axiosClient";
 import endpoints from "../api/endpoint";
-import type { TableListParams } from "../type/table/table";
+import type { TableListParams, TableCreateRequest } from "../type/table/table";
 
 const tableService = {
   getListTables: (params: TableListParams) =>
@@ -15,6 +15,8 @@ const tableService = {
     }),
   getTableDetail: (id: string) =>
     axiosClient.get(endpoints.table.detail(id)),
+  createTable: (tableData: TableCreateRequest) =>
+    axiosClient.post(endpoints.table.create(), tableData),
 };
 
 export default tableService; 

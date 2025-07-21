@@ -17,6 +17,8 @@ const statusColorMap: Record<string, string> = {
   occupied: "Occupied",
   reserved: "Reserved",
   maintenance: "Maintenance",
+  cleaning: "Cleaning",
+  outofservice: "OutOfService",
   unknown: "Unknown",
 };
 

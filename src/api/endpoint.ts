@@ -78,6 +78,7 @@ const endpoints = {
   table: {
     list: () => `${API_BASE_URL}/manager/tables`,
     detail: (id: string) => `${API_BASE_URL}/manager/table/${id}`,
+    create: () => `${API_BASE_URL}/manager/table`,
   },
 };
 
