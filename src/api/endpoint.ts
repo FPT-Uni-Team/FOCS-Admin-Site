@@ -79,6 +79,8 @@ const endpoints = {
     list: () => `${API_BASE_URL}/manager/tables`,
     detail: (id: string) => `${API_BASE_URL}/manager/table/${id}`,
     create: () => `${API_BASE_URL}/manager/table`,
+    update: (id: string) => `${API_BASE_URL}/manager/table/${id}`,
+    generateQR: () => `${API_BASE_URL}/manager/table/qrcode`,
   },
 };
 

@@ -18,10 +18,15 @@ import {
   createTableSuccess,
   createTableFailure,
 } from "../../slices/table/tableCreateSlice";
+import {
+  updateTableStart,
+  updateTableSuccess,
+  updateTableFailure,
+} from "../../slices/table/tableUpdateSlice";
 import tableService from "../../../services/tableService";
 import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 
-const { getListTables, getTableDetail, createTable } = tableService;
+const { getListTables, getTableDetail, createTable, updateTable, generateTableQR } = tableService;
 
 function* fetchTableList(
   action: PayloadAction<TableListParams>
@@ -57,6 +62,11 @@ function* fetchCreateTable(
 ): Generator<Effect, void, AxiosResponse<TableDTO>> {
   try {
     const response = yield call(() => createTable(action.payload));
+    
+   
+    const storeId = action.payload.store_id || "550e8400-e29b-41d4-a716-446655440000";
+    yield call(() => generateTableQR(response.data.id, storeId));
+    
     yield put(createTableSuccess(response.data));
   } catch (error: unknown) {
     const axiosError = error as AxiosError;
@@ -69,10 +79,38 @@ function* fetchCreateTable(
   }
 }
 
+function* fetchUpdateTable(
+  action: PayloadAction<{ id: string; data: Partial<TableDTO> }>
+): Generator<Effect, void, AxiosResponse<TableDTO>> {
+  try {
+    const { id, data } = action.payload;
+    yield call(() => updateTable(id, data));
+    
+   
+    if (data.generate_qr) {
+      const storeId = data.store_id || "550e8400-e29b-41d4-a716-446655440000";
+      yield call(() => generateTableQR(id, storeId));
+    }
+    
+    yield put(updateTableSuccess());
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred";
+    yield put(updateTableFailure(message));
+  }
+}
+
 export function* watchTableSaga() {
   yield takeLatest(fetchTablesStart.type, fetchTableList);
   yield takeLatest(fetchTableDetailStart.type, fetchTableDetail);
   yield takeLatest(createTableStart.type, function* (action) {
     yield* withGlobalLoading(fetchCreateTable, action);
+  });
+  yield takeLatest(updateTableStart.type, function* (action) {
+    yield* withGlobalLoading(fetchUpdateTable, action);
   });
 } 
