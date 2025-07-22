@@ -552,3 +552,5 @@ export const columnsTableList: ColumnsType<TableDataType> = [
     sorter: true,
   },
 ];
+
+

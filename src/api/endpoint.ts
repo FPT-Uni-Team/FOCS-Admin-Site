@@ -81,6 +81,8 @@ const endpoints = {
     create: () => `${API_BASE_URL}/manager/table`,
     update: (id: string) => `${API_BASE_URL}/manager/table/${id}`,
     generateQR: () => `${API_BASE_URL}/manager/table/qrcode`,
+    changeStatus: (tableId: string, storeId: string) => 
+      `${API_BASE_URL}/manager/table/status?tableId=${tableId}&storeId=${storeId}`,
   },
 };
 

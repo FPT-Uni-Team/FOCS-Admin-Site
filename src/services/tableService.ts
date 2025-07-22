@@ -21,6 +21,12 @@ const tableService = {
     axiosClient.put(endpoints.table.update(id), data),
   generateTableQR: (tableId: string, storeId: string) =>
     axiosClient.put(`${endpoints.table.generateQR()}?tableId=${tableId}&storeId=${storeId}`),
+  changeStatus: (tableId: string, storeId: string, status: number) => {
+    const url = endpoints.table.changeStatus(tableId, storeId);
+    return axiosClient.put(url, JSON.stringify(status), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  },
 };
 
 export default tableService; 
