@@ -51,6 +51,8 @@ const TableList: FC<TableListProps> = ({ fetchData, storeId }) => {
     fetchData(tableParams);
   }, [fetchData, params, storeId]);
 
+
+
   return (
     <div>
       <FilterReuse

@@ -10,6 +10,14 @@ export const checkActive = (status: string) => {
       return 0;
     case "Expired":
       return 2;
+    case "OutOfService":
+      return 1;
+    case "Occupied":
+      return 0;
+    case "Reserved":
+      return 0;
+    case "Cleaning":
+      return 0;
     default:
       return 2;
   }
@@ -26,6 +34,14 @@ export const checkShowEdit = (status: string) => {
       return true;
     case "Expired":
       return false;
+    case "OutOfService":
+      return false;
+    case "Occupied":
+      return false;
+    case "Reserved":
+      return true;
+    case "Cleaning":
+      return true;
     default:
       return false;
   }
