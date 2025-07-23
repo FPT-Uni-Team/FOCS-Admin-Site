@@ -1,6 +1,5 @@
 import { Col, Form, Input, InputNumber, Row, Select, Switch, Typography, type FormInstance } from "antd";
-import { useEffect } from "react";
-import { QRCodeSVG } from "qrcode.react";
+import React from "react";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
 import type { TableDTO } from "../../../type/table/table";
 import { TableStatus, TableStatusLabel } from "../../../type/table/table";
@@ -20,7 +19,7 @@ const TableForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
   const isDetail = mode === "Detail";
   const isCreate = mode === "Create";
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (initData && (mode === "Update" || mode === "Detail")) {
       form.setFieldsValue({
         table_number: initData.table_number,
@@ -32,7 +31,7 @@ const TableForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
     }
   }, [initData, form, mode]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isCreate) {
       const defaultStoreId = localStorage.getItem("storeId") || "550e8400-e29b-41d4-a716-446655440000";
       form.setFieldsValue({
@@ -136,10 +135,7 @@ const TableForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
                   justifyContent: "center",
                 }}
               >
-                <QRCodeSVG 
-                  value={initData.qr_code} 
-                  size={150}
-                />
+                <img src={initData.qr_code} alt="QR Code" style={{ maxWidth: "150px", maxHeight: "150px" }} />
               </div>
             ) : (
               <div

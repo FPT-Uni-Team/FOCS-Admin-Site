@@ -1,6 +1,5 @@
 import React from "react";
 import { Col, Row, Typography } from "antd";
-import { QRCodeSVG } from "qrcode.react";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
 import type { TableDataType } from "../../../type/table/table";
 
@@ -31,9 +30,10 @@ const TableDetail: React.FC<Props> = ({ tableDetail }) => {
                     justifyContent: "center",
                   }}
                 >
-                  <QRCodeSVG 
-                    value={tableDetail.qr_code} 
-                    size={180}
+                  <img
+                    src={tableDetail.qr_code}
+                    alt="QR Code"
+                    style={{ width: 180, height: 180, objectFit: "contain" }}
                   />
                 </div>
               ) : (
