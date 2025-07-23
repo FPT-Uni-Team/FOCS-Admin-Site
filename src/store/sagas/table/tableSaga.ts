@@ -1,8 +1,8 @@
 import { call, put, takeLatest, type Effect } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { AxiosResponse } from "axios";
+import type { AxiosResponse, AxiosError } from "axios";
 
-import type { TableListParams, TableListResponse, TableDataType } from "../../../type/table/table";
+import type { TableListParams, TableListResponse, TableDataType, TableCreateRequest, TableDTO } from "../../../type/table/table";
 import {
   fetchTablesFailure,
   fetchTablesStart,
@@ -13,9 +13,15 @@ import {
   fetchTableDetailSuccess,
   fetchTableDetailFailure,
 } from "../../slices/table/tableDetailSlice";
+import {
+  createTableStart,
+  createTableSuccess,
+  createTableFailure,
+} from "../../slices/table/tableCreateSlice";
 import tableService from "../../../services/tableService";
+import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 
-const { getListTables, getTableDetail } = tableService;
+const { getListTables, getTableDetail, createTable } = tableService;
 
 function* fetchTableList(
   action: PayloadAction<TableListParams>
@@ -46,7 +52,27 @@ function* fetchTableDetail(
   }
 }
 
+function* fetchCreateTable(
+  action: PayloadAction<TableCreateRequest>
+): Generator<Effect, void, AxiosResponse<TableDTO>> {
+  try {
+    const response = yield call(() => createTable(action.payload));
+    yield put(createTableSuccess(response.data));
+  } catch (error: unknown) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred";
+    yield put(createTableFailure(message));
+  }
+}
+
 export function* watchTableSaga() {
   yield takeLatest(fetchTablesStart.type, fetchTableList);
   yield takeLatest(fetchTableDetailStart.type, fetchTableDetail);
+  yield takeLatest(createTableStart.type, function* (action) {
+    yield* withGlobalLoading(fetchCreateTable, action);
+  });
 } 

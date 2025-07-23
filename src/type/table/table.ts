@@ -30,14 +30,16 @@ export const TableStatus = {
   Available: 0,
   Occupied: 1,
   Reserved: 2,
-  Maintenance: 3,
+  Cleaning: 3,
+  OutOfService: 4,
 } as const;
 
 export const TableStatusLabel = {
   0: "Available",
   1: "Occupied", 
   2: "Reserved",
-  3: "Maintenance",
+  3: "Cleaning",
+  4: "OutOfService",
 } as const;
 
 export type TableStatus = (typeof TableStatus)[keyof typeof TableStatus];
@@ -49,5 +51,12 @@ export const tableStatusOptions = [
     label: key,
   })),
 ];
+
+export interface TableCreateRequest {
+  table_number: number;
+  status: number;
+  is_active: boolean;
+  store_id: string;
+}
 
 export type TableDataType = TableDTO; 

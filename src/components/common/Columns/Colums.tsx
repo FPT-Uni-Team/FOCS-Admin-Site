@@ -551,12 +551,4 @@ export const columnsTableList: ColumnsType<TableDataType> = [
     },
     sorter: true,
   },
-  {
-    title: "Active",
-    dataIndex: "is_active",
-    key: "is_active",
-    render: (isActive: boolean) => (
-      <StatusTag status={isActive ? "available" : "unavailable"} />
-    ),
-  },
 ];
