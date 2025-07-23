@@ -13,6 +13,8 @@ const tableService = {
       sort_order: params.sort_order,
       filters: params.filters,
     }),
+  getTableDetail: (id: string) =>
+    axiosClient.get(endpoints.table.detail(id)),
 };
 
 export default tableService; 

@@ -1,9 +1,8 @@
-import { Col, Input, Row, Switch, Typography, type FormInstance } from "antd";
+import { Col, Input, Row, Typography, type FormInstance } from "antd";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
 import { Form } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import styles from "../menuItemForm/MenuItem.module.scss";
-import clsx from "clsx";
 import TableReuse from "../../common/Table/TableReuse";
 import { columnsCategoryNoSort } from "../../common/Columns/Colums";
 import { useEffect, useState } from "react";
@@ -33,7 +32,6 @@ const MenuItemDetailForm: React.FC<Props> = ({ form, menuItemDetail }) => {
         name: menuItemDetail.name,
         description: menuItemDetail.description,
         base_price: menuItemDetail.base_price,
-        is_available: menuItemDetail.is_available,
       });
       setDataCategorySeleted({
         keys: (menuItemDetail.categories || []).map((item) => item.id),
@@ -71,28 +69,13 @@ const MenuItemDetailForm: React.FC<Props> = ({ form, menuItemDetail }) => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={12}>
-                <div className={clsx(styles.flexClass, styles.customSwitch)}>
-                  <Form.Item
-                    name="is_available"
-                    valuePropName="checked"
-                    style={{ marginBottom: 0 }}
-                  >
-                    <Switch disabled />
-                  </Form.Item>
-                  <div>Active menu item</div>
-                </div>
-              </Col>
             </Row>
             <Row>
               <Col span={24}>
                 <Form.Item name="category_ids">
                   <Row>
                     <div
-                      className={clsx(
-                        styles.customTableSelect,
-                        styles.marginItem
-                      )}
+                      className={styles.customTableSelect}
                     >
                       <div className={styles.titleSelectCustom}>
                         <Typography.Title level={5}>
@@ -117,10 +100,7 @@ const MenuItemDetailForm: React.FC<Props> = ({ form, menuItemDetail }) => {
                 <Form.Item name="variant_groups">
                   <Row>
                     <div
-                      className={clsx(
-                        styles.customTableSelect,
-                        styles.marginItem
-                      )}
+                      className={styles.customTableSelect}
                     >
                       <VariantDisplayDetail
                         displayVariantGroups={

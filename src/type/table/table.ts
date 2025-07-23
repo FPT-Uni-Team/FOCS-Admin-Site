@@ -2,6 +2,7 @@
 export interface TableDTO {
   id: string;
   table_number: number;
+  qr_code?: string;
   status: number;
   is_active: boolean;
   store_id: string;
