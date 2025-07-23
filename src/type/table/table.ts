@@ -6,6 +6,7 @@ export interface TableDTO {
   status: number;
   is_active: boolean;
   store_id: string;
+  generate_qr?: boolean;
 }
 
 export interface TableListResponse {

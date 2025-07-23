@@ -60,6 +60,7 @@ const StaffUpdatePage = lazy(() => import("../pages/staff/StaffUpdatePage"));
 const TableListPage = lazy(() => import("../pages/table/TableListPage"));
 const TableDetailPage = lazy(() => import("../pages/table/TableDetailPage"));
 const TableCreatePage = lazy(() => import("../pages/table/TableCreatePage"));
+const TableUpdatePage = lazy(() => import("../pages/table/TableUpdatePage"));
 
 export interface AppRoute {
   path: string;
@@ -204,6 +205,11 @@ export const routes: AppRoute[] = [
   {
     path: "/tables/:tableId",
     component: TableDetailPage,
+    hidden: true,
+  },
+  {
+    path: "/tables/update/:tableId",
+    component: TableUpdatePage,
     hidden: true,
   },
   {
