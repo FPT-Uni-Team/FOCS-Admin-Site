@@ -1,0 +1,87 @@
+.variantGroupContainer {
+  .filterSection {
+    margin-bottom: 16px;
+  }
+
+  .actionSection {
+    margin-bottom: 16px;
+    text-align: right;
+  }
+
+  .tableSection {
+    .variantTable {
+      .statusTag {
+        &.required {
+          color: #52c41a;
+        }
+        
+        &.optional {
+          color: #faad14;
+        }
+      }
+
+      .variantCount {
+        font-weight: 600;
+      }
+
+      .priceColumn {
+        font-weight: 500;
+        
+        &.positive {
+          color: #52c41a;
+        }
+        
+        &.free {
+          color: #8c8c8c;
+        }
+      }
+
+      .availabilityRatio {
+        &.full {
+          color: #52c41a;
+        }
+        
+        &.partial {
+          color: #faad14;
+        }
+        
+        &.none {
+          color: #ff4d4f;
+        }
+      }
+    }
+
+    .expandedTable {
+      background-color: #fafafa;
+      border-radius: 4px;
+      
+      .ant-table {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+.actionButtons {
+  .editButton {
+    color: #1890ff;
+    
+    &:hover {
+      color: #40a9ff;
+    }
+  }
+
+  .deleteButton {
+    color: #ff4d4f;
+    
+    &:hover {
+      color: #ff7875;
+    }
+  }
+}
+
+.variantInfo {
+  .unavailableTag {
+    margin-left: 8px;
+  }
+}

@@ -1,15 +1,13 @@
 import {
   AppstoreOutlined,
   BranchesOutlined,
-  DeploymentUnitOutlined,
   GiftOutlined,
   ProfileOutlined,
   TagOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import {
+import React, {
   lazy,
-  type JSX,
   type LazyExoticComponent,
   type ReactNode,
 } from "react";
@@ -61,10 +59,11 @@ const TableListPage = lazy(() => import("../pages/table/TableListPage"));
 const TableDetailPage = lazy(() => import("../pages/table/TableDetailPage"));
 const TableCreatePage = lazy(() => import("../pages/table/TableCreatePage"));
 const TableUpdatePage = lazy(() => import("../pages/table/TableUpdatePage"));
+const VariantGroupListPage = lazy(() => import("../pages/variant/VariantGroupListPage"));
 
 export interface AppRoute {
   path: string;
-  component?: LazyExoticComponent<() => JSX.Element>;
+  component?: LazyExoticComponent<React.FC>;
   label?: string;
   icon?: ReactNode;
   hidden?: boolean;
@@ -213,16 +212,10 @@ export const routes: AppRoute[] = [
     hidden: true,
   },
   {
-    path: "/variantGroup",
-    component: StaffListPage,
-    label: "Variant Group",
+    path: "/variant-groups",
+    component: VariantGroupListPage,
+    label: "Variant Groups",
     icon: <BranchesOutlined />,
-  },
-  {
-    path: "/variant",
-    component: StaffListPage,
-    label: "Variant",
-    icon: <DeploymentUnitOutlined />,
   },
 ];
 
