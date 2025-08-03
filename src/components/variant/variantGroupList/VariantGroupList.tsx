@@ -11,6 +11,7 @@ import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner"
 import { createOnTableChangeHandler } from "../../common/Table/HandleTableChange/HandleTableChange";
 import { createOnFilterHandler } from "../../../helper/formatFilters";
 import styles from "./VariantGroupList.module.scss";
+import CustomLink from "../../common/Link/CustomLink";
 
 const { Text } = Typography;
 
@@ -53,7 +54,9 @@ const VariantGroupList: FC<VariantGroupListProps> = ({ fetchData }) => {
       dataIndex: "group_name",
       key: "group_name",
       sorter: true,
-      render: (text: string) => <Text strong>{text}</Text>,
+      render: (text: string, record: VariantGroup) => (
+        <CustomLink title={text} href={`/variant-groups/${record.id}`} />
+      ),
     },
     {
       title: "Variants Count",

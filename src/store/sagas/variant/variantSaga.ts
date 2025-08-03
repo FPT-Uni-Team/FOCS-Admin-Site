@@ -10,9 +10,16 @@ import {
   fetchVariantGroupsStart,
   fetchVariantGroupsSuccess,
 } from "../../slices/variant/variantGroupSlice";
-import variantGroupsService from "../../../services/variantService";
+import {
+  fetchVariantGroupDetailFailure,
+  fetchVariantGroupDetailStart,
+  fetchVariantGroupDetailSuccess,
+} from "../../slices/variant/variantGroupDetailSlice";
 
-const { getListVariantGroups } = variantGroupsService;
+import variantGroupsService from "../../../services/variantService";
+import type { VariantGroup } from "../../../type/variant/variant";
+
+const { getListVariantGroups, getDetailVariantGroup } = variantGroupsService;
 
 function* fetchVariantGroupsList(
   action: PayloadAction<ListPageParams>
@@ -33,6 +40,20 @@ function* fetchVariantGroupsList(
   }
 }
 
+function* fetchVariantGroupDetail(
+  action: PayloadAction<string>
+): Generator<Effect, void, AxiosResponse<VariantGroup>> {
+  try {
+    const response = yield call(() => getDetailVariantGroup(action.payload));
+    yield put(fetchVariantGroupDetailSuccess(response.data));
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch variant group detail";
+    yield put(fetchVariantGroupDetailFailure(errorMessage));
+  }
+}
+
 export function* watchVariantSaga() {
   yield takeLatest(fetchVariantGroupsStart.type, fetchVariantGroupsList);
+  yield takeLatest(fetchVariantGroupDetailStart.type, fetchVariantGroupDetail);
 }

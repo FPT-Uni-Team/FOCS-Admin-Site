@@ -17,6 +17,7 @@ import promotionUpdateSlice from "./slices/promotion/promotionUpdateSlice";
 import changeStatusPromotionSlice from "./slices/promotion/promotionChangeStatusSlice";
 import categoryListSlice from "./slices/category/categoryListSlice";
 import variantGroupSlice from "./slices/variant/variantGroupSlice";
+import variantGroupDetailSlice from "./slices/variant/variantGroupDetailSlice";
 import menuItemCreateSlice from "./slices/menuItem/menuItemCreateSlice";
 import menuItemDetailSlice from "./slices/menuItem/menuItemDetailSlice";
 import categoryCreateSlice from "./slices/category/categoryCreateSlice";
@@ -53,6 +54,7 @@ const rootReducer = combineReducers({
   changeStatusPromotion: changeStatusPromotionSlice,
   categoryList: categoryListSlice,
   variantGroup: variantGroupSlice,
+  variantGroupDetail: variantGroupDetailSlice,
   menuItemCreate: menuItemCreateSlice,
   menuItemDetail: menuItemDetailSlice,
   categoryCreate: categoryCreateSlice,
