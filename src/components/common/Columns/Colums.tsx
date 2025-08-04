@@ -22,6 +22,11 @@ import TableReuse from "../Table/TableReuse";
 import type { StaffDataType } from "../../../type/staff/staff";
 import type { TableDataType } from "../../../type/table/table";
 import { TableStatusLabel } from "../../../type/table/table";
+import type { OrderListDataType } from "../../../type/order/order";
+import { 
+  getOrderTypeText,
+  type OrderType
+} from "../../../type/order/order";
 const { Text } = Typography;
 
 export const columnsMenuItem: ColumnsType<MenuListDataType> = [
@@ -548,6 +553,99 @@ export const columnsTableList: ColumnsType<TableDataType> = [
         return <StatusTag status="unknown" />;
       }
       return <StatusTag status={statusLabel.toLowerCase()} />;
+    },
+    sorter: true,
+  },
+];
+
+export const columnsOrderList: ColumnsType<OrderListDataType> = [
+  {
+    title: "Order Code",
+    dataIndex: "order_code",
+    key: "order_code",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (_, record) => {
+      return (
+        <CustomLink
+          title={record.order_code}
+          href={`/orders/${record.order_code}`}
+        />
+      );
+    },
+    sorter: true,
+  },
+  {
+    title: "Order Type",
+    dataIndex: "order_type",
+    key: "order_type",
+    render: (order_type: number) => {
+      return <Text>{getOrderTypeText(order_type as OrderType)}</Text>;
+    },
+  },
+  {
+    title: "Order Status",
+    dataIndex: "order_status",
+    key: "order_status",
+    render: (order_status: number) => {
+      let statusName = '';
+      switch (order_status) {
+        case 0: statusName = 'pending'; break;
+        case 1: statusName = 'confirmed'; break;
+        case 2: statusName = 'preparing'; break;
+        case 3: statusName = 'ready'; break;
+        case 4: statusName = 'completed'; break;
+        case 5: statusName = 'cancelled'; break;
+        default: statusName = 'unknown'; break;
+      }
+      return <StatusTag status={statusName} />;
+    },
+  },
+  {
+    title: "Payment Status",
+    dataIndex: "payment_status",
+    key: "payment_status",
+    render: (payment_status: number) => {
+      let statusName = '';
+      switch (payment_status) {
+        case 0: statusName = 'pending'; break;
+        case 1: statusName = 'paid'; break;
+        case 2: statusName = 'failed'; break;
+        default: statusName = 'unknown'; break;
+      }
+      return <StatusTag status={statusName} />;
+    },
+  },
+  {
+    title: "Total Amount",
+    dataIndex: "total_amount",
+    key: "total_amount",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (total_amount: number) => {
+      const roundedAmount = Math.round(total_amount * 100) / 100;
+      const formattedAmount = roundedAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      return <Text strong>{formattedAmount}</Text>;
+    },
+    sorter: true,
+  },
+  {
+    title: "Created At",
+    dataIndex: "created_at",
+    key: "created_at",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (created_at: string) => {
+      return <Text>{formatDate(created_at)}</Text>;
     },
     sorter: true,
   },

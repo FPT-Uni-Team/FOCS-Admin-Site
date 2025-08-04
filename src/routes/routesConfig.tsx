@@ -5,6 +5,7 @@ import {
   ProfileOutlined,
   TagOutlined,
   UserOutlined,
+  ShoppingCartOutlined,
 } from "@ant-design/icons";
 import React, {
   lazy,
@@ -63,6 +64,7 @@ const VariantGroupListPage = lazy(() => import("../pages/variant/VariantGroupLis
 const VariantGroupDetailPage = lazy(() => import("../pages/variant/VariantGroupDetailPage"));
 const VariantGroupUpdatePage = lazy(() => import("../pages/variant/VariantGroupUpdatePage"));
 const VariantGroupCreatePage = lazy(() => import("../pages/variant/VariantGroupCreatePage"));
+const OrderListPage = lazy(() => import("../pages/order/OrderListPage"));
 
 export interface AppRoute {
   path: string;
@@ -235,7 +237,12 @@ export const routes: AppRoute[] = [
     component: VariantGroupUpdatePage,
     hidden: true,
   },
-
+  {
+    path: "/orders",
+    component: OrderListPage,
+    label: "Orders",
+    icon: <ShoppingCartOutlined />,
+  },
 ];
 
 export default routes;

@@ -87,6 +87,9 @@ const endpoints = {
     changeStatus: (tableId: string, storeId: string) => 
       `${API_BASE_URL}/manager/table/status?tableId=${tableId}&storeId=${storeId}`,
   },
+  order: {
+    list: () => `${API_BASE_URL}/cashier/orders`,
+  },
 };
 
 export default endpoints;
