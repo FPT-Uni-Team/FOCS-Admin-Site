@@ -42,6 +42,26 @@ const defaultFormatFilters = (filters: Record<string, unknown>) => {
     filters.is_active.length > 0
   ) {
     formatted.is_active = filters.is_active === "true" ? true : false;
+  } else if (
+    typeof filters.is_required === "string" &&
+    filters.is_required.length > 0
+  ) {
+    formatted.is_required = filters.is_required === "true" ? true : false;
+  }
+
+  // Handle numeric filters
+  if (
+    typeof filters.min_select === "string" &&
+    filters.min_select.length > 0
+  ) {
+    formatted.min_select = parseInt(filters.min_select);
+  }
+
+  if (
+    typeof filters.max_select === "string" &&
+    filters.max_select.length > 0
+  ) {
+    formatted.max_select = parseInt(filters.max_select);
   }
 
   Object.keys(formatted).forEach((key) => {

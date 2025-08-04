@@ -14,6 +14,7 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
   selectConfigs = [],
   onSearch,
   isShowFilter = false,
+  searchPlaceholder = "Search ...",
 }) => {
   const [showForm, setShowForm] = useState(isShowFilter);
   const [form] = Form.useForm();
@@ -67,7 +68,7 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
           <Input
             allowClear
             className={styles.customSearch}
-            placeholder="Search ..."
+            placeholder={searchPlaceholder}
             value={searchValue}
             suffix={<SearchOutlined onClick={() => onSearch(searchValue)} />}
             onChange={(e) => setSearchValue(e.target.value)}

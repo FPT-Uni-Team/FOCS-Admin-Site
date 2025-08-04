@@ -16,6 +16,7 @@ export interface FilterReuseProps {
   selectConfigs?: SelectConfig[];
   onSearch: (value: string) => void;
   isShowFilter?: boolean;
+  searchPlaceholder?: string;
 }
 
 export interface ListPageParams {

@@ -22,7 +22,7 @@ function* fetchVariantGroupsList(
     const total = response.data.total_count;
     yield put(
       fetchVariantGroupsSuccess({
-        menuItems: response.data.items,
+        variantGroups: response.data.items,
         total: total,
       })
     );
