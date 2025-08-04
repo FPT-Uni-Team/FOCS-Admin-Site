@@ -1,4 +1,4 @@
-import { call, put, takeLatest, type Effect } from "redux-saga/effects";
+import { call, put, takeLatest, all, type Effect } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { AxiosResponse } from "axios";
 import type {
@@ -11,8 +11,25 @@ import {
   fetchOrdersStart,
   fetchOrdersSuccess,
 } from "../../slices/order/orderListSlice";
+import {
+  fetchOrderDetailStart,
+  fetchOrderDetailSuccess,
+  fetchOrderDetailFailure,
+} from "../../slices/order/orderDetailSlice";
+import type { OrderDTO } from "../../../type/order/order";
+import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 
-const { getListOrders } = orderService;
+const { getListOrders, getOrderDetail } = orderService;
+
+interface ApiError {
+  message?: string;
+  response?: {
+    status?: number;
+    data?: {
+      message?: string;
+    };
+  };
+}
 
 function* fetchOrderList(
   action: PayloadAction<ListPageParams>
@@ -30,6 +47,25 @@ function* fetchOrderList(
   }
 }
 
+function* handleFetchOrderDetail(
+  action: PayloadAction<{ orderCode: string }>
+): Generator<Effect, void, AxiosResponse<OrderDTO>> {
+  try {
+    const { orderCode } = action.payload;
+    const response = yield call(getOrderDetail, orderCode);
+    yield put(fetchOrderDetailSuccess(response.data));
+  } catch (error: unknown) {
+    const err = error as ApiError;
+    const errorMessage = err.response?.data?.message || err.message || "Failed to fetch order detail";
+    yield put(fetchOrderDetailFailure(errorMessage));
+  }
+}
+
 export default function* orderSaga() {
-  yield takeLatest(fetchOrdersStart.type, fetchOrderList);
+  yield all([
+    takeLatest(fetchOrdersStart.type, fetchOrderList),
+    takeLatest(fetchOrderDetailStart.type, function* (action) {
+      yield* withGlobalLoading(handleFetchOrderDetail, action);
+    }),
+  ]);
 }

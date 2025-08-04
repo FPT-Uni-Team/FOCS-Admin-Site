@@ -89,6 +89,7 @@ const endpoints = {
   },
   order: {
     list: () => `${API_BASE_URL}/cashier/orders`,
+    detail: (orderCode: string) => `${API_BASE_URL}/order/order-by-code/${orderCode}`,
   },
 };
 

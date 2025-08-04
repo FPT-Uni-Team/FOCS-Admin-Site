@@ -65,6 +65,7 @@ const VariantGroupDetailPage = lazy(() => import("../pages/variant/VariantGroupD
 const VariantGroupUpdatePage = lazy(() => import("../pages/variant/VariantGroupUpdatePage"));
 const VariantGroupCreatePage = lazy(() => import("../pages/variant/VariantGroupCreatePage"));
 const OrderListPage = lazy(() => import("../pages/order/OrderListPage"));
+const OrderDetailPage = lazy(() => import("../pages/order/OrderDetailPage"));
 
 export interface AppRoute {
   path: string;
@@ -242,6 +243,11 @@ export const routes: AppRoute[] = [
     component: OrderListPage,
     label: "Orders",
     icon: <ShoppingCartOutlined />,
+  },
+  {
+    path: "/orders/:orderCode",
+    component: OrderDetailPage,
+    hidden: true,
   },
 ];
 
