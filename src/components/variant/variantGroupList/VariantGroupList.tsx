@@ -6,7 +6,6 @@ import FilterReuse from "../../common/Filter/FilterReuse";
 import { useAppSelector } from "../../../hooks/redux";
 import type { VariantGroup } from "../../../type/variant/variant";
 import type { ListPageParams } from "../../../type/common/common";
-import { defaultParams } from "../../../type/common/common";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
 import { createOnTableChangeHandler } from "../../common/Table/HandleTableChange/HandleTableChange";
 import { createOnFilterHandler } from "../../../helper/formatFilters";
@@ -23,7 +22,15 @@ const VariantGroupList: FC<VariantGroupListProps> = ({ fetchData }) => {
     (state) => state.variantGroup
   );
 
-  const [params, setParams] = useState<ListPageParams>(defaultParams());
+  const [params, setParams] = useState<ListPageParams>({
+    page: 1,
+    page_size: 10,
+    search_by: "",
+    search_value: "",
+    sort_by: "",
+    sort_order: "",
+    filters: {},
+  });
 
   const onFilter = createOnFilterHandler({
     setParams,
@@ -196,13 +203,16 @@ const VariantGroupList: FC<VariantGroupListProps> = ({ fetchData }) => {
     },
   ];
 
+ 
   return (
     <div>
       <FilterReuse
         onFilter={onFilter}
         selectConfigs={selectConfigs}
         onSearch={onSearch}
+
       />
+      
       <ContentInner>
         <TableReuse<VariantGroup>
           columns={columns}

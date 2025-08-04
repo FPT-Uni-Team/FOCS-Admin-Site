@@ -36,12 +36,12 @@ const variantGroupSlice = createSlice({
     fetchVariantGroupsSuccess: (
       state,
       action: PayloadAction<{
-        menuItems: VariantGroup[];
+        variantGroups: VariantGroup[];
         total: number;
       }>
     ) => {
       state.loading = false;
-      state.variantGroupsList = action.payload.menuItems;
+      state.variantGroupsList = action.payload.variantGroups;
       state.error = null;
       state.total = action.payload.total;
     },
