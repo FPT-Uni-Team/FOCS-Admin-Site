@@ -1,8 +1,9 @@
-import { Col, Form, Input, Row, type FormInstance } from "antd";
+import { Col, Form, Input, Row, type FormInstance, Card, Table, Tag } from "antd";
 import { useEffect } from "react";
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 import type { VariantGroup } from "../../type/variant/variant";
 import { useAppSelector } from "../../hooks/redux";
+import { formatPrice } from "../../helper/formatPrice";
 
 interface Props {
   mode?: "Update" | "Create" | "Detail";
@@ -20,6 +21,49 @@ const VariantGroupForm: React.FC<Props> = ({ mode = "Create", form, initData }) 
       });
     }
   }, [initData, form, mode]);
+
+  const variantColumns = [
+    {
+      title: "Variant Name",
+      dataIndex: "name",
+      key: "name",
+      width: "30%",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      width: "20%",
+      render: (price: number) => formatPrice(price),
+    },
+    {
+      title: "Available",
+      dataIndex: "is_available",
+      key: "is_available",
+      width: "15%",
+      render: (is_available: boolean) => (
+        <Tag color={is_available ? "green" : "red"}>
+          {is_available ? "Available" : "Unavailable"}
+        </Tag>
+      ),
+    },
+    {
+      title: "Prep Time (min)",
+      dataIndex: "prep_per_time",
+      key: "prep_per_time",
+      width: "15%",
+      render: (prep_per_time: number | undefined) =>
+        prep_per_time ? `${prep_per_time} min` : "-",
+    },
+    {
+      title: "Quantity per Time",
+      dataIndex: "quantity_per_time",
+      key: "quantity_per_time",
+      width: "20%",
+      render: (quantity_per_time: number | undefined) =>
+        quantity_per_time || "-",
+    },
+  ];
 
   return (
     <ContentInner style={{ minHeight: "fit-content" }}>
@@ -76,6 +120,27 @@ const VariantGroupForm: React.FC<Props> = ({ mode = "Create", form, initData }) 
             </Form.Item>
           </Col>
         </Row>
+
+        {initData && initData.variants && initData.variants.length > 0 && (
+          <Row style={{ marginTop: 24 }}>
+            <Col span={24}>
+              <Card title="Variants" size="small">
+                <Table
+                  columns={variantColumns}
+                  dataSource={initData.variants}
+                  rowKey="id"
+                  pagination={{
+                    pageSize: 10,
+                    showSizeChanger: true,
+                    showQuickJumper: true,
+                    showTotal: (total, range) =>
+                      `${range[0]}-${range[1]} of ${total} items`,
+                  }}
+                />
+              </Card>
+            </Col>
+          </Row>
+        )}
       </Form>
     </ContentInner>
   );

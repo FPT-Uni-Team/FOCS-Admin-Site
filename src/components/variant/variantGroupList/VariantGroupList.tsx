@@ -53,6 +53,7 @@ const VariantGroupList: FC<VariantGroupListProps> = ({ fetchData }) => {
       title: "Variant Group Name",
       dataIndex: "group_name",
       key: "group_name",
+      width: 400,
       sorter: true,
       render: (text: string, record: VariantGroup) => (
         <CustomLink title={text} href={`/variant-groups/${record.id}`} />
@@ -62,45 +63,17 @@ const VariantGroupList: FC<VariantGroupListProps> = ({ fetchData }) => {
       title: "Variants Count",
       dataIndex: "variants",
       key: "variants_count",
-      width: 150,
+      width: 250,
       align: "center",
       render: (variants: VariantGroup["variants"]) => (
         <Tag color="blue">{variants?.length || 0} variants</Tag>
       ),
     },
     {
-      title: "Min Select",
-      dataIndex: "min_select",
-      key: "min_select",
-      width: 120,
-      align: "center",
-      sorter: true,
-      render: (text: number) => text || "-",
-    },
-    {
-      title: "Max Select",
-      dataIndex: "max_select",
-      key: "max_select",
-      width: 120,
-      align: "center",
-      sorter: true,
-      render: (text: number) => text || "-",
-    },
-    {
-      title: "Required",
-      dataIndex: "is_required",
-      key: "is_required",
-      width: 100,
-      align: "center",
-      render: (checked: boolean) => (
-        <Switch checked={checked} disabled size="small" />
-      ),
-    },
-    {
       title: "Available Variants",
       dataIndex: "variants",
       key: "available_variants",
-      width: 150,
+      width: 250,
       align: "center",
       render: (variants: VariantGroup["variants"]) => {
         const availableCount = variants?.filter(v => v.is_available)?.length || 0;
@@ -112,7 +85,6 @@ const VariantGroupList: FC<VariantGroupListProps> = ({ fetchData }) => {
         );
       },
     },
-
   ];
 
   const expandedRowRender = (group: VariantGroup) => {

@@ -1,7 +1,6 @@
 import { useForm } from "antd/es/form/Form";
-import VariantGroupForm from "../../components/variant/VariantGroupForm";
-import TitleLine from "../../components/common/Title/TitleLine";
-import { useCallback, useEffect } from "react";
+import VariantGroupCreateModal from "../../components/variant/VariantGroupCreateModal";
+import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
   createVariantGroupStart,
@@ -14,25 +13,27 @@ const VariantGroupCreatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { success, error } = useAppSelector((state) => state.variantGroupCreate);
+  const { success, error, loading } = useAppSelector((state) => state.variantGroupCreate);
+  const [modalVisible, setModalVisible] = useState(true);
 
   const handleCreateVariantGroup = useCallback(() => {
-    form
-      .validateFields()
-      .then(() => {
-        const allFormValues = form.getFieldsValue();
-        const dataPayload = {
-          name: allFormValues.name,
-        };
-        dispatch(createVariantGroupStart(dataPayload));
-      })
-      .catch(() => {});
+    const allFormValues = form.getFieldsValue();
+    const dataPayload = {
+      name: allFormValues.name,
+    };
+    dispatch(createVariantGroupStart(dataPayload));
   }, [dispatch, form]);
+
+  const handleCancel = () => {
+    setModalVisible(false);
+    navigate("/variant-groups");
+  };
 
   useEffect(() => {
     if (success) {
       showNotification("success", "Create variant group success!");
       dispatch(resetVariantGroupCreate());
+      setModalVisible(false);
       navigate("/variant-groups");
     }
   }, [dispatch, navigate, success]);
@@ -45,10 +46,13 @@ const VariantGroupCreatePage = () => {
   }, [dispatch, error]);
 
   return (
-    <>
-      <TitleLine title="New Variant Group" onCreate={handleCreateVariantGroup} />
-      <VariantGroupForm form={form} mode="Create" />
-    </>
+    <VariantGroupCreateModal
+      visible={modalVisible}
+      onCancel={handleCancel}
+      onOk={handleCreateVariantGroup}
+      form={form}
+      loading={loading}
+    />
   );
 };
 

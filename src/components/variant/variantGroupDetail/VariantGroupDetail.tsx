@@ -82,30 +82,6 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = 
         </Col>
       </Row>
 
-      <Row gutter={24}>
-        <Col span={8}>
-          <Form.Item label="Min Select" style={{ marginBottom: 16 }}>
-            <div style={{ padding: '8px 12px', backgroundColor: '#f5f5f5', borderRadius: '6px' }}>
-              {variantGroupDetail?.min_select || "No limit"}
-            </div>
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item label="Max Select" style={{ marginBottom: 16 }}>
-            <div style={{ padding: '8px 12px', backgroundColor: '#f5f5f5', borderRadius: '6px' }}>
-              {variantGroupDetail?.max_select || "No limit"}
-            </div>
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item label="Total Variants" style={{ marginBottom: 16 }}>
-            <div style={{ padding: '8px 12px', backgroundColor: '#f5f5f5', borderRadius: '6px' }}>
-              {variantGroupDetail?.variants?.length || 0} variants
-            </div>
-          </Form.Item>
-        </Col>
-      </Row>
-
       <Row className={styles.variantTable}>
         <Col span={24}>
           <Card title="Variants" size="small">
