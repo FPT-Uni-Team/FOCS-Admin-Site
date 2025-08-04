@@ -17,8 +17,7 @@ const variantGroupDetailSlice = createSlice({
   name: "variantGroupDetail",
   initialState,
   reducers: {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    fetchVariantGroupDetailStart: (state, action: PayloadAction<string>) => {
+    fetchVariantGroupDetailStart: (state, _action: PayloadAction<string>) => {
       state.loading = true;
       state.error = null;
     },

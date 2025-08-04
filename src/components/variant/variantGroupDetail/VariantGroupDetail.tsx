@@ -17,16 +17,16 @@ import styles from "./VariantGroupDetail.module.scss";
 interface Props {
   form: FormInstance;
   variantGroupDetail: VariantGroup;
+  mode?: "View" | "Update";
 }
 
-const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail }) => {
+const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = "View" }) => {
+  const isEditMode = mode === "Update";
   useEffect(() => {
     if (variantGroupDetail) {
       form.setFieldsValue({
         group_name: variantGroupDetail.group_name,
         is_required: variantGroupDetail.is_required,
-        min_select: variantGroupDetail.min_select,
-        max_select: variantGroupDetail.max_select,
       });
     }
   }, [variantGroupDetail, form]);
@@ -79,17 +79,7 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail }) => {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item label="Group Name" name="group_name">
-            <Input disabled />
-          </Form.Item>
-        </Col>
-        <Col span={6}>
-          <Form.Item label="Minimum Select" name="min_select">
-            <Input disabled />
-          </Form.Item>
-        </Col>
-        <Col span={6}>
-          <Form.Item label="Maximum Select" name="max_select">
-            <Input disabled />
+            <Input disabled={!isEditMode} />
           </Form.Item>
         </Col>
       </Row>
@@ -102,7 +92,7 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail }) => {
             style={{ marginBottom: 0 }}
           >
             <div className={styles.switchWrapper}>
-              <Switch disabled />
+              <Switch disabled={!isEditMode} />
               <span>Required Selection</span>
             </div>
           </Form.Item>

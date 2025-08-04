@@ -1,6 +1,7 @@
 import { call, put, takeLatest, type Effect } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { AxiosResponse } from "axios";
+import type { AxiosResponse, AxiosError } from "axios";
+
 import type {
   ListPageParams,
   ListPageResponse,
@@ -15,11 +16,17 @@ import {
   fetchVariantGroupDetailStart,
   fetchVariantGroupDetailSuccess,
 } from "../../slices/variant/variantGroupDetailSlice";
+import {
+  updateVariantGroupStart,
+  updateVariantGroupSuccess,
+  updateVariantGroupFailure,
+} from "../../slices/variant/variantGroupUpdateSlice";
 
 import variantGroupsService from "../../../services/variantService";
-import type { VariantGroup } from "../../../type/variant/variant";
+import type { VariantGroup, VariantGroupUpdateRequest } from "../../../type/variant/variant";
+import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 
-const { getListVariantGroups, getDetailVariantGroup } = variantGroupsService;
+const { getListVariantGroups, getDetailVariantGroup, updateVariantGroup } = variantGroupsService;
 
 function* fetchVariantGroupsList(
   action: PayloadAction<ListPageParams>
@@ -53,7 +60,27 @@ function* fetchVariantGroupDetail(
   }
 }
 
+function* fetchUpdateVariantGroup(
+  action: PayloadAction<{ id: string; payload: VariantGroupUpdateRequest }>
+): Generator<Effect, void, AxiosResponse<VariantGroupUpdateRequest>> {
+  try {
+    const response = yield call(() => updateVariantGroup(action.payload.id, action.payload.payload));
+    yield put(updateVariantGroupSuccess(response.data));
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred while updating variant group";
+    yield put(updateVariantGroupFailure(message));
+  }
+}
+
 export function* watchVariantSaga() {
   yield takeLatest(fetchVariantGroupsStart.type, fetchVariantGroupsList);
   yield takeLatest(fetchVariantGroupDetailStart.type, fetchVariantGroupDetail);
+  yield takeLatest(updateVariantGroupStart.type, function* (action) {
+    yield* withGlobalLoading(fetchUpdateVariantGroup, action);
+  });
 }

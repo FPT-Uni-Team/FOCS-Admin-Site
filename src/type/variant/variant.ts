@@ -15,3 +15,7 @@ export interface VariantGroup {
   max_select?: number;
   variants: Variant[];
 }
+
+export interface VariantGroupUpdateRequest {
+  name: string;
+}
