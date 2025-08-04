@@ -1,11 +1,13 @@
 import axiosClient from "../api/axiosClient";
 import endpoints from "../api/endpoint";
 import type { ListPageParams } from "../type/common/common";
-import type { VariantGroupUpdateRequest } from "../type/variant/variant";
+import type { VariantGroupCreateRequest, VariantGroupUpdateRequest } from "../type/variant/variant";
 
 const variantGroupsService = {
   getListVariantGroups: (params: ListPageParams) =>
     axiosClient.post(endpoints.variant.list(), params),
+  createVariantGroup: (payload: VariantGroupCreateRequest) =>
+    axiosClient.post(endpoints.variant.create(), payload),
   getDetailVariantGroup: (id: string) =>
     axiosClient.get(endpoints.variant.detail(id)),
   updateVariantGroup: (id: string, payload: VariantGroupUpdateRequest) =>

@@ -19,3 +19,7 @@ export interface VariantGroup {
 export interface VariantGroupUpdateRequest {
   name: string;
 }
+
+export interface VariantGroupCreateRequest {
+  name: string;
+}

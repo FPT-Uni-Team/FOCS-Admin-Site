@@ -62,6 +62,7 @@ const TableUpdatePage = lazy(() => import("../pages/table/TableUpdatePage"));
 const VariantGroupListPage = lazy(() => import("../pages/variant/VariantGroupListPage"));
 const VariantGroupDetailPage = lazy(() => import("../pages/variant/VariantGroupDetailPage"));
 const VariantGroupUpdatePage = lazy(() => import("../pages/variant/VariantGroupUpdatePage"));
+const VariantGroupCreatePage = lazy(() => import("../pages/variant/VariantGroupCreatePage"));
 
 export interface AppRoute {
   path: string;
@@ -218,6 +219,11 @@ export const routes: AppRoute[] = [
     component: VariantGroupListPage,
     label: "Variant Groups",
     icon: <BranchesOutlined />,
+  },
+  {
+    path: "/variant-groups/create",
+    component: VariantGroupCreatePage,
+    hidden: true,
   },
   {
     path: "/variant-groups/:variantGroupId",

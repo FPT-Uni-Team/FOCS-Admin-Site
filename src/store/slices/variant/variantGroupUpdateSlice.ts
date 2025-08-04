@@ -5,14 +5,16 @@ interface VariantGroupUpdateState {
   loading: boolean;
   success: boolean;
   error: string | null;
-  variantGroupSuccess: VariantGroupUpdateRequest | null;
+  variantGroupSuccess: VariantGroupUpdateRequest;
 }
 
 const initialState: VariantGroupUpdateState = {
   loading: false,
   success: false,
   error: null,
-  variantGroupSuccess: null,
+  variantGroupSuccess: {
+    name: "",
+  },
 };
 
 const variantGroupUpdateSlice = createSlice({
@@ -25,7 +27,7 @@ const variantGroupUpdateSlice = createSlice({
         state.success = false;
         state.error = null;
       },
-      prepare: (payload: { id: string; payload: VariantGroupUpdateRequest }) => ({ payload }),
+      prepare: (payload) => ({ payload }),
     },
     updateVariantGroupSuccess: (state, action: PayloadAction<VariantGroupUpdateRequest>) => {
       state.loading = false;
@@ -41,7 +43,6 @@ const variantGroupUpdateSlice = createSlice({
       state.loading = false;
       state.success = false;
       state.error = null;
-      state.variantGroupSuccess = null;
     },
   },
 });

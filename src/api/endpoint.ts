@@ -65,6 +65,7 @@ const endpoints = {
   },
   variant: {
     list: () => `${API_BASE_URL}/admin/variant-group/variants`,
+    create: () => `${API_BASE_URL}/admin/variant-group`,
     detail: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
     update: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
   },

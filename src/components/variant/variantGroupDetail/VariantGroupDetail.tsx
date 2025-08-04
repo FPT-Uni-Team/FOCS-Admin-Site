@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import {
   Form,
   Input,
-  Switch,
   Row,
   Col,
   type FormInstance,
@@ -26,7 +25,6 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = 
     if (variantGroupDetail) {
       form.setFieldsValue({
         group_name: variantGroupDetail.group_name,
-        is_required: variantGroupDetail.is_required,
       });
     }
   }, [variantGroupDetail, form]);
@@ -86,14 +84,23 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = 
 
       <Row gutter={24}>
         <Col span={8}>
-          <Form.Item
-            name="is_required"
-            valuePropName="checked"
-            style={{ marginBottom: 0 }}
-          >
-            <div className={styles.switchWrapper}>
-              <Switch disabled={!isEditMode} />
-              <span>Required Selection</span>
+          <Form.Item label="Min Select" style={{ marginBottom: 16 }}>
+            <div style={{ padding: '8px 12px', backgroundColor: '#f5f5f5', borderRadius: '6px' }}>
+              {variantGroupDetail?.min_select || "No limit"}
+            </div>
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item label="Max Select" style={{ marginBottom: 16 }}>
+            <div style={{ padding: '8px 12px', backgroundColor: '#f5f5f5', borderRadius: '6px' }}>
+              {variantGroupDetail?.max_select || "No limit"}
+            </div>
+          </Form.Item>
+        </Col>
+        <Col span={8}>
+          <Form.Item label="Total Variants" style={{ marginBottom: 16 }}>
+            <div style={{ padding: '8px 12px', backgroundColor: '#f5f5f5', borderRadius: '6px' }}>
+              {variantGroupDetail?.variants?.length || 0} variants
             </div>
           </Form.Item>
         </Col>

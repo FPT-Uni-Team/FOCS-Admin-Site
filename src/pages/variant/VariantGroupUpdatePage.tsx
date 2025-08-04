@@ -1,19 +1,15 @@
 import { useForm } from "antd/es/form/Form";
+import VariantGroupForm from "../../components/variant/VariantGroupForm";
+import TitleLine from "../../components/common/Title/TitleLine";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCallback, useEffect } from "react";
-
-import TitleLine from "../../components/common/Title/TitleLine";
-
 import { fetchVariantGroupDetailStart } from "../../store/slices/variant/variantGroupDetailSlice";
 import {
   updateVariantGroupStart,
   resetVariantGroupUpdate,
 } from "../../store/slices/variant/variantGroupUpdateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
-import VariantGroupDetail from "../../components/variant/variantGroupDetail/VariantGroupDetail";
-import type { VariantGroup, VariantGroupUpdateRequest } from "../../type/variant/variant";
-import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 
 const VariantGroupUpdatePage = () => {
   const [form] = useForm();
@@ -25,37 +21,18 @@ const VariantGroupUpdatePage = () => {
   const { success, error } = useAppSelector((state) => state.variantGroupUpdate);
 
   const handleUpdateVariantGroup = useCallback(() => {
-    if (!variantGroupDetail) {
-      showNotification("error", "Please wait for data to load before updating");
-      return;
-    }
-
     form
       .validateFields()
       .then(() => {
-        const values = form.getFieldsValue();
-        const originalData = variantGroupDetail;
-        const changedFields: Partial<VariantGroupUpdateRequest> = {};
-        
-        if (values.group_name !== originalData?.group_name) {
-          changedFields.name = values.group_name || "";
-        }
-        
-        if (Object.keys(changedFields).length === 0) {
-          showNotification("info", "No changes detected");
-          return;
-        }
-        
-        dispatch(updateVariantGroupStart({ id: variantGroupId || "", payload: changedFields as VariantGroupUpdateRequest }));
+        const allFormValues = form.getFieldsValue();
+        const dataPayload = {
+          id: variantGroupId || "",
+          name: allFormValues.name,
+        };
+        dispatch(updateVariantGroupStart(dataPayload));
       })
       .catch(() => {});
-  }, [dispatch, form, variantGroupId, variantGroupDetail]);
-
-  useEffect(() => {
-    if (variantGroupId) {
-      dispatch(fetchVariantGroupDetailStart(variantGroupId));
-    }
-  }, [dispatch, variantGroupId]);
+  }, [variantGroupId, dispatch, form]);
 
   useEffect(() => {
     if (success) {
@@ -72,6 +49,10 @@ const VariantGroupUpdatePage = () => {
     }
   }, [dispatch, error]);
 
+  useEffect(() => {
+    dispatch(fetchVariantGroupDetailStart(variantGroupId || ""));
+  }, [dispatch, variantGroupId]);
+
   return (
     <>
       <TitleLine
@@ -79,13 +60,7 @@ const VariantGroupUpdatePage = () => {
         onCreate={handleUpdateVariantGroup}
         createButtonText="Update"
       />
-      <ContentInner>
-        <VariantGroupDetail 
-          form={form} 
-          variantGroupDetail={variantGroupDetail as VariantGroup}
-          mode="Update"
-        />
-      </ContentInner>
+      <VariantGroupForm form={form} mode="Update" initData={variantGroupDetail || undefined} />
     </>
   );
 };
