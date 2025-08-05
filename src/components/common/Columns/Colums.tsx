@@ -27,6 +27,8 @@ import {
   getOrderTypeText,
   type OrderType
 } from "../../../type/order/order";
+import type { FeedbackListDataType } from "../../../type/feedback/feedback";
+import { Rate, Image } from "antd";
 const { Text } = Typography;
 
 export const columnsMenuItem: ColumnsType<MenuListDataType> = [
@@ -651,4 +653,142 @@ export const columnsOrderList: ColumnsType<OrderListDataType> = [
   },
 ];
 
+export const columnsFeedback: ColumnsType<FeedbackListDataType> = [
+  {
+    title: "Order ID",
+    dataIndex: "order_id",
+    key: "order_id",
+    render: (order_id: string) => {
+      return (
+        <Text 
+          copyable={{ text: order_id }}
+          style={{ fontFamily: 'monospace', fontSize: '12px' }}
+        >
+          {order_id?.slice(0, 8)}...
+        </Text>
+      );
+    },
+  },
+  {
+    title: "Rating",
+    dataIndex: "rating",
+    key: "rating",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (rating: number) => {
+      return <Rate disabled defaultValue={rating} />;
+    },
+    sorter: true,
+  },
+  {
+    title: "Comment",
+    dataIndex: "comment",
+    key: "comment",
+    render: (comment: string) => {
+      return (
+        <Text ellipsis={{ tooltip: comment }} style={{ maxWidth: 250 }}>
+          {comment}
+        </Text>
+      );
+    },
+  },
+     {
+     title: "Images",
+     dataIndex: "images",
+     key: "images",
+     render: (images: string[]) => {
+       if (!images || images.length === 0) {
+         return <Text type="secondary">No images</Text>;
+       }
+       return (
+         <Image.PreviewGroup>
+           <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+             {images.slice(0, 3).map((image, index) => (
+               <Image
+                 key={index}
+                 src={image}
+                 alt={`Feedback image ${index + 1}`}
+                 width={40}
+                 height={40}
+                 style={{
+                   objectFit: 'cover',
+                   borderRadius: '4px',
+                   border: '1px solid #d9d9d9',
+                 }}
+                 preview={{
+                   mask: 'Click to view'
+                 }}
+               />
+             ))}
+             {images.length > 3 && (
+               <Image
+                 src={images[3]}
+                 alt={`Feedback image 4`}
+                 width={40}
+                 height={40}
+                 style={{
+                   objectFit: 'cover',
+                   borderRadius: '4px',
+                   border: '1px solid #d9d9d9',
+                 }}
+                 preview={{
+                   mask: `+${images.length - 3} more`
+                 }}
+               />
+             )}
+           
+             {images.slice(4).map((image, index) => (
+               <Image
+                 key={`hidden-${index + 4}`}
+                 src={image}
+                 alt={`Feedback image ${index + 5}`}
+                 style={{ display: 'none' }}
+               />
+             ))}
+           </div>
+         </Image.PreviewGroup>
+       );
+     },
+   },
+  {
+    title: "Public",
+    dataIndex: "is_public",
+    key: "is_public",
+    render: (is_public: boolean) => {
+      return <StatusTag status={is_public ? 'public' : 'private'} />;
+    },
+  },
+  {
+    title: "Reply",
+    dataIndex: "reply",
+    key: "reply",
+    render: (reply: string | null) => {
+      if (!reply) {
+        return <Text type="secondary">No reply</Text>;
+      }
+      return (
+        <Text ellipsis={{ tooltip: reply }} style={{ maxWidth: 200 }}>
+          {reply}
+        </Text>
+      );
+    },
+  },
+  {
+    title: "Created At",
+    dataIndex: "created_at",
+    key: "created_at",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (created_at: string) => {
+      return <Text>{formatDate(created_at)}</Text>;
+    },
+    sorter: true,
+  },
+];
 

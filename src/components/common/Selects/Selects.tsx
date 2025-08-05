@@ -3,6 +3,7 @@ import type { SelectConfig } from "../../../type/common/common";
 import { statusOptions } from "../../../type/menu/menu";
 import { tableStatusOptions } from "../../../type/table/table";
 import { orderStatusOptions, orderTypeOptions, paymentStatusOptions } from "../../../type/order/order";
+import { statusOptionsFeedback } from "../../../type/feedback/feedback";
 
 export const selectConfigsMenuStatus: SelectConfig[] = [
   {
@@ -85,5 +86,15 @@ export const selectConfigsOrderFilters: SelectConfig[] = [
     label: "Payment Status",
     placeholder: "Select Payment Status",
     options: paymentStatusOptions,
+  },
+];
+
+export const selectConfigsFeedbackStatus: SelectConfig[] = [
+  {
+    name: "is_resolved",
+    type: "select",
+    label: "Feedback Status",
+    placeholder: "Select Feedback Status",
+    options: statusOptionsFeedback,
   },
 ];

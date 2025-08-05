@@ -38,6 +38,7 @@ import tableUpdateSlice from "./slices/table/tableUpdateSlice";
 import tableChangeStatusSlice from "./slices/table/tableChangeStatusSlice";
 import orderListSlice from "./slices/order/orderListSlice";
 import orderDetailSlice from "./slices/order/orderDetailSlice";
+import feedbackListSlice from "./slices/feedback/feedbackListSlice";
 
 const rootReducer = combineReducers({
   promotion: promotionSlice,
@@ -79,6 +80,7 @@ const rootReducer = combineReducers({
   changeTableStatus: tableChangeStatusSlice,
   orderList: orderListSlice,
   orderDetail: orderDetailSlice,
+  feedbackList: feedbackListSlice,
 });
 
 export default rootReducer;
