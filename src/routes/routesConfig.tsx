@@ -1,15 +1,15 @@
 import {
   AppstoreOutlined,
   BranchesOutlined,
-  DeploymentUnitOutlined,
   GiftOutlined,
   ProfileOutlined,
   TagOutlined,
   UserOutlined,
+  ShoppingCartOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
-import {
+import React, {
   lazy,
-  type JSX,
   type LazyExoticComponent,
   type ReactNode,
 } from "react";
@@ -61,10 +61,23 @@ const TableListPage = lazy(() => import("../pages/table/TableListPage"));
 const TableDetailPage = lazy(() => import("../pages/table/TableDetailPage"));
 const TableCreatePage = lazy(() => import("../pages/table/TableCreatePage"));
 const TableUpdatePage = lazy(() => import("../pages/table/TableUpdatePage"));
+const VariantGroupListPage = lazy(() => import("../pages/variant/VariantGroupListPage"));
+const VariantGroupDetailPage = lazy(() => import("../pages/variant/VariantGroupDetailPage"));
+const VariantGroupUpdatePage = lazy(() => import("../pages/variant/VariantGroupUpdatePage"));
+const VariantGroupCreatePage = lazy(() => import("../pages/variant/VariantGroupCreatePage"));
+const VariantListPage = lazy(() => import("../pages/variant/VariantListPage"));
+const VariantCreatePage = lazy(() => import("../pages/variant/VariantCreatePage"));
+const VariantDetailPage = lazy(() => import("../pages/variant/VariantDetailPage"));
+const VariantUpdatePage = lazy(() => import("../pages/variant/VariantUpdatePage"));
+const OrderListPage = lazy(() => import("../pages/order/OrderListPage"));
+const OrderDetailPage = lazy(() => import("../pages/order/OrderDetailPage"));
+const FeedbackListPage = lazy(() => import("../pages/feedback/FeedbackListPage"));
+const FeedbackDetailPage = lazy(() => import("../pages/feedback/FeedbackDetailPage"));
+const FeedbackUpdatePage = lazy(() => import("../pages/feedback/FeedbackUpdatePage"));
 
 export interface AppRoute {
   path: string;
-  component?: LazyExoticComponent<() => JSX.Element>;
+  component?: LazyExoticComponent<React.FC>;
   label?: string;
   icon?: ReactNode;
   hidden?: boolean;
@@ -213,16 +226,73 @@ export const routes: AppRoute[] = [
     hidden: true,
   },
   {
-    path: "/variantGroup",
-    component: StaffListPage,
-    label: "Variant Group",
+    path: "/variant-groups",
+    component: VariantGroupListPage,
+    label: "Variant Groups",
     icon: <BranchesOutlined />,
   },
   {
-    path: "/variant",
-    component: StaffListPage,
-    label: "Variant",
-    icon: <DeploymentUnitOutlined />,
+    path: "/variant-groups/create",
+    component: VariantGroupCreatePage,
+    hidden: true,
+  },
+  {
+    path: "/variant-groups/:variantGroupId",
+    component: VariantGroupDetailPage,
+    hidden: true,
+  },
+  {
+    path: "/variant-groups/:variantGroupId/update",
+    component: VariantGroupUpdatePage,
+    hidden: true,
+  },
+  {
+    path: "/variants",
+    component: VariantListPage,
+    label: "Variants",
+    icon: <BranchesOutlined />,
+  },
+  {
+    path: "/variants/create",
+    component: VariantCreatePage,
+    hidden: true,
+  },
+  {
+    path: "/variants/:variantId",
+    component: VariantDetailPage,
+    hidden: true,
+  },
+  {
+    path: "/variants/:variantId/update",
+    component: VariantUpdatePage,
+    hidden: true,
+  },
+  {
+    path: "/orders",
+    component: OrderListPage,
+    label: "Orders",
+    icon: <ShoppingCartOutlined />,
+  },
+  {
+    path: "/orders/:orderCode",
+    component: OrderDetailPage,
+    hidden: true,
+  },
+  {
+    path: "/feedbacks",
+    component: FeedbackListPage,
+    label: "Feedbacks",
+    icon: <MessageOutlined />,
+  },
+  {
+    path: "/feedbacks/:feedbackId",
+    component: FeedbackDetailPage,
+    hidden: true,
+  },
+  {
+    path: "/feedbacks/:feedbackId/update",
+    component: FeedbackUpdatePage,
+    hidden: true,
   },
 ];
 

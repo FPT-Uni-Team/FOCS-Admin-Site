@@ -9,6 +9,8 @@ import { watchCategorySaga } from "./sagas/category/categorySaga";
 import { watchVariantSaga } from "./sagas/variant/variantSaga";
 import { watchStaffSaga } from "./sagas/staff/staffSaga";
 import { watchTableSaga } from "./sagas/table/tableSaga";
+import orderSaga from "./sagas/order/orderSaga";
+import { watchFeedbackSaga } from "./sagas/feedback/feedbackSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -20,6 +22,8 @@ export default function* rootSaga() {
     fork(watchVariantSaga),
     fork(watchStaffSaga),
     fork(watchTableSaga),
+    fork(orderSaga),
+    fork(watchFeedbackSaga),
     // add saga
   ]);
 }

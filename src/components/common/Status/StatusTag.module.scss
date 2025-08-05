@@ -62,4 +62,68 @@
     color: #8c8c8c;
     border-color: #d9d9d9;
   }
+
+
+  &.pending {
+    background-color: #fff7e6;
+    color: #fa8c16;
+    border-color: #fa8c16;
+  }
+
+  &.confirmed {
+    background-color: #e6f4ff;
+    color: #1890ff;
+    border-color: #1890ff;
+  }
+
+  &.preparing {
+    background-color: #f9f0ff;
+    color: #722ed1;
+    border-color: #722ed1;
+  }
+
+  &.ready {
+    background-color: #f6ffed;
+    color: #52c41a;
+    border-color: #52c41a;
+  }
+
+  &.completed {
+    background-color: #f6ffed;
+    color: #52c41a;
+    border-color: #52c41a;
+  }
+
+  &.cancelled {
+    background-color: #fff1f0;
+    color: #cf1322;
+    border-color: #cf1322;
+  }
+
+  // Payment status colors
+  &.paid {
+    background-color: #f6ffed;
+    color: #52c41a;
+    border-color: #52c41a;
+  }
+
+  &.failed {
+    background-color: #fff1f0;
+    color: #cf1322;
+    border-color: #cf1322;
+  }
+
+
+  &.public {
+    background-color: #f6ffed;
+    color: #52c41a;
+    border-color: #52c41a;
+  }
+
+  &.hide {
+    background-color: #fff7e6;
+    color: #fa8c16;
+    border-color: #fa8c16;
+    font-weight: 600;
+  }
 }

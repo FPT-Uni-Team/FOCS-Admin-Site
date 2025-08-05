@@ -17,6 +17,13 @@ import promotionUpdateSlice from "./slices/promotion/promotionUpdateSlice";
 import changeStatusPromotionSlice from "./slices/promotion/promotionChangeStatusSlice";
 import categoryListSlice from "./slices/category/categoryListSlice";
 import variantGroupSlice from "./slices/variant/variantGroupSlice";
+import variantGroupDetailSlice from "./slices/variant/variantGroupDetailSlice";
+import variantGroupUpdateSlice from "./slices/variant/variantGroupUpdateSlice";
+import variantGroupCreateSlice from "./slices/variant/variantGroupCreateSlice";
+import variantListSlice from "./slices/variant/variantListSlice";
+import variantDetailSlice from "./slices/variant/variantDetailSlice";
+import variantUpdateSlice from "./slices/variant/variantUpdateSlice";
+import variantCreateSlice from "./slices/variant/variantCreateSlice";
 import menuItemCreateSlice from "./slices/menuItem/menuItemCreateSlice";
 import menuItemDetailSlice from "./slices/menuItem/menuItemDetailSlice";
 import categoryCreateSlice from "./slices/category/categoryCreateSlice";
@@ -33,6 +40,11 @@ import tableDetailSlice from "./slices/table/tableDetailSlice";
 import tableCreateSlice from "./slices/table/tableCreateSlice";
 import tableUpdateSlice from "./slices/table/tableUpdateSlice";
 import tableChangeStatusSlice from "./slices/table/tableChangeStatusSlice";
+import orderListSlice from "./slices/order/orderListSlice";
+import orderDetailSlice from "./slices/order/orderDetailSlice";
+import feedbackListSlice from "./slices/feedback/feedbackListSlice";
+import feedbackDetailSlice from "./slices/feedback/feedbackDetailSlice";
+import feedbackUpdateSlice from "./slices/feedback/feedbackUpdateSlice";
 
 const rootReducer = combineReducers({
   promotion: promotionSlice,
@@ -53,6 +65,13 @@ const rootReducer = combineReducers({
   changeStatusPromotion: changeStatusPromotionSlice,
   categoryList: categoryListSlice,
   variantGroup: variantGroupSlice,
+  variantGroupDetail: variantGroupDetailSlice,
+  variantGroupUpdate: variantGroupUpdateSlice,
+  variantGroupCreate: variantGroupCreateSlice,
+  variantList: variantListSlice,
+  variantDetail: variantDetailSlice,
+  variantUpdate: variantUpdateSlice,
+  variantCreate: variantCreateSlice,
   menuItemCreate: menuItemCreateSlice,
   menuItemDetail: menuItemDetailSlice,
   categoryCreate: categoryCreateSlice,
@@ -69,6 +88,11 @@ const rootReducer = combineReducers({
   tableCreate: tableCreateSlice,
   tableUpdate: tableUpdateSlice,
   changeTableStatus: tableChangeStatusSlice,
+  orderList: orderListSlice,
+  orderDetail: orderDetailSlice,
+  feedbackList: feedbackListSlice,
+  feedbackDetail: feedbackDetailSlice,
+  feedbackUpdate: feedbackUpdateSlice,
 });
 
 export default rootReducer;

@@ -30,30 +30,6 @@ const VariantDisplayDetail: React.FC<VariantDisplayDetailProps> = ({
       key: "group_name",
       render: (text: string) => <Text strong>{text}</Text>,
     },
-    {
-      title: "Min Select",
-      dataIndex: "min_select",
-      key: "min_select",
-      width: 150,
-      align: "center",
-      render: (text: number) => text,
-    },
-    {
-      title: "Max Select",
-      dataIndex: "max_select",
-      key: "max_select",
-      width: 150,
-      align: "center",
-      render: (text: number) => text,
-    },
-    {
-      title: "Required",
-      dataIndex: "is_required",
-      key: "is_required",
-      width: 100,
-      align: "center",
-      render: (checked: boolean) => <Switch checked={checked} disabled />,
-    },
   ];
 
   const expandedRowRender = (group: VariantGroup) => {

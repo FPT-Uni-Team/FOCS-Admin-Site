@@ -22,6 +22,13 @@ import TableReuse from "../Table/TableReuse";
 import type { StaffDataType } from "../../../type/staff/staff";
 import type { TableDataType } from "../../../type/table/table";
 import { TableStatusLabel } from "../../../type/table/table";
+import type { OrderListDataType } from "../../../type/order/order";
+import { 
+  getOrderTypeText,
+  type OrderType
+} from "../../../type/order/order";
+import type { FeedbackListDataType } from "../../../type/feedback/feedback";
+import { Rate, Image } from "antd";
 const { Text } = Typography;
 
 export const columnsMenuItem: ColumnsType<MenuListDataType> = [
@@ -553,4 +560,281 @@ export const columnsTableList: ColumnsType<TableDataType> = [
   },
 ];
 
+export const columnsOrderList: ColumnsType<OrderListDataType> = [
+  {
+    title: "Order Code",
+    dataIndex: "order_code",
+    key: "order_code",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (_, record) => {
+      return (
+        <CustomLink
+          title={record.order_code}
+          href={`/orders/${record.order_code}`}
+        />
+      );
+    },
+    sorter: true,
+  },
+  {
+    title: "Order Type",
+    dataIndex: "order_type",
+    key: "order_type",
+    render: (order_type: number) => {
+      return <Text>{getOrderTypeText(order_type as OrderType)}</Text>;
+    },
+  },
+  {
+    title: "Order Status",
+    dataIndex: "order_status",
+    key: "order_status",
+    render: (order_status: number) => {
+      let statusName = '';
+      switch (order_status) {
+        case 0: statusName = 'pending'; break;
+        case 1: statusName = 'confirmed'; break;
+        case 2: statusName = 'preparing'; break;
+        case 3: statusName = 'ready'; break;
+        case 4: statusName = 'completed'; break;
+        case 5: statusName = 'cancelled'; break;
+        default: statusName = 'unknown'; break;
+      }
+      return <StatusTag status={statusName} />;
+    },
+  },
+  {
+    title: "Payment Status",
+    dataIndex: "payment_status",
+    key: "payment_status",
+    render: (payment_status: number) => {
+      let statusName = '';
+      switch (payment_status) {
+        case 0: statusName = 'pending'; break;
+        case 1: statusName = 'paid'; break;
+        case 2: statusName = 'failed'; break;
+        default: statusName = 'unknown'; break;
+      }
+      return <StatusTag status={statusName} />;
+    },
+  },
+  {
+    title: "Total Amount",
+    dataIndex: "total_amount",
+    key: "total_amount",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (total_amount: number) => {
+      const roundedAmount = Math.round(total_amount * 100) / 100;
+      const formattedAmount = roundedAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      return <Text strong>{formattedAmount}</Text>;
+    },
+    sorter: true,
+  },
+  {
+    title: "Created At",
+    dataIndex: "created_at",
+    key: "created_at",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (created_at: string) => {
+      return <Text>{formatDate(created_at)}</Text>;
+    },
+    sorter: true,
+  },
+];
+
+export const columnsVariantList: ColumnsType<Variant> = [
+  {
+    title: "Variant Name",
+    dataIndex: "name",
+    key: "name",
+    width: "40%", 
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (text: string, record: Variant) => (
+      <CustomLink
+        title={text}
+        href={`/variants/${record.id}`}
+      />
+    ),
+    sorter: true,
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+    key: "price",
+    width: "35%", 
+    align: "center",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (price: number) => (
+      <Text type={price > 0 ? "success" : undefined}>
+        {price > 0 ? `+${formatPrice(price)}` : "Free"}
+      </Text>
+    ),
+    sorter: true,
+  },
+  {
+    title: "Status",
+    dataIndex: "is_available",
+    key: "is_available",
+    width: "25%", 
+    align: "center",
+    render: (isAvailable: boolean) => (
+      <StatusTag status={isAvailable ? "available" : "unavailable"} />
+    ),
+  },
+];
+
+export const columnsFeedback: ColumnsType<FeedbackListDataType> = [
+  {
+    title: "Rating",
+    dataIndex: "rating",
+    key: "rating",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (rating: number) => {
+      return <Rate disabled defaultValue={rating} />;
+    },
+    sorter: true,
+  },
+  {
+    title: "Comment",
+    dataIndex: "comment",
+    key: "comment",
+    render: (comment: string) => {
+      return (
+        <Text ellipsis={{ tooltip: comment }} style={{ maxWidth: 250 }}>
+          {comment}
+        </Text>
+      );
+    },
+  },
+     {
+     title: "Images",
+     dataIndex: "images",
+     key: "images",
+     render: (images: string[]) => {
+       if (!images || images.length === 0) {
+         return <Text type="secondary">No images</Text>;
+       }
+       return (
+         <Image.PreviewGroup>
+           <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+             {images.slice(0, 3).map((image, index) => (
+               <Image
+                 key={index}
+                 src={image}
+                 alt={`Feedback image ${index + 1}`}
+                 width={40}
+                 height={40}
+                 style={{
+                   objectFit: 'cover',
+                   borderRadius: '4px',
+                   border: '1px solid #d9d9d9',
+                 }}
+                 preview={{
+                   mask: 'Click to view'
+                 }}
+               />
+             ))}
+             {images.length > 3 && (
+               <Image
+                 src={images[3]}
+                 alt={`Feedback image 4`}
+                 width={40}
+                 height={40}
+                 style={{
+                   objectFit: 'cover',
+                   borderRadius: '4px',
+                   border: '1px solid #d9d9d9',
+                 }}
+                 preview={{
+                   mask: `+${images.length - 3} more`
+                 }}
+               />
+             )}
+           
+             {images.slice(4).map((image, index) => (
+               <Image
+                 key={`hidden-${index + 4}`}
+                 src={image}
+                 alt={`Feedback image ${index + 5}`}
+                 style={{ display: 'none' }}
+               />
+             ))}
+           </div>
+         </Image.PreviewGroup>
+       );
+     },
+   },
+  {
+    title: "Public",
+    dataIndex: "is_public",
+    key: "is_public",
+    render: (isPublic: boolean) => {
+      return (
+                 <span style={{
+           padding: '4px 8px',
+           borderRadius: '4px',
+           fontSize: '12px',
+           fontWeight: '500',
+           backgroundColor: isPublic ? '#f6ffed' : '#fff2e8',
+           color: isPublic ? '#52c41a' : '#fa8c16',
+           border: `1px solid ${isPublic ? '#52c41a' : '#fa8c16'}`
+         }}>
+           {isPublic ? 'True' : 'False'}
+         </span>
+      );
+    },
+  },
+  {
+    title: "Reply",
+    dataIndex: "reply",
+    key: "reply",
+    render: (reply: string | null) => {
+      if (!reply) {
+        return <Text type="secondary">No reply</Text>;
+      }
+      return (
+        <Text ellipsis={{ tooltip: reply }} style={{ maxWidth: 200 }}>
+          {reply}
+        </Text>
+      );
+    },
+  },
+  {
+    title: "Created At",
+    dataIndex: "created_at",
+    key: "created_at",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (created_at: string) => {
+      return <Text>{formatDate(created_at)}</Text>;
+    },
+    sorter: true,
+  },
+];
 

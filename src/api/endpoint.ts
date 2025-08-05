@@ -63,8 +63,17 @@ const endpoints = {
     change: (action: string, id: string) =>
       `${API_BASE_URL}/Category/${action}/${id}`,
   },
-  variant: {
+  variantGroup: {
     list: () => `${API_BASE_URL}/admin/variant-group/variants`,
+    create: () => `${API_BASE_URL}/admin/variant-group`,
+    detail: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
+    update: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
+  },
+  variant: {
+    list: () => `${API_BASE_URL}/admin/menu-item-variant/list`,
+    create: () => `${API_BASE_URL}/admin/menu-item-variant`,
+    detail: (id: string) => `${API_BASE_URL}/admin/menu-item-variant/${id}`,
+    update: (id: string) => `${API_BASE_URL}/admin/menu-item-variant/${id}`,
   },
   image: {
     upload: () => `${API_BASE_URL}/admin/menu-item/sync-images`,
@@ -83,6 +92,15 @@ const endpoints = {
     generateQR: () => `${API_BASE_URL}/manager/table/qrcode`,
     changeStatus: (tableId: string, storeId: string) => 
       `${API_BASE_URL}/manager/table/status?tableId=${tableId}&storeId=${storeId}`,
+  },
+  order: {
+    list: () => `${API_BASE_URL}/cashier/orders`,
+    detail: (orderCode: string) => `${API_BASE_URL}/order/order-by-code/${orderCode}`,
+  },
+  feedback: {
+    list: () => `${API_BASE_URL}/feedback/list`,
+    detail: (id: string) => `${API_BASE_URL}/feedback/${id}`,
+    update: (id: string) => `${API_BASE_URL}/feedback/${id}`,
   },
 };
 

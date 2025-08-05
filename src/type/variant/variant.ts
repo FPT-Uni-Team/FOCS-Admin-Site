@@ -15,3 +15,27 @@ export interface VariantGroup {
   max_select?: number;
   variants: Variant[];
 }
+
+export interface VariantGroupUpdateRequest {
+  name: string;
+}
+
+export interface VariantGroupCreateRequest {
+  name: string;
+}
+
+export interface VariantCreateRequest {
+  name: string;
+  price: number;
+  is_available: boolean;
+  prep_per_time?: number;
+  quantity_per_time?: number;
+}
+
+export interface VariantUpdateRequest {
+  name: string;
+  price: number;
+  is_available: boolean;
+  prep_per_time?: number;
+  quantity_per_time?: number;
+}
