@@ -73,6 +73,7 @@ const OrderListPage = lazy(() => import("../pages/order/OrderListPage"));
 const OrderDetailPage = lazy(() => import("../pages/order/OrderDetailPage"));
 const FeedbackListPage = lazy(() => import("../pages/feedback/FeedbackListPage"));
 const FeedbackDetailPage = lazy(() => import("../pages/feedback/FeedbackDetailPage"));
+const FeedbackUpdatePage = lazy(() => import("../pages/feedback/FeedbackUpdatePage"));
 
 export interface AppRoute {
   path: string;
@@ -286,6 +287,11 @@ export const routes: AppRoute[] = [
   {
     path: "/feedbacks/:feedbackId",
     component: FeedbackDetailPage,
+    hidden: true,
+  },
+  {
+    path: "/feedbacks/:feedbackId/update",
+    component: FeedbackUpdatePage,
     hidden: true,
   },
 ];

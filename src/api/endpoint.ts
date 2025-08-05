@@ -100,6 +100,7 @@ const endpoints = {
   feedback: {
     list: () => `${API_BASE_URL}/feedback/list`,
     detail: (id: string) => `${API_BASE_URL}/feedback/${id}`,
+    update: (id: string) => `${API_BASE_URL}/feedback/${id}`,
   },
 };
 

@@ -29,7 +29,7 @@ const FeedbackDetail: FC<FeedbackDetailProps> = ({ feedbackDetail }) => {
       ),
     },
     {
-      key: "public",
+      key: "is_public",
       label: "Public",
       children: (
                  <span style={{
@@ -37,11 +37,11 @@ const FeedbackDetail: FC<FeedbackDetailProps> = ({ feedbackDetail }) => {
            borderRadius: '4px',
            fontSize: '12px',
            fontWeight: '500',
-           backgroundColor: feedbackDetail.public ? '#f6ffed' : '#fff2e8',
-           color: feedbackDetail.public ? '#52c41a' : '#fa8c16',
-           border: `1px solid ${feedbackDetail.public ? '#52c41a' : '#fa8c16'}`
+           backgroundColor: feedbackDetail.is_public ? '#f6ffed' : '#fff2e8',
+           color: feedbackDetail.is_public ? '#52c41a' : '#fa8c16',
+           border: `1px solid ${feedbackDetail.is_public ? '#52c41a' : '#fa8c16'}`
          }}>
-           {feedbackDetail.public ? 'True' : 'False'}
+           {feedbackDetail.is_public ? 'True' : 'False'}
          </span>
       ),
     },

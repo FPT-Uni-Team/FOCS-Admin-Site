@@ -5,7 +5,7 @@ export interface FeedbackListDataType {
   rating: number;
   comment: string;
   images: string[];
-  public: boolean;
+  is_public: boolean;
   reply: string | null;
   created_at: string;
 }
@@ -25,4 +25,9 @@ export const statusOptionsFeedback = [
       label: key,
     };
   }),
-]; 
+];
+
+export interface FeedbackUpdateRequest {
+  public?: boolean;
+  reply?: string;
+} 

@@ -789,8 +789,8 @@ export const columnsFeedback: ColumnsType<FeedbackListDataType> = [
    },
   {
     title: "Public",
-    dataIndex: "public",
-    key: "public",
+    dataIndex: "is_public",
+    key: "is_public",
     render: (isPublic: boolean) => {
       return (
                  <span style={{

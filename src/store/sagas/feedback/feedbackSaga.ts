@@ -16,9 +16,14 @@ import {
   fetchFeedbackDetailSuccess,
   fetchFeedbackDetailFailure,
 } from "../../slices/feedback/feedbackDetailSlice";
-import type { FeedbackListDataType } from "../../../type/feedback/feedback";
+import {
+  updateFeedbackStart,
+  updateFeedbackSuccess,
+  updateFeedbackFailure,
+} from "../../slices/feedback/feedbackUpdateSlice";
+import type { FeedbackListDataType, FeedbackUpdateRequest } from "../../../type/feedback/feedback";
 
-const { getListFeedback, getFeedbackDetail } = feedbackService;
+const { getListFeedback, getFeedbackDetail, updateFeedback } = feedbackService;
 
 function* fetchFeedbackList(
   action: PayloadAction<ListPageParams>
@@ -49,7 +54,23 @@ function* fetchFeedbackDetail(
   }
 }
 
+function* fetchUpdateFeedback(
+  action: PayloadAction<{ feedbackId: string; payload: FeedbackUpdateRequest }>
+): Generator<Effect, void, AxiosResponse<FeedbackListDataType>> {
+  try {
+    yield call(() => 
+      updateFeedback(action.payload.feedbackId, action.payload.payload)
+    );
+    yield put(updateFeedbackSuccess());
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to update feedback";
+    yield put(updateFeedbackFailure(errorMessage));
+  }
+}
+
 export function* watchFeedbackSaga() {
   yield takeLatest(fetchFeedbacksStart.type, fetchFeedbackList);
   yield takeLatest(fetchFeedbackDetailStart.type, fetchFeedbackDetail);
+  yield takeLatest(updateFeedbackStart.type, fetchUpdateFeedback);
 }

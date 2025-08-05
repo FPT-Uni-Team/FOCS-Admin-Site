@@ -1,7 +1,10 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { fetchFeedbackDetailStart, clearFeedbackDetail } from "../../store/slices/feedback/feedbackDetailSlice";
+import { 
+  fetchFeedbackDetailStart, 
+  clearFeedbackDetail
+} from "../../store/slices/feedback/feedbackDetailSlice";
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 import TitleLine from "../../components/common/Title/TitleLine";
 import FeedbackDetail from "../../components/feedback/feedbackDetail/FeedbackDetail";
@@ -10,6 +13,7 @@ import type { FeedbackListDataType } from "../../type/feedback/feedback";
 const FeedbackDetailPage = () => {
   const dispatch = useAppDispatch();
   const { feedback, loading } = useAppSelector((state) => state.feedbackDetail);
+  const navigate = useNavigate();
 
   const { feedbackId } = useParams<{ feedbackId: string }>();
 
@@ -39,16 +43,18 @@ const FeedbackDetailPage = () => {
     return isPublic ? 1 : 0;
   };
 
+  const handleEdit = () => {
+    navigate(`/feedbacks/${feedbackId}/update`);
+  };
+  
   return (
     <>
       <TitleLine
         title={`Feedback #${feedback.id.slice(0, 8)}`}
-        status={getStatusText(feedback.public)}
-        isActive={getStatusValue(feedback.public)}
+        status={getStatusText(feedback.is_public)}
+        isActive={getStatusValue(feedback.is_public)}
         contentModal="this feedback"
-        onEdit={() => {
-          // Handle edit if needed
-        }}
+        onEdit={handleEdit}
         hasMoreAction={true}
         promotionId={feedbackId}
         isShowEdit={true}
