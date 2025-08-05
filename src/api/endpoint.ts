@@ -72,6 +72,7 @@ const endpoints = {
   variant: {
     list: () => `${API_BASE_URL}/admin/menu-item-variant/list`,
     detail: (id: string) => `${API_BASE_URL}/admin/menu-item-variant/${id}`,
+    update: (id: string) => `${API_BASE_URL}/admin/menu-item-variant/${id}`,
   },
   image: {
     upload: () => `${API_BASE_URL}/admin/menu-item/sync-images`,

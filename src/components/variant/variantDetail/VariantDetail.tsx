@@ -24,11 +24,11 @@ const VariantDetail: React.FC<Props> = ({ form, variantDetail, mode = "View" }) 
   useEffect(() => {
     if (variantDetail) {
       form.setFieldsValue({
-        name: variantDetail.name,
+        name: variantDetail.name || "",
         price: formatPrice(variantDetail.price),
-        is_available: variantDetail.is_available,
-        prep_per_time: variantDetail.prep_per_time,
-        quantity_per_time: variantDetail.quantity_per_time,
+        is_available: variantDetail.is_available ?? true,
+        prep_per_time: variantDetail.prep_per_time || "",
+        quantity_per_time: variantDetail.quantity_per_time || "",
       });
     }
   }, [variantDetail, form]);

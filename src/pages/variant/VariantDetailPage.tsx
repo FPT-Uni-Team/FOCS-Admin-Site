@@ -39,7 +39,7 @@ const VariantDetailPage = () => {
         isActive={variant.is_available ? 1 : 0}
         contentModal="this variant"
         onEdit={() => {
-          navigate(`/variants/${variantId}/edit`);
+          navigate(`/variants/${variantId}/update`);
         }}
         hasMoreAction={false}
         promotionId={variantId}

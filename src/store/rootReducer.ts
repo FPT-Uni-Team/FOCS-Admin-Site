@@ -22,6 +22,7 @@ import variantGroupUpdateSlice from "./slices/variant/variantGroupUpdateSlice";
 import variantGroupCreateSlice from "./slices/variant/variantGroupCreateSlice";
 import variantListSlice from "./slices/variant/variantListSlice";
 import variantDetailSlice from "./slices/variant/variantDetailSlice";
+import variantUpdateSlice from "./slices/variant/variantUpdateSlice";
 import menuItemCreateSlice from "./slices/menuItem/menuItemCreateSlice";
 import menuItemDetailSlice from "./slices/menuItem/menuItemDetailSlice";
 import categoryCreateSlice from "./slices/category/categoryCreateSlice";
@@ -66,6 +67,7 @@ const rootReducer = combineReducers({
   variantGroupCreate: variantGroupCreateSlice,
   variantList: variantListSlice,
   variantDetail: variantDetailSlice,
+  variantUpdate: variantUpdateSlice,
   menuItemCreate: menuItemCreateSlice,
   menuItemDetail: menuItemDetailSlice,
   categoryCreate: categoryCreateSlice,

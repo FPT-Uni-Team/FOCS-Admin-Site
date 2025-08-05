@@ -27,8 +27,8 @@ import {
   createVariantGroupFailure,
 } from "../../slices/variant/variantGroupCreateSlice";
 
-import variantGroupsService, { variantService } from "../../../services/variantService";
-import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest, Variant } from "../../../type/variant/variant";
+import variantGroupsService, { variantService, updateVariant } from "../../../services/variantService";
+import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest, Variant, VariantUpdateRequest } from "../../../type/variant/variant";
 import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 import {
   fetchVariantsStart,
@@ -40,6 +40,11 @@ import {
   fetchVariantDetailSuccess,
   fetchVariantDetailFailure,
 } from "../../slices/variant/variantDetailSlice";
+import {
+  updateVariantStart,
+  updateVariantSuccess,
+  updateVariantFailure,
+} from "../../slices/variant/variantUpdateSlice";
 
 const { getListVariantGroups, createVariantGroup, getDetailVariantGroup, updateVariantGroup } = variantGroupsService;
 
@@ -114,7 +119,6 @@ function* fetchVariantsList(
 ): Generator<Effect, void, AxiosResponse<ListPageResponse>> {
   try {
     const response = yield call(() => variantService.getListVariants(action.payload));
-    // Transform the response to match ListPageResponse format
     const transformedData = {
       total_count: response.data.total_count || 0,
       page_index: action.payload.page || 1,
@@ -143,6 +147,24 @@ function* fetchVariantDetail(
   }
 }
 
+function* fetchUpdateVariant(
+  action: PayloadAction<{ id: string } & VariantUpdateRequest>
+): Generator<Effect, void, AxiosResponse<VariantUpdateRequest>> {
+  try {
+    const { id, ...payload } = action.payload;
+    const response = yield call(() => updateVariant(id, payload));
+    yield put(updateVariantSuccess(response.data));
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred while updating variant";
+    yield put(updateVariantFailure(message));
+  }
+}
+
 export function* watchVariantSaga() {
   yield takeLatest(fetchVariantGroupsStart.type, fetchVariantGroupsList);
   yield takeLatest(fetchVariantGroupDetailStart.type, fetchVariantGroupDetail);
@@ -155,5 +177,8 @@ export function* watchVariantSaga() {
   yield takeLatest(fetchVariantsStart.type, fetchVariantsList);
   yield takeLatest(fetchVariantDetailStart.type, function* (action) {
     yield* withGlobalLoading(fetchVariantDetail, action);
+  });
+  yield takeLatest(updateVariantStart.type, function* (action) {
+    yield* withGlobalLoading(fetchUpdateVariant, action);
   });
 }
