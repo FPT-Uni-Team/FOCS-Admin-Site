@@ -28,13 +28,18 @@ import {
 } from "../../slices/variant/variantGroupCreateSlice";
 
 import variantGroupsService, { variantService } from "../../../services/variantService";
-import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest } from "../../../type/variant/variant";
+import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest, Variant } from "../../../type/variant/variant";
 import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 import {
   fetchVariantsStart,
   fetchVariantsSuccess,
   fetchVariantsFailure,
 } from "../../slices/variant/variantListSlice";
+import {
+  fetchVariantDetailStart,
+  fetchVariantDetailSuccess,
+  fetchVariantDetailFailure,
+} from "../../slices/variant/variantDetailSlice";
 
 const { getListVariantGroups, createVariantGroup, getDetailVariantGroup, updateVariantGroup } = variantGroupsService;
 
@@ -124,6 +129,20 @@ function* fetchVariantsList(
   }
 }
 
+function* fetchVariantDetail(
+  action: PayloadAction<{ variantId: string }>
+): Generator<Effect, void, AxiosResponse<Variant>> {
+  try {
+    const { variantId } = action.payload;
+    const response = yield call(() => variantService.getDetailVariant(variantId));
+    yield put(fetchVariantDetailSuccess(response.data));
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch variant detail";
+    yield put(fetchVariantDetailFailure(errorMessage));
+  }
+}
+
 export function* watchVariantSaga() {
   yield takeLatest(fetchVariantGroupsStart.type, fetchVariantGroupsList);
   yield takeLatest(fetchVariantGroupDetailStart.type, fetchVariantGroupDetail);
@@ -134,4 +153,7 @@ export function* watchVariantSaga() {
     yield* withGlobalLoading(fetchCreateVariantGroup, action);
   });
   yield takeLatest(fetchVariantsStart.type, fetchVariantsList);
+  yield takeLatest(fetchVariantDetailStart.type, function* (action) {
+    yield* withGlobalLoading(fetchVariantDetail, action);
+  });
 }

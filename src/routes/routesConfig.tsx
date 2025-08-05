@@ -66,6 +66,7 @@ const VariantGroupDetailPage = lazy(() => import("../pages/variant/VariantGroupD
 const VariantGroupUpdatePage = lazy(() => import("../pages/variant/VariantGroupUpdatePage"));
 const VariantGroupCreatePage = lazy(() => import("../pages/variant/VariantGroupCreatePage"));
 const VariantListPage = lazy(() => import("../pages/variant/VariantListPage"));
+const VariantDetailPage = lazy(() => import("../pages/variant/VariantDetailPage"));
 const OrderListPage = lazy(() => import("../pages/order/OrderListPage"));
 const OrderDetailPage = lazy(() => import("../pages/order/OrderDetailPage"));
 const FeedbackListPage = lazy(() => import("../pages/feedback/FeedbackListPage"));
@@ -246,6 +247,11 @@ export const routes: AppRoute[] = [
     component: VariantListPage,
     label: "Variants",
     icon: <BranchesOutlined />,
+  },
+  {
+    path: "/variants/:variantId",
+    component: VariantDetailPage,
+    hidden: true,
   },
   {
     path: "/orders",

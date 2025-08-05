@@ -25,6 +25,8 @@ const variantService = {
       sort_order: params.sort_order,
       filters: params.filters,
     }),
+  getDetailVariant: (id: string) =>
+    axiosClient.get(endpoints.variant.detail(id)),
 };
 
 export { variantGroupsService, variantService };

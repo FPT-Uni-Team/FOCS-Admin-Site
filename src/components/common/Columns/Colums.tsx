@@ -664,8 +664,11 @@ export const columnsVariantList: ColumnsType<Variant> = [
       "descend" as SortOrder,
       "ascend" as SortOrder,
     ],
-    render: (text: string) => (
-      <Text>{text}</Text>
+    render: (text: string, record: Variant) => (
+      <CustomLink
+        title={text}
+        href={`/variants/${record.id}`}
+      />
     ),
     sorter: true,
   },
@@ -673,7 +676,7 @@ export const columnsVariantList: ColumnsType<Variant> = [
     title: "Price",
     dataIndex: "price",
     key: "price",
-    width: 180, // Tăng width để hiển thị giá rõ hơn
+    width: 180, 
     align: "right",
     sortDirections: [
       "ascend" as SortOrder,

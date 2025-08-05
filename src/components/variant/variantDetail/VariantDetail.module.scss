@@ -1,0 +1,19 @@
+.flexClass {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.switchLabel {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+}
+
+.variantInfo {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
