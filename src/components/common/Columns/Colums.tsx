@@ -658,7 +658,7 @@ export const columnsVariantList: ColumnsType<Variant> = [
     title: "Variant Name",
     dataIndex: "name",
     key: "name",
-    width: 350, 
+    width: "40%", 
     sortDirections: [
       "ascend" as SortOrder,
       "descend" as SortOrder,
@@ -676,8 +676,8 @@ export const columnsVariantList: ColumnsType<Variant> = [
     title: "Price",
     dataIndex: "price",
     key: "price",
-    width: 180, 
-    align: "right",
+    width: "35%", 
+    align: "center",
     sortDirections: [
       "ascend" as SortOrder,
       "descend" as SortOrder,
@@ -694,7 +694,7 @@ export const columnsVariantList: ColumnsType<Variant> = [
     title: "Status",
     dataIndex: "is_available",
     key: "is_available",
-    width: 140, 
+    width: "25%", 
     align: "center",
     render: (isAvailable: boolean) => (
       <StatusTag status={isAvailable ? "available" : "unavailable"} />

@@ -27,8 +27,8 @@ import {
   createVariantGroupFailure,
 } from "../../slices/variant/variantGroupCreateSlice";
 
-import variantGroupsService, { variantService, updateVariant } from "../../../services/variantService";
-import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest, Variant, VariantUpdateRequest } from "../../../type/variant/variant";
+import variantGroupsService, { variantService, updateVariant, createVariant } from "../../../services/variantService";
+import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest, Variant, VariantCreateRequest, VariantUpdateRequest } from "../../../type/variant/variant";
 import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 import {
   fetchVariantsStart,
@@ -45,6 +45,11 @@ import {
   updateVariantSuccess,
   updateVariantFailure,
 } from "../../slices/variant/variantUpdateSlice";
+import {
+  createVariantStart,
+  createVariantSuccess,
+  createVariantFailure,
+} from "../../slices/variant/variantCreateSlice";
 
 const { getListVariantGroups, createVariantGroup, getDetailVariantGroup, updateVariantGroup } = variantGroupsService;
 
@@ -165,6 +170,23 @@ function* fetchUpdateVariant(
   }
 }
 
+function* fetchCreateVariant(
+  action: PayloadAction<VariantCreateRequest>
+): Generator<Effect, void, AxiosResponse<Variant>> {
+  try {
+    const response = yield call(() => createVariant(action.payload));
+    yield put(createVariantSuccess(response.data));
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred while creating variant";
+    yield put(createVariantFailure(message));
+  }
+}
+
 export function* watchVariantSaga() {
   yield takeLatest(fetchVariantGroupsStart.type, fetchVariantGroupsList);
   yield takeLatest(fetchVariantGroupDetailStart.type, fetchVariantGroupDetail);
@@ -180,5 +202,8 @@ export function* watchVariantSaga() {
   });
   yield takeLatest(updateVariantStart.type, function* (action) {
     yield* withGlobalLoading(fetchUpdateVariant, action);
+  });
+  yield takeLatest(createVariantStart.type, function* (action) {
+    yield* withGlobalLoading(fetchCreateVariant, action);
   });
 }
