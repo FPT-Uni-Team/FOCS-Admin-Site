@@ -10,6 +10,9 @@ const feedbackService = {
     };
     return axiosClient.post(endpoints.feedback.list(), requestBody);
   },
+  getFeedbackDetail: (feedbackId: string) => {
+    return axiosClient.get(endpoints.feedback.detail(feedbackId));
+  },
 };
 
 export default feedbackService; 

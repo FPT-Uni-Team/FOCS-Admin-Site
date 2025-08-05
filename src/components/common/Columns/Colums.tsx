@@ -704,21 +704,6 @@ export const columnsVariantList: ColumnsType<Variant> = [
 
 export const columnsFeedback: ColumnsType<FeedbackListDataType> = [
   {
-    title: "Order ID",
-    dataIndex: "order_id",
-    key: "order_id",
-    render: (order_id: string) => {
-      return (
-        <Text 
-          copyable={{ text: order_id }}
-          style={{ fontFamily: 'monospace', fontSize: '12px' }}
-        >
-          {order_id?.slice(0, 8)}...
-        </Text>
-      );
-    },
-  },
-  {
     title: "Rating",
     dataIndex: "rating",
     key: "rating",
@@ -804,10 +789,22 @@ export const columnsFeedback: ColumnsType<FeedbackListDataType> = [
    },
   {
     title: "Public",
-    dataIndex: "is_public",
-    key: "is_public",
-    render: (is_public: boolean) => {
-      return <StatusTag status={is_public ? 'public' : 'private'} />;
+    dataIndex: "public",
+    key: "public",
+    render: (isPublic: boolean) => {
+      return (
+                 <span style={{
+           padding: '4px 8px',
+           borderRadius: '4px',
+           fontSize: '12px',
+           fontWeight: '500',
+           backgroundColor: isPublic ? '#f6ffed' : '#fff2e8',
+           color: isPublic ? '#52c41a' : '#fa8c16',
+           border: `1px solid ${isPublic ? '#52c41a' : '#fa8c16'}`
+         }}>
+           {isPublic ? 'True' : 'False'}
+         </span>
+      );
     },
   },
   {

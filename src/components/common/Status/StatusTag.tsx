@@ -26,9 +26,10 @@ const statusColorMap: Record<string, string> = {
   ready: "Ready",
   completed: "Completed",
   cancelled: "Cancelled",
-  // Payment status
   paid: "Paid",
   failed: "Failed",
+  public: "Public",
+  hide: "Hide",
 };
 
 const StatusTag: React.FC<StatusTagProps> = ({ status }) => {

@@ -11,8 +11,14 @@ import {
   fetchFeedbacksSuccess,
 } from "../../slices/feedback/feedbackListSlice";
 import feedbackService from "../../../services/feedbackService";
+import {
+  fetchFeedbackDetailStart,
+  fetchFeedbackDetailSuccess,
+  fetchFeedbackDetailFailure,
+} from "../../slices/feedback/feedbackDetailSlice";
+import type { FeedbackListDataType } from "../../../type/feedback/feedback";
 
-const { getListFeedback } = feedbackService;
+const { getListFeedback, getFeedbackDetail } = feedbackService;
 
 function* fetchFeedbackList(
   action: PayloadAction<ListPageParams>
@@ -30,6 +36,20 @@ function* fetchFeedbackList(
   }
 }
 
+function* fetchFeedbackDetail(
+  action: PayloadAction<{ feedbackId: string }>
+): Generator<Effect, void, AxiosResponse<FeedbackListDataType>> {
+  try {
+    const response = yield call(() => getFeedbackDetail(action.payload.feedbackId));
+    yield put(fetchFeedbackDetailSuccess(response.data));
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to fetch feedback detail";
+    yield put(fetchFeedbackDetailFailure(errorMessage));
+  }
+}
+
 export function* watchFeedbackSaga() {
   yield takeLatest(fetchFeedbacksStart.type, fetchFeedbackList);
+  yield takeLatest(fetchFeedbackDetailStart.type, fetchFeedbackDetail);
 }

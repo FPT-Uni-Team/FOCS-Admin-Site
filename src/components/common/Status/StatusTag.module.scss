@@ -112,4 +112,18 @@
     color: #cf1322;
     border-color: #cf1322;
   }
+
+
+  &.public {
+    background-color: #f6ffed;
+    color: #52c41a;
+    border-color: #52c41a;
+  }
+
+  &.hide {
+    background-color: #fff7e6;
+    color: #fa8c16;
+    border-color: #fa8c16;
+    font-weight: 600;
+  }
 }

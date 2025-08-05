@@ -41,7 +41,7 @@ const VariantDetailPage = () => {
         onEdit={() => {
           navigate(`/variants/${variantId}/update`);
         }}
-        hasMoreAction={false}
+        hasMoreAction={true}
         promotionId={variantId}
         isShowEdit={true}
       />

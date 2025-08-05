@@ -5,7 +5,7 @@ export interface FeedbackListDataType {
   rating: number;
   comment: string;
   images: string[];
-  is_public: boolean;
+  public: boolean;
   reply: string | null;
   created_at: string;
 }

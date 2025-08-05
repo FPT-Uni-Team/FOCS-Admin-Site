@@ -1,0 +1,19 @@
+.feedbackDetail {
+  .imageGallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    
+    .ant-image {
+      border: 1px solid #d9d9d9;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        border-color: #1890ff;
+        transform: scale(1.02);
+      }
+    }
+  }
+}

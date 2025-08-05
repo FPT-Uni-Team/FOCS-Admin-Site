@@ -9,12 +9,14 @@ import { createOnFilterHandler } from "../../../helper/formatFilters";
 import { columnsFeedback } from "../../common/Columns/Colums";
 import { selectConfigsFeedbackStatus } from "../../common/Selects/Selects";
 import type { FeedbackListDataType } from "../../../type/feedback/feedback";
+import { useNavigate } from "react-router-dom";
 
 interface FeedbackListProps {
   fetchData: (params: ListPageParams) => void;
 }
 
 const FeedbackList: FC<FeedbackListProps> = ({ fetchData }) => {
+  const navigate = useNavigate();
   const { loading, feedbacks, total } = useAppSelector(
     (state) => state.feedbackList
   );
@@ -47,6 +49,10 @@ const FeedbackList: FC<FeedbackListProps> = ({ fetchData }) => {
     setParams,
   });
 
+  const handleRowClick = (record: FeedbackListDataType) => {
+    navigate(`/feedbacks/${record.id}`);
+  };
+
   useEffect(() => {
     fetchData(params);
   }, [fetchData, params]);
@@ -72,6 +78,10 @@ const FeedbackList: FC<FeedbackListProps> = ({ fetchData }) => {
             showSizeChanger: true,
           }}
           rowKey="id"
+          onRow={(record) => ({
+            onClick: () => handleRowClick(record),
+            style: { cursor: 'pointer' }
+          })}
         />
       </ContentInner>
     </div>
