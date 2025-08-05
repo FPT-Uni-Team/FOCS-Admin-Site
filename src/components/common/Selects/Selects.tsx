@@ -98,3 +98,17 @@ export const selectConfigsFeedbackStatus: SelectConfig[] = [
     options: statusOptionsFeedback,
   },
 ];
+
+export const selectConfigsVariantStatus: SelectConfig[] = [
+  {
+    name: "is_available",
+    type: "select",
+    label: "Variant Status",
+    placeholder: "Select Variant Status",
+    options: [
+      { label: "All", value: "" },
+      { label: "Available", value: "true" },
+      { label: "Unavailable", value: "false" },
+    ],
+  },
+];

@@ -653,6 +653,52 @@ export const columnsOrderList: ColumnsType<OrderListDataType> = [
   },
 ];
 
+export const columnsVariantList: ColumnsType<Variant> = [
+  {
+    title: "Variant Name",
+    dataIndex: "name",
+    key: "name",
+    width: 350, 
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (text: string) => (
+      <Text>{text}</Text>
+    ),
+    sorter: true,
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+    key: "price",
+    width: 180, // Tăng width để hiển thị giá rõ hơn
+    align: "right",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (price: number) => (
+      <Text type={price > 0 ? "success" : undefined}>
+        {price > 0 ? `+${formatPrice(price)}` : "Free"}
+      </Text>
+    ),
+    sorter: true,
+  },
+  {
+    title: "Status",
+    dataIndex: "is_available",
+    key: "is_available",
+    width: 140, 
+    align: "center",
+    render: (isAvailable: boolean) => (
+      <StatusTag status={isAvailable ? "available" : "unavailable"} />
+    ),
+  },
+];
+
 export const columnsFeedback: ColumnsType<FeedbackListDataType> = [
   {
     title: "Order ID",

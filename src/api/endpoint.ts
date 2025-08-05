@@ -63,11 +63,14 @@ const endpoints = {
     change: (action: string, id: string) =>
       `${API_BASE_URL}/Category/${action}/${id}`,
   },
-  variant: {
+  variantGroup: {
     list: () => `${API_BASE_URL}/admin/variant-group/variants`,
     create: () => `${API_BASE_URL}/admin/variant-group`,
     detail: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
     update: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
+  },
+  variant: {
+    list: () => `${API_BASE_URL}/admin/menu-item-variant/list`,
   },
   image: {
     upload: () => `${API_BASE_URL}/admin/menu-item/sync-images`,

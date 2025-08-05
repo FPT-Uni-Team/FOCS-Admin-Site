@@ -121,13 +121,13 @@ const VariantGroupForm: React.FC<Props> = ({ mode = "Create", form, initData }) 
           </Col>
         </Row>
 
-        {initData && initData.variants && initData.variants.length > 0 && (
+        {(mode === "Update" || mode === "Detail") && initData && (
           <Row style={{ marginTop: 24 }}>
             <Col span={24}>
               <Card title="Variants" size="small">
                 <Table
                   columns={variantColumns}
-                  dataSource={initData.variants}
+                  dataSource={initData.variants || []}
                   rowKey="id"
                   pagination={{
                     pageSize: 10,
