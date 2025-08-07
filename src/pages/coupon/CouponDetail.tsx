@@ -3,7 +3,7 @@ import CouponDetail from "../../components/coupon/couponDetail/CouponDetail";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchCouponDetailStart } from "../../store/slices/coupon/couponDetailSlice";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   CouponStatusLabel,
   type CouponDetailType,
@@ -12,12 +12,17 @@ import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 import TitleLine from "../../components/common/Title/TitleLine";
 import { checkActive, checkShowEdit } from "../../helper/checkStatus";
 import { setCouponStatusRequest } from "../../store/slices/coupon/couponSetStatusSlice";
+import { Modal } from "antd";
+import { showNotification } from "../../components/common/Notification/ToastCustom";
+import { deleteCouponStart, clearDeleteCouponState } from "../../store/slices/coupon/couponDeleteSlice";
 
 const CouponDetailPage = () => {
   const [form] = useForm();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const { coupon } = useAppSelector((state) => state.couponDetail);
   const { success } = useAppSelector((state) => state.couponSetStatus);
+  const { loading: deleteLoading, success: deleteSuccess, error: deleteError } = useAppSelector((state) => state.couponDelete);
 
   const { couponId } = useParams<{ couponId: string }>();
   const navigate = useNavigate();
@@ -25,6 +30,10 @@ const CouponDetailPage = () => {
     dispatch(
       setCouponStatusRequest({ isActive: category === "active", couponId })
     );
+  };
+
+  const handleDeleteCoupon = () => {
+    setIsDeleteModalOpen(true);
   };
 
   useEffect(() => {
@@ -37,7 +46,20 @@ const CouponDetailPage = () => {
       );
   }, [success, couponId, dispatch]);
 
-  console.log("coupon", coupon);
+  useEffect(() => {
+    if (deleteSuccess) {
+      showNotification("success", "Delete coupon success!");
+      navigate("/coupons");
+      dispatch(clearDeleteCouponState());
+    }
+  }, [deleteSuccess, navigate, dispatch]);
+
+  useEffect(() => {
+    if (deleteError) {
+      showNotification("error", deleteError);
+      dispatch(clearDeleteCouponState());
+    }
+  }, [deleteError, dispatch]);
 
   return (
     <>
@@ -54,15 +76,32 @@ const CouponDetailPage = () => {
         onEdit={() => {
           navigate(`/coupons/${couponId}/edit`);
         }}
+        onDelete={handleDeleteCoupon}
         hasMoreAction
         promotionId={couponId}
         isShowEdit={checkShowEdit(
           CouponStatusLabel[coupon?.status as keyof typeof CouponStatusLabel]
         )}
+        deleteLoading={deleteLoading}
       />
       <ContentInner>
         <CouponDetail form={form} couponDetail={coupon as CouponDetailType} />
       </ContentInner>
+      
+      <Modal
+        title="Delete Coupon"
+        open={isDeleteModalOpen}
+        onOk={() => {
+          setIsDeleteModalOpen(false);
+          dispatch(deleteCouponStart({ couponId: couponId || "" }));
+        }}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        okText="Delete"
+        okType="danger"
+        cancelText="Cancel"
+      >
+        <p>Are you sure you want to delete this coupon? This action cannot be undone.</p>
+      </Modal>
     </>
   );
 };

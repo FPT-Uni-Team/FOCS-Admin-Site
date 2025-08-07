@@ -12,6 +12,8 @@ const variantGroupsService = {
     axiosClient.get(endpoints.variantGroup.detail(id)),
   updateVariantGroup: (id: string, payload: VariantGroupUpdateRequest) =>
     axiosClient.patch(endpoints.variantGroup.update(id), payload),
+  deleteVariantGroup: (id: string) =>
+    axiosClient.delete(endpoints.variantGroup.delete(id)),
   assignVariantsToGroup: (payload: VariantAssignRequest) =>
     axiosClient.post(endpoints.variantGroup.assignVariants(), {
       variant_ids: payload.variantIds,
@@ -34,6 +36,8 @@ const variantService = {
     axiosClient.post(endpoints.variant.create(), payload),
   getDetailVariant: (id: string) =>
     axiosClient.get(endpoints.variant.detail(id)),
+  deleteVariant: (id: string) =>
+    axiosClient.delete(endpoints.variant.delete(id)),
 };
 
 const updateVariant = (id: string, payload: VariantUpdateRequest) =>

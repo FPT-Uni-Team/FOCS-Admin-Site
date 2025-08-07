@@ -33,6 +33,8 @@ const menuItemService = {
     axiosClient.put(endpoints.menuItem.update(params.menuItemId), params.data),
   changeStatus: (action: string, id: string) =>
     axiosClient.put(endpoints.menuItem.change(action, id)),
+  deleteMenuItem: (id: string) =>
+    axiosClient.delete(endpoints.menuItem.delete(id)),
   createMenuItemGroupsVariant: (params: {
     menuItemId: string;
     data: VariantGroup[];

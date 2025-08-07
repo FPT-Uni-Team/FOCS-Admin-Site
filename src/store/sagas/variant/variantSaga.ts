@@ -27,7 +27,7 @@ import {
   createVariantGroupFailure,
 } from "../../slices/variant/variantGroupCreateSlice";
 
-import variantGroupsService, { variantService, updateVariant, createVariant } from "../../../services/variantService";
+import variantGroupsService, { variantService, updateVariant } from "../../../services/variantService";
 import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest, Variant, VariantCreateRequest, VariantUpdateRequest, VariantAssignRequest, VariantAssignResponse } from "../../../type/variant/variant";
 import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 import {
@@ -55,8 +55,19 @@ import {
   assignVariantsSuccess,
   assignVariantsFailure,
 } from "../../slices/variant/variantAssignSlice";
+import {
+  deleteVariantGroupStart,
+  deleteVariantGroupSuccess,
+  deleteVariantGroupFailure,
+} from "../../slices/variant/variantGroupDeleteSlice";
+import {
+  deleteVariantStart,
+  deleteVariantSuccess,
+  deleteVariantFailure,
+} from "../../slices/variant/variantDeleteSlice";
 
-const { getListVariantGroups, createVariantGroup, getDetailVariantGroup, updateVariantGroup, assignVariantsToGroup } = variantGroupsService;
+const { getListVariantGroups, createVariantGroup, getDetailVariantGroup, updateVariantGroup, assignVariantsToGroup, deleteVariantGroup } = variantGroupsService;
+const { createVariant, deleteVariant } = variantService;
 
 function* fetchVariantGroupsList(
   action: PayloadAction<ListPageParams>
@@ -212,6 +223,34 @@ function* fetchAssignVariants(
   }
 }
 
+function* handleDeleteVariantGroup(
+  action: PayloadAction<{ variantGroupId: string }>
+): Generator<unknown, void, unknown> {
+  try {
+    const { variantGroupId } = action.payload;
+    yield call(deleteVariantGroup, variantGroupId);
+    yield put(deleteVariantGroupSuccess({ variantGroupId }));
+  } catch (error: unknown) {
+    const err = error as { message?: string };
+    const errorMessage = err.message || "Failed to delete variant group";
+    yield put(deleteVariantGroupFailure(errorMessage));
+  }
+}
+
+function* handleDeleteVariant(
+  action: PayloadAction<{ variantId: string }>
+): Generator<unknown, void, unknown> {
+  try {
+    const { variantId } = action.payload;
+    yield call(deleteVariant, variantId);
+    yield put(deleteVariantSuccess({ variantId }));
+  } catch (error: unknown) {
+    const err = error as { message?: string };
+    const errorMessage = err.message || "Failed to delete variant";
+    yield put(deleteVariantFailure(errorMessage));
+  }
+}
+
 export function* watchVariantSaga() {
   yield takeLatest(fetchVariantGroupsStart.type, fetchVariantGroupsList);
   yield takeLatest(fetchVariantGroupDetailStart.type, fetchVariantGroupDetail);
@@ -234,4 +273,6 @@ export function* watchVariantSaga() {
   yield takeLatest(assignVariantsStart.type, function* (action) {
     yield* withGlobalLoading(fetchAssignVariants, action);
   });
+  yield takeLatest(deleteVariantGroupStart.type, handleDeleteVariantGroup);
+  yield takeLatest(deleteVariantStart.type, handleDeleteVariant);
 }

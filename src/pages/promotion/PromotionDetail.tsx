@@ -1,17 +1,22 @@
 import { useNavigate, useParams } from "react-router-dom";
 import TitleLine from "../../components/common/Title/TitleLine";
 import PromotionDetail from "../../components/promotion/promotionDetail/PromotionDetail";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchPromotionDetailStart } from "../../store/slices/promotion/promotionDetailSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { PromotionStatusLabel } from "../../type/promotion/promotion";
 import { changeStatusPromotionsStart } from "../../store/slices/promotion/promotionChangeStatusSlice";
 import { checkActive, checkShowEdit } from "../../helper/checkStatus";
+import { Modal } from "antd";
+import { showNotification } from "../../components/common/Notification/ToastCustom";
+import { deletePromotionStart, clearDeletePromotionState } from "../../store/slices/promotion/promotionDeleteSlice";
 
 const PromotionDetailPage = () => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { promotionId } = useParams();
   const { promotion } = useAppSelector((state) => state.promotionDetail);
   const { success } = useAppSelector((state) => state.changeStatusPromotion);
+  const { loading: deleteLoading, success: deleteSuccess, error: deleteError } = useAppSelector((state) => state.promotionDelete);
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -22,9 +27,30 @@ const PromotionDetailPage = () => {
   ) => {
     dispatch(changeStatusPromotionsStart(category, promotionId));
   };
+
+  const handleDeletePromotion = () => {
+    setIsDeleteModalOpen(true);
+  };
+
   useEffect(() => {
     dispatch(fetchPromotionDetailStart(promotionId || ""));
   }, [success, dispatch, promotionId]);
+
+
+  useEffect(() => {
+    if (deleteSuccess) {
+      showNotification("success", "Delete promotion success!");
+      navigate("/promotions");
+      dispatch(clearDeletePromotionState());
+    }
+  }, [deleteSuccess, navigate, dispatch]);
+
+  useEffect(() => {
+    if (deleteError) {
+      showNotification("error", deleteError);
+      dispatch(clearDeletePromotionState());
+    }
+  }, [deleteError, dispatch]);
   return (
     <>
       <TitleLine
@@ -44,6 +70,7 @@ const PromotionDetailPage = () => {
         onEdit={() => {
           navigate(`/promotions/update/${promotionId}`);
         }}
+        onDelete={handleDeletePromotion}
         hasMoreAction
         promotionId={promotionId}
         isShowEdit={checkShowEdit(
@@ -51,8 +78,24 @@ const PromotionDetailPage = () => {
             promotion.status as keyof typeof PromotionStatusLabel
           ]
         )}
+        deleteLoading={deleteLoading}
       />
       <PromotionDetail promotionDetail={promotion} />
+      
+      <Modal
+        title="Delete Promotion"
+        open={isDeleteModalOpen}
+        onOk={() => {
+          setIsDeleteModalOpen(false);
+          dispatch(deletePromotionStart({ promotionId: promotionId || "" }));
+        }}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        okText="Delete"
+        okType="danger"
+        cancelText="Cancel"
+      >
+        <p>Are you sure you want to delete this promotion? This action cannot be undone.</p>
+      </Modal>
     </>
   );
 };

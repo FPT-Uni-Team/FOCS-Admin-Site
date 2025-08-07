@@ -11,6 +11,8 @@ const staffService = {
   getStaffDetail: (id: string) => axiosClient.get(endpoints.staff.detail(id)),
   updateStaff: (payload: StaffDetailPayload) =>
     axiosClient.put(endpoints.staff.update(payload.id), payload),
+  deleteStaff: (id: string) =>
+    axiosClient.delete(endpoints.staff.delete(id)),
 };
 
 export default staffService;

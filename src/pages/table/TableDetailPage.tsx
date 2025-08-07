@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import TableDetail from "../../components/table/tableDetail/TableDetail";
 import TableStatusSelector from "../../components/table/tableStatusSelector/TableStatusSelector";
@@ -7,21 +7,28 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchTableDetailStart } from "../../store/slices/table/tableDetailSlice";
 import { changeTableStatusStart, resetChangeTableStatus } from "../../store/slices/table/tableChangeStatusSlice";
 import { TableStatusLabel } from "../../type/table/table";
-import { checkShowEdit } from "../../helper/checkStatus";
+import { checkShowEdit, checkShowDelete } from "../../helper/checkStatus";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
-import { Button, Dropdown } from "antd";
+import { Button, Dropdown, Modal } from "antd";
 import { DownOutlined, EditOutlined } from "@ant-design/icons";
+import { deleteTableStart, clearDeleteTableState } from "../../store/slices/table/tableDeleteSlice";
 
 const TableDetailPage = () => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { tableId } = useParams<{ tableId: string }>();
   const { table } = useAppSelector((state) => state.tableDetail);
   const { success, error } = useAppSelector((state) => state.changeTableStatus);
+  const { loading: deleteLoading, success: deleteSuccess, error: deleteError } = useAppSelector((state) => state.tableDelete);
 
   const handleTableStatusChange = (tableId: string, newStatus: number) => {
     const storeId = table.store_id || "550e8400-e29b-41d4-a716-446655440000";
     dispatch(changeTableStatusStart(tableId, storeId, newStatus));
+  };
+
+  const handleDeleteTable = () => {
+    setIsDeleteModalOpen(true);
   };
 
   useEffect(() => {
@@ -47,6 +54,21 @@ const TableDetailPage = () => {
     }
   }, [dispatch, error]);
 
+  useEffect(() => {
+    if (deleteSuccess) {
+      showNotification("success", "Delete table success!");
+      navigate("/tables");
+      dispatch(clearDeleteTableState());
+    }
+  }, [deleteSuccess, navigate, dispatch]);
+
+  useEffect(() => {
+    if (deleteError) {
+      showNotification("error", deleteError);
+      dispatch(clearDeleteTableState());
+    }
+  }, [deleteError, dispatch]);
+
   return (
     <>
       <div style={{ 
@@ -67,39 +89,66 @@ const TableDetailPage = () => {
             status={TableStatusLabel[table.status as keyof typeof TableStatusLabel]} 
           />
         </div>
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '8px' 
-        }}>
-          <Dropdown 
-            menu={{ 
-              items: [{ key: "1", label: "View History" }] 
-            }} 
-            trigger={['click']}
-          >
-            <Button type="default" icon={<DownOutlined />} iconPosition="end">
-              More
-            </Button>
-          </Dropdown>
-          {checkShowEdit(TableStatusLabel[table.status as keyof typeof TableStatusLabel]) && (
-            <Button
-              icon={<EditOutlined />}
-              onClick={() => navigate(`/tables/update/${tableId}`)}
-              color="primary"
-              variant="outlined"
-            >
-              Edit
-            </Button>
-          )}
-          <TableStatusSelector
-            currentStatus={table.status}
-            tableId={tableId || ""}
-            onStatusChange={handleTableStatusChange}
-          />
-        </div>
+                 <div style={{ 
+           display: 'flex', 
+           alignItems: 'center', 
+           gap: '8px' 
+         }}>
+           {checkShowDelete(TableStatusLabel[table.status as keyof typeof TableStatusLabel]) && (
+             <Button 
+               type="primary" 
+               danger 
+               onClick={handleDeleteTable}
+               disabled={deleteLoading}
+             >
+               Delete
+             </Button>
+           )}
+           <Dropdown 
+             menu={{ 
+               items: [
+                 { key: "1", label: "View History" }
+               ]
+             }} 
+             trigger={['click']}
+           >
+             <Button type="default" icon={<DownOutlined />} iconPosition="end">
+               More
+             </Button>
+           </Dropdown>
+           {checkShowEdit(TableStatusLabel[table.status as keyof typeof TableStatusLabel]) && (
+             <Button
+               icon={<EditOutlined />}
+               onClick={() => navigate(`/tables/update/${tableId}`)}
+               color="primary"
+               variant="outlined"
+             >
+               Edit
+             </Button>
+           )}
+           <TableStatusSelector
+             currentStatus={table.status}
+             tableId={tableId || ""}
+             onStatusChange={handleTableStatusChange}
+           />
+         </div>
       </div>
       <TableDetail tableDetail={table} />
+      
+      <Modal
+        title="Delete Table"
+        open={isDeleteModalOpen}
+        onOk={() => {
+          setIsDeleteModalOpen(false);
+          dispatch(deleteTableStart({ tableId: tableId || "" }));
+        }}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        okText="Delete"
+        okType="danger"
+        cancelText="Cancel"
+      >
+        <p>Are you sure you want to delete this table? This action cannot be undone.</p>
+      </Modal>
     </>
   );
 };

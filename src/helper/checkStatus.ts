@@ -61,3 +61,28 @@ export const checkCanEdit = (status: string) => {
       return 0;
   }
 };
+
+export const checkShowDelete = (status: string) => {
+  switch (status) {
+    case "UnAvailable":
+      return true;
+    case "Available":
+      return true;
+    case "Not Start":
+      return true;
+    case "On Going":
+      return false;
+    case "Expired":
+      return true;
+    case "OutOfService":
+      return true;
+    case "Occupied":
+      return false;
+    case "Reserved":
+      return true;
+    case "Cleaning":
+      return true;
+    default:
+      return true;
+  }
+};

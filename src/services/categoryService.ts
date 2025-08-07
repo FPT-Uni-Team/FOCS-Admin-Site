@@ -14,6 +14,8 @@ const categoryService = {
     axiosClient.get(endpoints.category.detail(params)),
   changeStatus: (action: string, id: string) =>
     axiosClient.post(endpoints.category.change(action, id)),
+  deleteCategory: (id: string) =>
+    axiosClient.delete(endpoints.category.delete(id)),
 };
 
 export default categoryService;
