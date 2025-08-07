@@ -28,7 +28,7 @@ import {
 } from "../../slices/variant/variantGroupCreateSlice";
 
 import variantGroupsService, { variantService, updateVariant, createVariant } from "../../../services/variantService";
-import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest, Variant, VariantCreateRequest, VariantUpdateRequest } from "../../../type/variant/variant";
+import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest, Variant, VariantCreateRequest, VariantUpdateRequest, VariantAssignRequest, VariantAssignResponse } from "../../../type/variant/variant";
 import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 import {
   fetchVariantsStart,
@@ -50,8 +50,13 @@ import {
   createVariantSuccess,
   createVariantFailure,
 } from "../../slices/variant/variantCreateSlice";
+import {
+  assignVariantsStart,
+  assignVariantsSuccess,
+  assignVariantsFailure,
+} from "../../slices/variant/variantAssignSlice";
 
-const { getListVariantGroups, createVariantGroup, getDetailVariantGroup, updateVariantGroup } = variantGroupsService;
+const { getListVariantGroups, createVariantGroup, getDetailVariantGroup, updateVariantGroup, assignVariantsToGroup } = variantGroupsService;
 
 function* fetchVariantGroupsList(
   action: PayloadAction<ListPageParams>
@@ -187,6 +192,26 @@ function* fetchCreateVariant(
   }
 }
 
+function* fetchAssignVariants(
+  action: PayloadAction<VariantAssignRequest>
+): Generator<Effect, void, AxiosResponse<VariantAssignResponse>> {
+  try {
+    const response: AxiosResponse<VariantAssignResponse> = yield call(
+      assignVariantsToGroup,
+      action.payload
+    );
+    yield put(assignVariantsSuccess(response.data));
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred while assigning variants";
+    yield put(assignVariantsFailure(message));
+  }
+}
+
 export function* watchVariantSaga() {
   yield takeLatest(fetchVariantGroupsStart.type, fetchVariantGroupsList);
   yield takeLatest(fetchVariantGroupDetailStart.type, fetchVariantGroupDetail);
@@ -205,5 +230,8 @@ export function* watchVariantSaga() {
   });
   yield takeLatest(createVariantStart.type, function* (action) {
     yield* withGlobalLoading(fetchCreateVariant, action);
+  });
+  yield takeLatest(assignVariantsStart.type, function* (action) {
+    yield* withGlobalLoading(fetchAssignVariants, action);
   });
 }

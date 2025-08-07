@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { fetchVariantGroupDetailStart } from "../../store/slices/variant/variantGroupDetailSlice";
-import type { VariantGroup } from "../../type/variant/variant";
+
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 
 const VariantGroupDetailPage = () => {
@@ -20,10 +20,14 @@ const VariantGroupDetailPage = () => {
     dispatch(fetchVariantGroupDetailStart(variantGroupId || ""));
   }, [dispatch, variantGroupId]);
 
+  if (!variantGroupDetail) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <TitleLine
-        title={variantGroupDetail?.group_name || "Variant Group"}
+        title={variantGroupDetail.group_name || "Variant Group"}
         onEdit={() => {
           navigate(`/variant-groups/${variantGroupId}/update`);
         }}
@@ -32,7 +36,7 @@ const VariantGroupDetailPage = () => {
       <ContentInner>
         <VariantGroupDetail 
           form={form} 
-          variantGroupDetail={variantGroupDetail as VariantGroup} 
+          variantGroupDetail={variantGroupDetail} 
           mode="View"
         />
       </ContentInner>

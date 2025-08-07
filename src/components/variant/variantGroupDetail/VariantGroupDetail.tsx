@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   Input,
@@ -8,10 +8,15 @@ import {
   Card,
   Table,
   Tag,
+  Button,
 } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import type { VariantGroup } from "../../../type/variant/variant";
 import { formatPrice } from "../../../helper/formatPrice";
 import styles from "./VariantGroupDetail.module.scss";
+import ModalAssignVariant from "../../common/modal/ModalAssignVariant";
+import { fetchVariantGroupDetailStart } from "../../../store/slices/variant/variantGroupDetailSlice";
+import { useAppDispatch } from "../../../hooks/redux";
 
 interface Props {
   form: FormInstance;
@@ -20,14 +25,21 @@ interface Props {
 }
 
 const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = "View" }) => {
+  const dispatch = useAppDispatch();
   const isEditMode = mode === "Update";
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  
   useEffect(() => {
-    if (variantGroupDetail) {
+    if (variantGroupDetail?.group_name) {
       form.setFieldsValue({
         group_name: variantGroupDetail.group_name,
       });
     }
   }, [variantGroupDetail, form]);
+
+  if (!variantGroupDetail) {
+    return <div>Loading...</div>;
+  }
 
   const variantColumns = [
     {
@@ -72,6 +84,17 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = 
     },
   ];
 
+  const handleAssignSuccess = () => {
+    // Refresh variant group detail after successful assignment
+    if (variantGroupDetail?.id) {
+      dispatch(fetchVariantGroupDetailStart(variantGroupDetail.id));
+    }
+  };
+
+  const getAssignedVariantIds = () => {
+    return variantGroupDetail?.variants?.map(variant => variant.id) || [];
+  };
+
   return (
     <Form form={form} layout="vertical" name="variantGroupDetailForm" colon={true}>
       <Row gutter={24}>
@@ -84,10 +107,24 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = 
 
       <Row className={styles.variantTable}>
         <Col span={24}>
-          <Card title="Variants" size="small">
+          <Card 
+            title="Variants" 
+            size="small"
+            extra={
+              !isEditMode && (
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  onClick={() => setShowAssignModal(true)}
+                >
+                  Assign Variants
+                </Button>
+              )
+            }
+          >
             <Table
               columns={variantColumns}
-              dataSource={variantGroupDetail?.variants || []}
+              dataSource={variantGroupDetail.variants || []}
               rowKey="id"
               pagination={{
                 pageSize: 10,
@@ -100,6 +137,17 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = 
           </Card>
         </Col>
       </Row>
+
+      {variantGroupDetail?.id && (
+        <ModalAssignVariant
+          visible={showAssignModal}
+          onCancel={() => setShowAssignModal(false)}
+          variantGroupId={variantGroupDetail.id}
+          variantGroupName={variantGroupDetail.group_name || ""}
+          excludeVariantIds={getAssignedVariantIds()}
+          onSuccess={handleAssignSuccess}
+        />
+      )}
     </Form>
   );
 };

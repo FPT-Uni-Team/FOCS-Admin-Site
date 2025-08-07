@@ -68,6 +68,7 @@ const endpoints = {
     create: () => `${API_BASE_URL}/admin/variant-group`,
     detail: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
     update: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
+    assignVariants: () => `${API_BASE_URL}/admin/menu-item-variant/assign-to-variant-group`,
   },
   variant: {
     list: () => `${API_BASE_URL}/admin/menu-item-variant/list`,
