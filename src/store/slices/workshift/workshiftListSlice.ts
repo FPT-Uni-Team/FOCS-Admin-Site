@@ -1,7 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import {
   defaultParams,
-  type ListPageParams,
 } from "../../../type/common/common";
 import type { WorkshiftItem, WorkshiftListParams } from "../../../type/workshift/workshift";
 
