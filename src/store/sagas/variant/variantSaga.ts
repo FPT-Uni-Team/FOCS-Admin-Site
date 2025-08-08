@@ -27,8 +27,8 @@ import {
   createVariantGroupFailure,
 } from "../../slices/variant/variantGroupCreateSlice";
 
-import variantGroupsService, { variantService, updateVariant, createVariant } from "../../../services/variantService";
-import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest, Variant, VariantCreateRequest, VariantUpdateRequest } from "../../../type/variant/variant";
+import variantGroupsService, { variantService, updateVariant } from "../../../services/variantService";
+import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest, Variant, VariantCreateRequest, VariantUpdateRequest, VariantAssignRequest, VariantAssignResponse } from "../../../type/variant/variant";
 import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 import {
   fetchVariantsStart,
@@ -50,8 +50,24 @@ import {
   createVariantSuccess,
   createVariantFailure,
 } from "../../slices/variant/variantCreateSlice";
+import {
+  assignVariantsStart,
+  assignVariantsSuccess,
+  assignVariantsFailure,
+} from "../../slices/variant/variantAssignSlice";
+import {
+  deleteVariantGroupStart,
+  deleteVariantGroupSuccess,
+  deleteVariantGroupFailure,
+} from "../../slices/variant/variantGroupDeleteSlice";
+import {
+  deleteVariantStart,
+  deleteVariantSuccess,
+  deleteVariantFailure,
+} from "../../slices/variant/variantDeleteSlice";
 
-const { getListVariantGroups, createVariantGroup, getDetailVariantGroup, updateVariantGroup } = variantGroupsService;
+const { getListVariantGroups, createVariantGroup, getDetailVariantGroup, updateVariantGroup, assignVariantsToGroup, deleteVariantGroup } = variantGroupsService;
+const { createVariant, deleteVariant } = variantService;
 
 function* fetchVariantGroupsList(
   action: PayloadAction<ListPageParams>
@@ -187,6 +203,54 @@ function* fetchCreateVariant(
   }
 }
 
+function* fetchAssignVariants(
+  action: PayloadAction<VariantAssignRequest>
+): Generator<Effect, void, AxiosResponse<VariantAssignResponse>> {
+  try {
+    const response: AxiosResponse<VariantAssignResponse> = yield call(
+      assignVariantsToGroup,
+      action.payload
+    );
+    yield put(assignVariantsSuccess(response.data));
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred while assigning variants";
+    yield put(assignVariantsFailure(message));
+  }
+}
+
+function* handleDeleteVariantGroup(
+  action: PayloadAction<{ variantGroupId: string }>
+): Generator<unknown, void, unknown> {
+  try {
+    const { variantGroupId } = action.payload;
+    yield call(deleteVariantGroup, variantGroupId);
+    yield put(deleteVariantGroupSuccess({ variantGroupId }));
+  } catch (error: unknown) {
+    const err = error as { message?: string };
+    const errorMessage = err.message || "Failed to delete variant group";
+    yield put(deleteVariantGroupFailure(errorMessage));
+  }
+}
+
+function* handleDeleteVariant(
+  action: PayloadAction<{ variantId: string }>
+): Generator<unknown, void, unknown> {
+  try {
+    const { variantId } = action.payload;
+    yield call(deleteVariant, variantId);
+    yield put(deleteVariantSuccess({ variantId }));
+  } catch (error: unknown) {
+    const err = error as { message?: string };
+    const errorMessage = err.message || "Failed to delete variant";
+    yield put(deleteVariantFailure(errorMessage));
+  }
+}
+
 export function* watchVariantSaga() {
   yield takeLatest(fetchVariantGroupsStart.type, fetchVariantGroupsList);
   yield takeLatest(fetchVariantGroupDetailStart.type, fetchVariantGroupDetail);
@@ -206,4 +270,9 @@ export function* watchVariantSaga() {
   yield takeLatest(createVariantStart.type, function* (action) {
     yield* withGlobalLoading(fetchCreateVariant, action);
   });
+  yield takeLatest(assignVariantsStart.type, function* (action) {
+    yield* withGlobalLoading(fetchAssignVariants, action);
+  });
+  yield takeLatest(deleteVariantGroupStart.type, handleDeleteVariantGroup);
+  yield takeLatest(deleteVariantStart.type, handleDeleteVariant);
 }

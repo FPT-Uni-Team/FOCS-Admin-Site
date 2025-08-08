@@ -7,6 +7,7 @@ import {
   UserOutlined,
   ShoppingCartOutlined,
   MessageOutlined,
+  ClockCircleOutlined,
 } from "@ant-design/icons";
 import React, {
   lazy,
@@ -74,6 +75,7 @@ const OrderDetailPage = lazy(() => import("../pages/order/OrderDetailPage"));
 const FeedbackListPage = lazy(() => import("../pages/feedback/FeedbackListPage"));
 const FeedbackDetailPage = lazy(() => import("../pages/feedback/FeedbackDetailPage"));
 const FeedbackUpdatePage = lazy(() => import("../pages/feedback/FeedbackUpdatePage"));
+const WorkshiftListPage = lazy(() => import("../pages/workshift/WorkshiftListPage"));
 
 export interface AppRoute {
   path: string;
@@ -293,6 +295,12 @@ export const routes: AppRoute[] = [
     path: "/feedbacks/:feedbackId/update",
     component: FeedbackUpdatePage,
     hidden: true,
+  },
+  {
+    path: "/workshifts",
+    component: WorkshiftListPage,
+    label: "Workshifts",
+    icon: <ClockCircleOutlined />,
   },
 ];
 

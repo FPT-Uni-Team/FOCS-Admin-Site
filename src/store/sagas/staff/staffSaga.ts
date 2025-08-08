@@ -31,8 +31,13 @@ import {
   updateStaffStart,
   updateStaffSuccess,
 } from "../../slices/staff/staffUpdateSlice";
+import {
+  deleteStaffStart,
+  deleteStaffSuccess,
+  deleteStaffFailure,
+} from "../../slices/staff/staffDeleteSlice";
 
-const { getListStaffs, createStaff, getStaffDetail, updateStaff } =
+const { getListStaffs, createStaff, getStaffDetail, updateStaff, deleteStaff } =
   staffService;
 
 function* fetchStaffList(
@@ -102,6 +107,20 @@ export function* fetchUpdateStaff(
   }
 }
 
+function* handleDeleteStaff(
+  action: PayloadAction<{ staffId: string }>
+): Generator<unknown, void, unknown> {
+  try {
+    const { staffId } = action.payload;
+    yield call(deleteStaff, staffId);
+    yield put(deleteStaffSuccess({ staffId }));
+  } catch (error: unknown) {
+    const err = error as { message?: string };
+    const errorMessage = err.message || "Failed to delete staff";
+    yield put(deleteStaffFailure(errorMessage));
+  }
+}
+
 export function* watchStaffSaga() {
   yield takeLatest(fetchStaffListStart.type, fetchStaffList);
   yield takeLatest(createStaffStart.type, function* (action) {
@@ -113,4 +132,5 @@ export function* watchStaffSaga() {
   yield takeLatest(updateStaffStart.type, function* (action) {
     yield* withGlobalLoading(fetchUpdateStaff, action);
   });
+  yield takeLatest(deleteStaffStart.type, handleDeleteStaff);
 }

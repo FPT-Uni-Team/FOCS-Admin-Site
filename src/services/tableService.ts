@@ -27,6 +27,8 @@ const tableService = {
       headers: { 'Content-Type': 'application/json' }
     });
   },
+  deleteTable: (id: string) =>
+    axiosClient.delete(endpoints.table.delete(id)),
 };
 
 export default tableService; 

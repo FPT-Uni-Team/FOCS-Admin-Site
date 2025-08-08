@@ -40,6 +40,11 @@ import {
   changeStatusPromotionsStart,
   changeStatusPromotionsSuccess,
 } from "../../slices/promotion/promotionChangeStatusSlice";
+import {
+  deletePromotionStart,
+  deletePromotionSuccess,
+  deletePromotionFailure,
+} from "../../slices/promotion/promotionDeleteSlice";
 
 const {
   getListPromtions,
@@ -47,6 +52,7 @@ const {
   getPromotionDetail,
   updatePromotion,
   changeStatus,
+  deletePromotion,
 } = promotionService;
 
 const { getListCouponByIDs } = couponService;
@@ -184,6 +190,21 @@ function* fetchChangeStatusPromotion(
   }
 }
 
+function* handleDeletePromotion(
+  action: PayloadAction<{ promotionId: string }>
+): Generator<unknown, void, unknown> {
+  try {
+    const { promotionId } = action.payload;
+
+    yield call(deletePromotion, promotionId);
+    yield put(deletePromotionSuccess({ promotionId }));
+  } catch (error: unknown) {
+    const err = error as { message?: string };
+    const errorMessage = err.message || "Failed to delete promotion";
+    yield put(deletePromotionFailure(errorMessage));
+  }
+}
+
 export function* watchPromotionSaga() {
   yield takeLatest(fetchPromotionsStart.type, fetchPromotionList);
   yield takeLatest(createPromotionStart.type, function* (action) {
@@ -198,4 +219,5 @@ export function* watchPromotionSaga() {
   yield takeLatest(changeStatusPromotionsStart.type, function* (action) {
     yield* withGlobalLoading(fetchChangeStatusPromotion, action);
   });
+  yield takeLatest(deletePromotionStart.type, handleDeletePromotion);
 }

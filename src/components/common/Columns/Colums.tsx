@@ -28,6 +28,7 @@ import {
   type OrderType
 } from "../../../type/order/order";
 import type { FeedbackListDataType } from "../../../type/feedback/feedback";
+import type { WorkshiftItem } from "../../../type/workshift/workshift";
 import { Rate, Image } from "antd";
 const { Text } = Typography;
 
@@ -835,6 +836,44 @@ export const columnsFeedback: ColumnsType<FeedbackListDataType> = [
       return <Text>{formatDate(created_at)}</Text>;
     },
     sorter: true,
+  },
+];
+
+export const columnsWorkshiftList: ColumnsType<WorkshiftItem> = [
+  {
+    title: "Work Date",
+    dataIndex: "workDate",
+    key: "workDate",
+    sortDirections: [
+      "ascend" as SortOrder,
+      "descend" as SortOrder,
+      "ascend" as SortOrder,
+    ],
+    render: (workDate: string) => {
+      return formatDate(workDate);
+    },
+    sorter: true,
+  },
+  {
+    title: "Shifts",
+    dataIndex: "shift",
+    key: "shift",
+    render: (shifts: WorkshiftItem["shift"]) => {
+      return (
+        <div>
+          {shifts.map((shift, index) => (
+            <div key={index} style={{ marginBottom: index > 0 ? '8px' : '0' }}>
+              <div style={{ fontWeight: '500', color: '#1890ff' }}>
+                {shift.staffName}
+              </div>
+              <div style={{ fontSize: '12px', color: '#666' }}>
+                {shift.startTime} - {shift.endTime}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    },
   },
 ];
 

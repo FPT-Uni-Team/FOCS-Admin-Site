@@ -9,6 +9,7 @@ interface TitleProps {
   status?: string;
   onEdit?: () => void;
   onAction?: (category: string, id: string) => void;
+  onDelete?: () => void;
   hasMoreAction?: boolean;
   isActive?: number;
   onCreate?: () => void;
@@ -21,6 +22,7 @@ interface TitleProps {
   contentModal?: string;
   promotionId?: string;
   isShowEdit?: boolean;
+  deleteLoading?: boolean;
 }
 
 const TitleLine: React.FC<TitleProps> = ({
@@ -28,6 +30,7 @@ const TitleLine: React.FC<TitleProps> = ({
   status,
   onEdit,
   onAction,
+  onDelete,
   hasMoreAction,
   isActive,
   onCreate,
@@ -40,15 +43,8 @@ const TitleLine: React.FC<TitleProps> = ({
   contentModal,
   promotionId,
   isShowEdit = true,
+  deleteLoading = false,
 }) => {
-  const moreMenu = {
-    items: [
-      {
-        key: "1",
-        label: "View History",
-      },
-    ],
-  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -60,8 +56,29 @@ const TitleLine: React.FC<TitleProps> = ({
       </div>
 
       <div className={styles.actionButtons}>
+        {onDelete && (
+          <Button 
+            type="primary" 
+            danger 
+            onClick={onDelete}
+            disabled={deleteLoading}
+          >
+            Delete
+          </Button>
+        )}
+        
         {hasMoreAction && (
-          <Dropdown menu={moreMenu} trigger={["click"]}>
+          <Dropdown 
+            menu={{
+              items: [
+                {
+                  key: "1",
+                  label: "View History",
+                },
+              ]
+            }} 
+            trigger={["click"]}
+          >
             <Button type="default" icon={<DownOutlined />} iconPosition="end">
               More
             </Button>

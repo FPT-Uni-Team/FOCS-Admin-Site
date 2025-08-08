@@ -33,6 +33,11 @@ import {
   updateCategoryStart,
   updateCategorySuccess,
 } from "../../slices/category/categoryUpdateSlice";
+import {
+  deleteCategoryStart,
+  deleteCategorySuccess,
+  deleteCategoryFailure,
+} from "../../slices/category/categoryDeleteSlice";
 
 const {
   getListCategories,
@@ -40,6 +45,7 @@ const {
   getCategoryDetail,
   changeStatus,
   updateCategories,
+  deleteCategory,
 } = categoryService;
 
 export interface categoryRequest {
@@ -130,6 +136,20 @@ function* fetchChangeStatusCategory(
   }
 }
 
+function* handleDeleteCategory(
+  action: PayloadAction<{ categoryId: string }>
+): Generator<unknown, void, unknown> {
+  try {
+    const { categoryId } = action.payload;
+    yield call(deleteCategory, categoryId);
+    yield put(deleteCategorySuccess({ categoryId }));
+  } catch (error: unknown) {
+    const err = error as { message?: string };
+    const errorMessage = err.message || "Failed to delete category";
+    yield put(deleteCategoryFailure(errorMessage));
+  }
+}
+
 export function* watchCategorySaga() {
   yield takeLatest(fetchCategoriesStart.type, fetchCategoryList);
   yield takeLatest(createCategoryStart.type, function* (action) {
@@ -144,4 +164,5 @@ export function* watchCategorySaga() {
   yield takeLatest(updateCategoryStart.type, function* (action) {
     yield* withGlobalLoading(fetchCategoryUpdate, action);
   });
+  yield takeLatest(deleteCategoryStart.type, handleDeleteCategory);
 }

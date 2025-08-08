@@ -6,6 +6,7 @@ const endpoints = {
     create: () => `${API_BASE_URL}/admin/promotion`,
     detail: (params: string) => `${API_BASE_URL}/admin/promotion/${params}`,
     update: (params: string) => `${API_BASE_URL}/admin/promotion/${params}`,
+    delete: (id: string) => `${API_BASE_URL}/admin/promotion/${id}`,
     change: (action: string, id: string) =>
       `${API_BASE_URL}/admin/promotion/${action}/${id}`,
   },
@@ -15,6 +16,7 @@ const endpoints = {
     create: () => `${API_BASE_URL}/admin/menu-item`,
     detail: (params: string) => `${API_BASE_URL}/admin/menu-item/${params}`,
     update: (params: string) => `${API_BASE_URL}/admin/menu-item/${params}`,
+    delete: (id: string) => `${API_BASE_URL}/admin/menu-item/${id}`,
     images: (params: string) =>
       `${API_BASE_URL}/admin/menu-item/${params}/images`,
     variantGroups: (params: string) =>
@@ -60,6 +62,7 @@ const endpoints = {
     create: () => `${API_BASE_URL}/Category`,
     detail: (params: string) => `${API_BASE_URL}/Category/${params}`,
     update: (param: string) => `${API_BASE_URL}/Category/${param}`,
+    delete: (id: string) => `${API_BASE_URL}/menu-item-category/${id}/category`,
     change: (action: string, id: string) =>
       `${API_BASE_URL}/Category/${action}/${id}`,
   },
@@ -68,12 +71,15 @@ const endpoints = {
     create: () => `${API_BASE_URL}/admin/variant-group`,
     detail: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
     update: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
+    delete: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
+    assignVariants: () => `${API_BASE_URL}/admin/menu-item-variant/assign-to-variant-group`,
   },
   variant: {
     list: () => `${API_BASE_URL}/admin/menu-item-variant/list`,
     create: () => `${API_BASE_URL}/admin/menu-item-variant`,
     detail: (id: string) => `${API_BASE_URL}/admin/menu-item-variant/${id}`,
     update: (id: string) => `${API_BASE_URL}/admin/menu-item-variant/${id}`,
+    delete: (id: string) => `${API_BASE_URL}/admin/menu-item-variant/${id}`,
   },
   image: {
     upload: () => `${API_BASE_URL}/admin/menu-item/sync-images`,
@@ -83,12 +89,14 @@ const endpoints = {
     create: () => `${API_BASE_URL}/staff`,
     detail: (id: string) => `${API_BASE_URL}/staff/${id}`,
     update: (id: string) => `${API_BASE_URL}/staff/${id}`,
+    delete: (id: string) => `${API_BASE_URL}/staff/${id}`,
   },
   table: {
     list: () => `${API_BASE_URL}/manager/tables`,
     detail: (id: string) => `${API_BASE_URL}/manager/table/${id}`,
     create: () => `${API_BASE_URL}/manager/table`,
     update: (id: string) => `${API_BASE_URL}/manager/table/${id}`,
+    delete: (id: string) => `${API_BASE_URL}/manager/table/${id}`,
     generateQR: () => `${API_BASE_URL}/manager/table/qrcode`,
     changeStatus: (tableId: string, storeId: string) => 
       `${API_BASE_URL}/manager/table/status?tableId=${tableId}&storeId=${storeId}`,
@@ -101,6 +109,9 @@ const endpoints = {
     list: () => `${API_BASE_URL}/feedback/list`,
     detail: (id: string) => `${API_BASE_URL}/feedback/${id}`,
     update: (id: string) => `${API_BASE_URL}/feedback/${id}`,
+  },
+  workshift: {
+    list: () => `${API_BASE_URL}/Workshift/list`,
   },
 };
 

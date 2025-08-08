@@ -19,6 +19,8 @@ const promotionService = {
     ),
   changeStatus: (action: string, id: string) =>
     axiosClient.patch(endpoints.promotion.change(action, id)),
+  deletePromotion: (id: string) =>
+    axiosClient.delete(endpoints.promotion.delete(id)),
 };
 
 export default promotionService;

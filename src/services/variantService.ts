@@ -1,7 +1,7 @@
 import axiosClient from "../api/axiosClient";
 import endpoints from "../api/endpoint";
 import type { ListPageParams } from "../type/common/common";
-import type { VariantGroupCreateRequest, VariantGroupUpdateRequest, VariantCreateRequest, VariantUpdateRequest } from "../type/variant/variant";
+import type { VariantGroupCreateRequest, VariantGroupUpdateRequest, VariantCreateRequest, VariantUpdateRequest, VariantAssignRequest } from "../type/variant/variant";
 
 const variantGroupsService = {
   getListVariantGroups: (params: ListPageParams) =>
@@ -12,6 +12,13 @@ const variantGroupsService = {
     axiosClient.get(endpoints.variantGroup.detail(id)),
   updateVariantGroup: (id: string, payload: VariantGroupUpdateRequest) =>
     axiosClient.patch(endpoints.variantGroup.update(id), payload),
+  deleteVariantGroup: (id: string) =>
+    axiosClient.delete(endpoints.variantGroup.delete(id)),
+  assignVariantsToGroup: (payload: VariantAssignRequest) =>
+    axiosClient.post(endpoints.variantGroup.assignVariants(), {
+      variant_ids: payload.variantIds,
+      variant_group_id: payload.variantGroupId,
+    }),
 };
 
 const variantService = {
@@ -29,6 +36,8 @@ const variantService = {
     axiosClient.post(endpoints.variant.create(), payload),
   getDetailVariant: (id: string) =>
     axiosClient.get(endpoints.variant.detail(id)),
+  deleteVariant: (id: string) =>
+    axiosClient.delete(endpoints.variant.delete(id)),
 };
 
 const updateVariant = (id: string, payload: VariantUpdateRequest) =>

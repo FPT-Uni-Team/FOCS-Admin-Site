@@ -33,6 +33,11 @@ import {
   updateMenuItemSuccess,
 } from "../../slices/menuItem/menuItemUpdateSlice";
 import { changeStatusMenuItemStart } from "../../action/menuItemAction";
+import {
+  deleteMenuItemStart,
+  deleteMenuItemSuccess,
+  deleteMenuItemFailure,
+} from "../../slices/menuItem/menuItemDeleteSlice";
 
 const {
   getListMenuItems,
@@ -43,6 +48,7 @@ const {
   menuItemGroups,
   menuItemCategory,
   menuItemUpdate,
+  deleteMenuItem,
 } = menuItemService;
 
 function* fetchMenuItemList(
@@ -133,6 +139,21 @@ function* changeStatusWorker(
   }
 }
 
+function* handleDeleteMenuItem(
+  action: PayloadAction<{ menuItemId: string }>
+): Generator<unknown, void, unknown> {
+  try {
+    const { menuItemId } = action.payload;
+
+    yield call(deleteMenuItem, menuItemId);
+    yield put(deleteMenuItemSuccess({ menuItemId }));
+  } catch (error: unknown) {
+    const err = error as { message?: string };
+    const errorMessage = err.message || "Failed to delete menu item";
+    yield put(deleteMenuItemFailure(errorMessage));
+  }
+}
+
 export function* watchMenuSaga() {
   yield takeLatest(fetchMenuItemsStart.type, fetchMenuItemList);
   yield takeLatest(createMenuItemStart.type, function* (action) {
@@ -147,4 +168,5 @@ export function* watchMenuSaga() {
   yield takeLatest(changeStatusMenuItemStart.type, function* (action) {
     yield* withGlobalLoading(changeStatusWorker, action);
   });
+  yield takeLatest(deleteMenuItemStart.type, handleDeleteMenuItem);
 }

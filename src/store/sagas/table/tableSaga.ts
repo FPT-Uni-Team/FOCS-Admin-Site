@@ -28,10 +28,15 @@ import {
   changeTableStatusSuccess,
   changeTableStatusFailure,
 } from "../../slices/table/tableChangeStatusSlice";
+import {
+  deleteTableStart,
+  deleteTableSuccess,
+  deleteTableFailure,
+} from "../../slices/table/tableDeleteSlice";
 import tableService from "../../../services/tableService";
 import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 
-const { getListTables, getTableDetail, createTable, updateTable, generateTableQR, changeStatus } = tableService;
+const { getListTables, getTableDetail, createTable, updateTable, generateTableQR, changeStatus, deleteTable } = tableService;
 
 function* fetchTableList(
   action: PayloadAction<TableListParams>
@@ -125,6 +130,20 @@ function* fetchChangeTableStatus(
   }
 }
 
+function* handleDeleteTable(
+  action: PayloadAction<{ tableId: string }>
+): Generator<unknown, void, unknown> {
+  try {
+    const { tableId } = action.payload;
+    yield call(deleteTable, tableId);
+    yield put(deleteTableSuccess({ tableId }));
+  } catch (error: unknown) {
+    const err = error as { message?: string };
+    const errorMessage = err.message || "Failed to delete table";
+    yield put(deleteTableFailure(errorMessage));
+  }
+}
+
 export function* watchTableSaga() {
   yield takeLatest(fetchTablesStart.type, fetchTableList);
   yield takeLatest(fetchTableDetailStart.type, fetchTableDetail);
@@ -137,4 +156,5 @@ export function* watchTableSaga() {
   yield takeLatest(changeTableStatusStart.type, function* (action) {
     yield* withGlobalLoading(fetchChangeTableStatus, action);
   });
+  yield takeLatest(deleteTableStart.type, handleDeleteTable);
 } 
