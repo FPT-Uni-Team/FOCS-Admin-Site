@@ -53,6 +53,7 @@ import orderDetailSlice from "./slices/order/orderDetailSlice";
 import feedbackListSlice from "./slices/feedback/feedbackListSlice";
 import feedbackDetailSlice from "./slices/feedback/feedbackDetailSlice";
 import feedbackUpdateSlice from "./slices/feedback/feedbackUpdateSlice";
+import workshiftListSlice from "./slices/workshift/workshiftListSlice";
 
 const rootReducer = combineReducers({
   promotion: promotionSlice,
@@ -109,6 +110,7 @@ const rootReducer = combineReducers({
   feedbackList: feedbackListSlice,
   feedbackDetail: feedbackDetailSlice,
   feedbackUpdate: feedbackUpdateSlice,
+  workshiftList: workshiftListSlice,
 });
 
 export default rootReducer;

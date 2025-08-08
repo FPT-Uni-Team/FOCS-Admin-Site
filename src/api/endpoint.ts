@@ -110,6 +110,9 @@ const endpoints = {
     detail: (id: string) => `${API_BASE_URL}/feedback/${id}`,
     update: (id: string) => `${API_BASE_URL}/feedback/${id}`,
   },
+  workshift: {
+    list: () => `${API_BASE_URL}/Workshift/list`,
+  },
 };
 
 export default endpoints;
