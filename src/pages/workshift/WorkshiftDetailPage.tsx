@@ -1,14 +1,17 @@
-import { useEffect } from "react";
+import { useForm } from "antd/es/form/Form";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { Modal } from "antd";
 
+import TitleLine from "../../components/common/Title/TitleLine";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchWorkshiftDetailStart } from "../../store/slices/workshift/workshiftDetailSlice";
 import WorkshiftDetail from "../../components/workshift/workshiftDetail/WorkshiftDetail";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 
 const WorkshiftDetailPage = () => {
+  const [form] = useForm();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -29,30 +32,52 @@ const WorkshiftDetailPage = () => {
     }
   }, [error]);
 
-  const handleBack = () => {
-    navigate("/workshifts");
+  const handleDeleteWorkshift = () => {
+    setIsDeleteModalOpen(true);
   };
 
   if (!id) {
     return <div>ID not found</div>;
   }
 
+  if (loading || !workshiftDetail) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
-      <div className="mb-4">
-        <Button 
-          icon={<ArrowLeftOutlined />} 
-          onClick={handleBack}
-          className="mb-4"
-        >
-          Back to Workshift List
-        </Button>
-      </div>
+      <TitleLine
+        title={`Workshift - ${workshiftDetail.workDate}`}
+        contentModal="this workshift"
+        onEdit={() => {
+          navigate(`/workshifts/${id}/update`);
+        }}
+        onDelete={handleDeleteWorkshift}
+        hasMoreAction={true}
+        promotionId={id}
+        isShowEdit={true}
+      />
       
       <WorkshiftDetail 
+        form={form}
         workshiftDetail={workshiftDetail} 
-        loading={loading} 
+        mode="View"
       />
+      
+      <Modal
+        title="Delete Workshift"
+        open={isDeleteModalOpen}
+        onOk={() => {
+          setIsDeleteModalOpen(false);
+          // TODO: Implement delete functionality
+        }}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        okText="Delete"
+        okType="danger"
+        cancelText="Cancel"
+      >
+        <p>Are you sure you want to delete this workshift? This action cannot be undone.</p>
+      </Modal>
     </>
   );
 };
