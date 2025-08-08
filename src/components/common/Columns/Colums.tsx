@@ -849,8 +849,13 @@ export const columnsWorkshiftList: ColumnsType<WorkshiftItem> = [
       "descend" as SortOrder,
       "ascend" as SortOrder,
     ],
-    render: (workDate: string) => {
-      return formatDate(workDate);
+    render: (workDate: string, record: WorkshiftItem) => {
+      return (
+        <CustomLink
+          title={formatDate(workDate)}
+          href={`/workshifts/${record.id}`}
+        />
+      );
     },
     sorter: true,
   },

@@ -5,6 +5,7 @@ export interface Shift {
 }
 
 export interface WorkshiftItem {
+  id: string;
   workDate: string;
   shift: Shift[];
 }
@@ -25,4 +26,41 @@ export interface WorkshiftListParams {
   sort_order?: string;
   filters?: Record<string, string>;
   storeId: string;
+}
+
+export interface WorkshiftDetailItem {
+  scheduleId: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface WorkshiftDetailResponse {
+  items: WorkshiftDetailItem[];
+}
+
+
+export interface WorkshiftDetailResponseActual {
+  id: string | null;
+  workDate: string;
+  shift: {
+    staffId: string;
+    staffName: string;
+    startTime: string;
+    endTime: string;
+  }[];
+}
+
+export interface WorkshiftDetailParams {
+  id: string;
+}
+
+export interface WorkshiftCreatePayload {
+  workDate: string;
+  shift: {
+    staffId: string;
+    staffName: string;
+    startTime: string;
+    endTime: string;
+  }[];
 } 

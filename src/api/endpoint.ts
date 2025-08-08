@@ -112,6 +112,8 @@ const endpoints = {
   },
   workshift: {
     list: () => `${API_BASE_URL}/Workshift/list`,
+    create: () => `${API_BASE_URL}/workshift`,
+    detail: (id: string) => `${API_BASE_URL}/Workshift/shift/${id}`,
   },
 };
 

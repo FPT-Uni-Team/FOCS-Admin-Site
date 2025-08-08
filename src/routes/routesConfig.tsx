@@ -76,6 +76,8 @@ const FeedbackListPage = lazy(() => import("../pages/feedback/FeedbackListPage")
 const FeedbackDetailPage = lazy(() => import("../pages/feedback/FeedbackDetailPage"));
 const FeedbackUpdatePage = lazy(() => import("../pages/feedback/FeedbackUpdatePage"));
 const WorkshiftListPage = lazy(() => import("../pages/workshift/WorkshiftListPage"));
+const WorkshiftDetailPage = lazy(() => import("../pages/workshift/WorkshiftDetailPage"));
+const WorkshiftCreatePage = lazy(() => import("../pages/workshift/WorkshiftCreatePage"));
 
 export interface AppRoute {
   path: string;
@@ -302,6 +304,16 @@ export const routes: AppRoute[] = [
     label: "Workshifts",
     icon: <ClockCircleOutlined />,
   },
+  {
+    path: "/workshifts/create",
+    component: WorkshiftCreatePage,
+    hidden: true,
+  },
+        {
+        path: "/workshifts/:id",
+        component: WorkshiftDetailPage,
+        hidden: true,
+      },
 ];
 
 export default routes;

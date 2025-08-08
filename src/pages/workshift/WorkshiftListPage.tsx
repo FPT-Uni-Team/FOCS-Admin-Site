@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TitleLine from "../../components/common/Title/TitleLine";
 import { useAppDispatch } from "../../hooks/redux";
 import { fetchWorkshiftListStart } from "../../store/slices/workshift/workshiftListSlice";
@@ -7,6 +8,7 @@ import type { WorkshiftListParams } from "../../type/workshift/workshift";
 
 const WorkshiftListPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [storeId, setStoreId] = useState<string>("");
 
   useEffect(() => {
@@ -32,8 +34,7 @@ const WorkshiftListPage = () => {
       <TitleLine
         title="Workshift List"
         onCreate={() => {
-          // TODO: Navigate to create workshift page if needed
-          console.log("Create workshift");
+          navigate("/workshifts/create");
         }}
       />
       <WorkshiftList fetchData={fetchData} storeId={storeId} />
