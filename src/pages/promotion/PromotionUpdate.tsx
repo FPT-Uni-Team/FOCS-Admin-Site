@@ -86,7 +86,7 @@ const PromotionCreatePage = () => {
             }
           : undefined,
       coupon_ids: allFormValues?.step1?.use_coupon_list,
-      store_id: "550e8400-e29b-41d4-a716-446655440000",
+      store_id: localStorage.getItem("storeId") as string,
     };
   };
 

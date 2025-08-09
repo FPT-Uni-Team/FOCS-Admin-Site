@@ -9,11 +9,7 @@ import {
   MessageOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
-import React, {
-  lazy,
-  type LazyExoticComponent,
-  type ReactNode,
-} from "react";
+import React, { lazy, type LazyExoticComponent, type ReactNode } from "react";
 
 const PromotionListPage = lazy(
   () => import("../pages/promotion/PromotionList")
@@ -62,20 +58,42 @@ const TableListPage = lazy(() => import("../pages/table/TableListPage"));
 const TableDetailPage = lazy(() => import("../pages/table/TableDetailPage"));
 const TableCreatePage = lazy(() => import("../pages/table/TableCreatePage"));
 const TableUpdatePage = lazy(() => import("../pages/table/TableUpdatePage"));
-const VariantGroupListPage = lazy(() => import("../pages/variant/VariantGroupListPage"));
-const VariantGroupDetailPage = lazy(() => import("../pages/variant/VariantGroupDetailPage"));
-const VariantGroupUpdatePage = lazy(() => import("../pages/variant/VariantGroupUpdatePage"));
-const VariantGroupCreatePage = lazy(() => import("../pages/variant/VariantGroupCreatePage"));
+const VariantGroupListPage = lazy(
+  () => import("../pages/variant/VariantGroupListPage")
+);
+const VariantGroupDetailPage = lazy(
+  () => import("../pages/variant/VariantGroupDetailPage")
+);
+const VariantGroupUpdatePage = lazy(
+  () => import("../pages/variant/VariantGroupUpdatePage")
+);
+const VariantGroupCreatePage = lazy(
+  () => import("../pages/variant/VariantGroupCreatePage")
+);
 const VariantListPage = lazy(() => import("../pages/variant/VariantListPage"));
-const VariantCreatePage = lazy(() => import("../pages/variant/VariantCreatePage"));
-const VariantDetailPage = lazy(() => import("../pages/variant/VariantDetailPage"));
-const VariantUpdatePage = lazy(() => import("../pages/variant/VariantUpdatePage"));
+const VariantCreatePage = lazy(
+  () => import("../pages/variant/VariantCreatePage")
+);
+const VariantDetailPage = lazy(
+  () => import("../pages/variant/VariantDetailPage")
+);
+const VariantUpdatePage = lazy(
+  () => import("../pages/variant/VariantUpdatePage")
+);
 const OrderListPage = lazy(() => import("../pages/order/OrderListPage"));
 const OrderDetailPage = lazy(() => import("../pages/order/OrderDetailPage"));
-const FeedbackListPage = lazy(() => import("../pages/feedback/FeedbackListPage"));
-const FeedbackDetailPage = lazy(() => import("../pages/feedback/FeedbackDetailPage"));
-const FeedbackUpdatePage = lazy(() => import("../pages/feedback/FeedbackUpdatePage"));
-const WorkshiftListPage = lazy(() => import("../pages/workshift/WorkshiftListPage"));
+const FeedbackListPage = lazy(
+  () => import("../pages/feedback/FeedbackListPage")
+);
+const FeedbackDetailPage = lazy(
+  () => import("../pages/feedback/FeedbackDetailPage")
+);
+const FeedbackUpdatePage = lazy(
+  () => import("../pages/feedback/FeedbackUpdatePage")
+);
+const WorkshiftListPage = lazy(
+  () => import("../pages/workshift/WorkshiftListPage")
+);
 
 export interface AppRoute {
   path: string;
@@ -89,215 +107,215 @@ export interface AppRoute {
 
 export const routes: AppRoute[] = [
   {
-    path: "/promotions",
+    path: "promotions",
     component: PromotionListPage,
     label: "Promotions",
     icon: <TagOutlined />,
   },
   {
-    path: "/promotions/:promotionId",
+    path: "promotions/:promotionId",
     component: PromotionDetailPage,
     hidden: true,
   },
   {
-    path: "/promotions/create",
+    path: "promotions/create",
     component: PromotionCreatePage,
     hidden: true,
   },
   {
-    path: "/promotions/update/:promotionId",
+    path: "promotions/update/:promotionId",
     component: PromotionUpdatePage,
     hidden: true,
   },
   {
-    path: "/login",
+    path: "/:storeId/login",
     component: LoginPage,
     label: "Login",
     hidden: true,
     isNotLayout: true,
   },
   {
-    path: "/coupons",
+    path: "coupons",
     component: CouponListPage,
     label: "Coupons",
     icon: <GiftOutlined />,
   },
   {
-    path: "/coupons/create",
+    path: "coupons/create",
     component: CouponCreatePage,
     label: "Create Coupon",
     hidden: true,
   },
   {
-    path: "/coupons/:couponId",
+    path: "coupons/:couponId",
     component: CouponDetailPage,
     label: "Coupon Detail",
     hidden: true,
   },
   {
-    path: "/coupons/:couponId/edit",
+    path: "coupons/:couponId/edit",
     component: CouponUpdatePage,
     label: "Update Coupon",
     hidden: true,
   },
   {
-    path: "/menu-items",
+    path: "menu-items",
     component: MenuItemListPage,
     label: "Menu Item",
     icon: <ProfileOutlined />,
   },
   {
-    path: "/menu-items/:menuItemId",
+    path: "menu-items/:menuItemId",
     component: MenuItemDetailPage,
     hidden: true,
   },
   {
-    path: "/categories",
+    path: "categories",
     component: CategoryListPage,
     label: "Category",
     icon: <AppstoreOutlined />,
   },
   {
-    path: "/categories/create",
+    path: "categories/create",
     component: CategoryCreatePage,
     label: "Category",
     hidden: true,
   },
   {
-    path: "/categories/:categoryId",
+    path: "categories/:categoryId",
     component: CategoryDetailPage,
     label: "Category",
     hidden: true,
   },
   {
-    path: "/categories/update/:categoryId",
+    path: "categories/update/:categoryId",
     component: CategoryUpdatePage,
     label: "Category",
     hidden: true,
   },
   {
-    path: "/menu-items/create",
+    path: "menu-items/create",
     component: MenuItemCreatePage,
     hidden: true,
   },
   {
-    path: "/menu-items/update/:menuItemId",
+    path: "menu-items/update/:menuItemId",
     component: MenuItemUpdatePage,
     hidden: true,
   },
   {
-    path: "/staffs",
+    path: "staffs",
     component: StaffListPage,
     label: "Staff",
     icon: <UserOutlined />,
   },
   {
-    path: "/staffs/create",
+    path: "staffs/create",
     component: StaffCreatePage,
     hidden: true,
   },
   {
-    path: "/staffs/:staffId",
+    path: "staffs/:staffId",
     component: StaffDetailPage,
     hidden: true,
   },
   {
-    path: "/staffs/update/:staffId",
+    path: "staffs/update/:staffId",
     component: StaffUpdatePage,
     hidden: true,
   },
   {
-    path: "/tables",
+    path: "tables",
     component: TableListPage,
     label: "Tables",
     icon: <AppstoreOutlined />,
   },
   {
-    path: "/tables/create",
+    path: "tables/create",
     component: TableCreatePage,
     hidden: true,
   },
   {
-    path: "/tables/:tableId",
+    path: "tables/:tableId",
     component: TableDetailPage,
     hidden: true,
   },
   {
-    path: "/tables/update/:tableId",
+    path: "tables/update/:tableId",
     component: TableUpdatePage,
     hidden: true,
   },
   {
-    path: "/variant-groups",
+    path: "variant-groups",
     component: VariantGroupListPage,
     label: "Variant Groups",
     icon: <BranchesOutlined />,
   },
   {
-    path: "/variant-groups/create",
+    path: "variant-groups/create",
     component: VariantGroupCreatePage,
     hidden: true,
   },
   {
-    path: "/variant-groups/:variantGroupId",
+    path: "variant-groups/:variantGroupId",
     component: VariantGroupDetailPage,
     hidden: true,
   },
   {
-    path: "/variant-groups/:variantGroupId/update",
+    path: "variant-groups/:variantGroupId/update",
     component: VariantGroupUpdatePage,
     hidden: true,
   },
   {
-    path: "/variants",
+    path: "variants",
     component: VariantListPage,
     label: "Variants",
     icon: <BranchesOutlined />,
   },
   {
-    path: "/variants/create",
+    path: "variants/create",
     component: VariantCreatePage,
     hidden: true,
   },
   {
-    path: "/variants/:variantId",
+    path: "variants/:variantId",
     component: VariantDetailPage,
     hidden: true,
   },
   {
-    path: "/variants/:variantId/update",
+    path: "variants/:variantId/update",
     component: VariantUpdatePage,
     hidden: true,
   },
   {
-    path: "/orders",
+    path: "orders",
     component: OrderListPage,
     label: "Orders",
     icon: <ShoppingCartOutlined />,
   },
   {
-    path: "/orders/:orderCode",
+    path: "orders/:orderCode",
     component: OrderDetailPage,
     hidden: true,
   },
   {
-    path: "/feedbacks",
+    path: "feedbacks",
     component: FeedbackListPage,
     label: "Feedbacks",
     icon: <MessageOutlined />,
   },
   {
-    path: "/feedbacks/:feedbackId",
+    path: "feedbacks/:feedbackId",
     component: FeedbackDetailPage,
     hidden: true,
   },
   {
-    path: "/feedbacks/:feedbackId/update",
+    path: "feedbacks/:feedbackId/update",
     component: FeedbackUpdatePage,
     hidden: true,
   },
   {
-    path: "/workshifts",
+    path: "workshifts",
     component: WorkshiftListPage,
     label: "Workshifts",
     icon: <ClockCircleOutlined />,

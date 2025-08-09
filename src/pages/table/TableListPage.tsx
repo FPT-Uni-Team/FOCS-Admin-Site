@@ -13,9 +13,9 @@ const TableListPage = () => {
 
   useEffect(() => {
     const storedStoreId = localStorage.getItem("storeId");
-    const defaultStoreId = "550e8400-e29b-41d4-a716-446655440000";
+    const defaultStoreId = localStorage.getItem("storeId");
     const currentStoreId = storedStoreId || defaultStoreId;
-    setStoreId(currentStoreId);
+    setStoreId(currentStoreId as string);
   }, []);
 
   const fetchData = async (params: TableListParams) => {
@@ -39,4 +39,4 @@ const TableListPage = () => {
   );
 };
 
-export default TableListPage; 
+export default TableListPage;
