@@ -13,7 +13,11 @@ import MenuItemDetailForm from "../../components/menuItem/menuItemDetail/MenuIte
 import { changeStatusMenuItemStart } from "../../store/action/menuItemAction";
 import { Modal } from "antd";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
-import { deleteMenuItemStart, clearDeleteMenuItemState } from "../../store/slices/menuItem/menuItemDeleteSlice";
+import {
+  deleteMenuItemStart,
+  clearDeleteMenuItemState,
+} from "../../store/slices/menuItem/menuItemDeleteSlice";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const MenuItemDetailPage = () => {
   const [form] = useForm();
@@ -24,7 +28,11 @@ const MenuItemDetailPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { menuItem } = useAppSelector((state) => state.menuItemDetail);
-  const { loading: deleteLoading, success: deleteSuccess, error: deleteError } = useAppSelector((state) => state.menuItemDelete);
+  const {
+    loading: deleteLoading,
+    success: deleteSuccess,
+    error: deleteError,
+  } = useAppSelector((state) => state.menuItemDelete);
 
   const fetchChangeStatusMenuItem = async (
     category: string,
@@ -33,7 +41,7 @@ const MenuItemDetailPage = () => {
     dispatch(changeStatusMenuItemStart({ category, menuItemId }));
   };
 
-    const handleDeleteMenuItem = () => {
+  const handleDeleteMenuItem = () => {
     setIsDeleteModalOpen(true);
   };
 
@@ -55,6 +63,18 @@ const MenuItemDetailPage = () => {
       dispatch(clearDeleteMenuItemState());
     }
   }, [deleteError, dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Menu Items",
+          link: `/${localStorage.getItem("storeId")}/menu-items`,
+        },
+        { name: menuItemId as string },
+      ])
+    );
+  }, [dispatch, menuItemId]);
 
   return (
     <>
@@ -82,7 +102,7 @@ const MenuItemDetailPage = () => {
       >
         <MenuItemDetailForm form={form} menuItemDetail={menuItem} />
       </ImageUploadContext.Provider>
-      
+
       <Modal
         title="Delete Menu Item"
         open={isDeleteModalOpen}
@@ -95,7 +115,10 @@ const MenuItemDetailPage = () => {
         okType="danger"
         cancelText="Cancel"
       >
-        <p>Are you sure you want to delete this menu item? This action cannot be undone.</p>
+        <p>
+          Are you sure you want to delete this menu item? This action cannot be
+          undone.
+        </p>
       </Modal>
     </>
   );

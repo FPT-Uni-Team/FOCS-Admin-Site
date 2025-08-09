@@ -15,6 +15,7 @@ import {
   resetUpdatePromotion,
   updatePromotionStart,
 } from "../../store/slices/promotion/promotionUpdateSlice";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const PromotionCreatePage = () => {
   const [form] = useForm();
@@ -120,6 +121,18 @@ const PromotionCreatePage = () => {
   useEffect(() => {
     dispatch(fetchPromotionDetailStart(promotionId || ""));
   }, [dispatch, promotionId]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Promotions",
+          link: `/${localStorage.getItem("storeId")}/promotions`,
+        },
+        { name: promotionId as string },
+      ])
+    );
+  }, [promotionId, dispatch]);
 
   return (
     <>

@@ -21,6 +21,7 @@ import {
   updateCouponStart,
 } from "../../store/slices/coupon/couponUpdateSlice";
 import { checkCanEdit } from "../../helper/checkStatus";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const CouponUpdatePage = () => {
   const [form] = useForm();
@@ -89,7 +90,7 @@ const CouponUpdatePage = () => {
   useEffect(() => {
     if (success) {
       showNotification("success", "Update coupon success!");
-      navigate(`/coupons/${couponId}`);
+      navigate(`/${localStorage.getItem("storeId")}/coupons`);
     }
   }, [couponId, dispatch, navigate, success]);
 
@@ -107,6 +108,18 @@ const CouponUpdatePage = () => {
       dispatch(clearCouponDetail());
       dispatch(clearUpdateCouponState());
     };
+  }, [couponId, dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Coupons",
+          link: `/${localStorage.getItem("storeId")}/coupons`,
+        },
+        { name: `${couponId}` },
+      ])
+    );
   }, [couponId, dispatch]);
 
   return (

@@ -6,6 +6,7 @@ import SiderMenu from "./SiderMenu/SiderMenu";
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import { Header } from "antd/es/layout/layout";
 import MenuUser from "../../components/auth/MenuUser/MenuUser";
+import { BreadcrumbNav } from "../../components/common/Breadcumb/BreadcrumbNav";
 
 const { Sider } = Layout;
 
@@ -41,7 +42,17 @@ const MainLayout: React.FC = () => {
           style={{ background: colorBgContainer }}
           className={styles.customHeader}
         >
-          <MenuUser />
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <BreadcrumbNav />
+            <MenuUser />
+          </div>
         </Header>
         <ContentWrapper />
       </Layout>

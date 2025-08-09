@@ -4,7 +4,8 @@ import { useAppDispatch } from "../../hooks/redux";
 import { fetchMenuItemsStart } from "../../store/slices/menuItem/menuItemSlice";
 import MenuItemList from "../../components/menuItem/menuItemList/MenuItemList";
 import type { ListPageParams } from "../../type/common/common";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const MenuItemPage = () => {
   const dispatch = useAppDispatch();
@@ -15,12 +16,16 @@ const MenuItemPage = () => {
     },
     [dispatch]
   );
+
+  useEffect(() => {
+    dispatch(setBreadcrumb([]));
+  }, [dispatch]);
   return (
     <>
       <TitleLine
         title="Menu Item List"
         onCreate={() => {
-          navigate("/menu-items/create");
+          navigate("create");
         }}
       />
       <MenuItemList fetchData={fetchData} />

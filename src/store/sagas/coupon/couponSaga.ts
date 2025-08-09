@@ -172,9 +172,8 @@ function* handleCreateCoupon(
   try {
     const response = yield call(createCoupon, action.payload);
     yield put(createCouponSuccess(response as Record<string, unknown>));
-  } catch (error: unknown) {
-    const err = error as ApiError;
-    yield put(createCouponFailure(err as string));
+  } catch (error) {
+    yield put(createCouponFailure(error as string));
   }
 }
 
@@ -186,9 +185,8 @@ function* handleUpdateCoupon(
 
     const response = yield call(updateCoupon, couponId, couponData);
     yield put(updateCouponSuccess(response as Record<string, unknown>));
-  } catch (error: unknown) {
-    const err = error as ApiError;
-    yield put(updateCouponFailure(err as string));
+  } catch (error) {
+    yield put(updateCouponFailure(error as string));
   }
 }
 

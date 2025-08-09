@@ -10,6 +10,7 @@ import {
   updateCategoryStart,
 } from "../../store/slices/category/categoryUpdateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 const CategoryUpdatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
@@ -52,6 +53,18 @@ const CategoryUpdatePage = () => {
   useEffect(() => {
     dispatch(fetchCategoryDetailStart(categoryId || ""));
   }, [dispatch, categoryId]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Categories",
+          link: `/${localStorage.getItem("storeId")}/categories`,
+        },
+        { name: categoryId as string },
+      ])
+    );
+  }, [categoryId, dispatch]);
   return (
     <>
       <TitleLine

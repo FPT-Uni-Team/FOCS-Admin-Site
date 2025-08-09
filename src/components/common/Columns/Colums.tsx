@@ -23,10 +23,7 @@ import type { StaffDataType } from "../../../type/staff/staff";
 import type { TableDataType } from "../../../type/table/table";
 import { TableStatusLabel } from "../../../type/table/table";
 import type { OrderListDataType } from "../../../type/order/order";
-import { 
-  getOrderTypeText,
-  type OrderType
-} from "../../../type/order/order";
+import { getOrderTypeText, type OrderType } from "../../../type/order/order";
 import type { FeedbackListDataType } from "../../../type/feedback/feedback";
 import type { WorkshiftItem } from "../../../type/workshift/workshift";
 import { Rate, Image } from "antd";
@@ -44,12 +41,7 @@ export const columnsMenuItem: ColumnsType<MenuListDataType> = [
       "ascend" as SortOrder,
     ],
     render: (_, record) => {
-      return (
-        <CustomLink
-          title={record.menuName}
-          href={`/menu-items/${record.menuId}`}
-        />
-      );
+      return <CustomLink title={record.menuName} href={record.menuId} />;
     },
     sorter: true,
   },
@@ -86,7 +78,14 @@ export const columnsMenuItemNoSort = [
     key: "name",
 
     render: (value: string, _record: MenuListDataType) => {
-      return <CustomLink title={value} href={`menu-item/${_record.menuId}`} />;
+      return (
+        <CustomLink
+          title={value}
+          href={`/${localStorage.getItem("storeId")}/menu-item/${
+            _record.menuId
+          }`}
+        />
+      );
     },
   },
   {
@@ -98,6 +97,12 @@ export const columnsMenuItemNoSort = [
     title: "Status",
     dataIndex: "isAvailable",
     key: "is_available",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    render: (_: any, record: any) => {
+      return (
+        <StatusTag status={record.isAvailable ? "available" : "unavailable"} />
+      );
+    },
   },
 ];
 
@@ -109,11 +114,7 @@ export const columnsCouponList: ColumnsType<CouponAdminDTO> = [
     render: (_, record: CouponAdminDTO) => {
       return (
         <>
-          <CustomLink
-            title={record.code}
-            href={`/coupons/${record.id}`}
-            key={record.id}
-          />
+          <CustomLink title={record.code} href={record.id} key={record.id} />
         </>
       );
     },
@@ -532,11 +533,10 @@ export const columnsTableList: ColumnsType<TableDataType> = [
       "ascend" as SortOrder,
     ],
     render: (_, record) => {
-      const storeId = localStorage.getItem("storeId");
       return (
         <CustomLink
           title={`Table ${record.table_number}`}
-          href={`/${storeId}/tables/${record.id}`}
+          href={record.id}
           key={record.id}
         />
       );
@@ -553,7 +553,8 @@ export const columnsTableList: ColumnsType<TableDataType> = [
       "ascend" as SortOrder,
     ],
     render: (status: number) => {
-      const statusLabel = TableStatusLabel[status as keyof typeof TableStatusLabel];
+      const statusLabel =
+        TableStatusLabel[status as keyof typeof TableStatusLabel];
       if (!statusLabel) {
         return <StatusTag status="unknown" />;
       }
@@ -597,15 +598,29 @@ export const columnsOrderList: ColumnsType<OrderListDataType> = [
     dataIndex: "order_status",
     key: "order_status",
     render: (order_status: number) => {
-      let statusName = '';
+      let statusName = "";
       switch (order_status) {
-        case 0: statusName = 'pending'; break;
-        case 1: statusName = 'confirmed'; break;
-        case 2: statusName = 'preparing'; break;
-        case 3: statusName = 'ready'; break;
-        case 4: statusName = 'completed'; break;
-        case 5: statusName = 'cancelled'; break;
-        default: statusName = 'unknown'; break;
+        case 0:
+          statusName = "pending";
+          break;
+        case 1:
+          statusName = "confirmed";
+          break;
+        case 2:
+          statusName = "preparing";
+          break;
+        case 3:
+          statusName = "ready";
+          break;
+        case 4:
+          statusName = "completed";
+          break;
+        case 5:
+          statusName = "cancelled";
+          break;
+        default:
+          statusName = "unknown";
+          break;
       }
       return <StatusTag status={statusName} />;
     },
@@ -615,12 +630,20 @@ export const columnsOrderList: ColumnsType<OrderListDataType> = [
     dataIndex: "payment_status",
     key: "payment_status",
     render: (payment_status: number) => {
-      let statusName = '';
+      let statusName = "";
       switch (payment_status) {
-        case 0: statusName = 'pending'; break;
-        case 1: statusName = 'paid'; break;
-        case 2: statusName = 'failed'; break;
-        default: statusName = 'unknown'; break;
+        case 0:
+          statusName = "pending";
+          break;
+        case 1:
+          statusName = "paid";
+          break;
+        case 2:
+          statusName = "failed";
+          break;
+        default:
+          statusName = "unknown";
+          break;
       }
       return <StatusTag status={statusName} />;
     },
@@ -636,7 +659,9 @@ export const columnsOrderList: ColumnsType<OrderListDataType> = [
     ],
     render: (total_amount: number) => {
       const roundedAmount = Math.round(total_amount * 100) / 100;
-      const formattedAmount = roundedAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      const formattedAmount = roundedAmount
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       return <Text strong>{formattedAmount}</Text>;
     },
     sorter: true,
@@ -662,7 +687,7 @@ export const columnsVariantList: ColumnsType<Variant> = [
     title: "Variant Name",
     dataIndex: "name",
     key: "name",
-    width: "40%", 
+    width: "40%",
     sortDirections: [
       "ascend" as SortOrder,
       "descend" as SortOrder,
@@ -671,10 +696,7 @@ export const columnsVariantList: ColumnsType<Variant> = [
     render: (text: string, record: Variant) => {
       const storeId = localStorage.getItem("storeId");
       return (
-        <CustomLink
-          title={text}
-          href={`/${storeId}/variants/${record.id}`}
-        />
+        <CustomLink title={text} href={`/${storeId}/variants/${record.id}`} />
       );
     },
     sorter: true,
@@ -683,7 +705,7 @@ export const columnsVariantList: ColumnsType<Variant> = [
     title: "Price",
     dataIndex: "price",
     key: "price",
-    width: "35%", 
+    width: "35%",
     align: "center",
     sortDirections: [
       "ascend" as SortOrder,
@@ -701,7 +723,7 @@ export const columnsVariantList: ColumnsType<Variant> = [
     title: "Status",
     dataIndex: "is_available",
     key: "is_available",
-    width: "25%", 
+    width: "25%",
     align: "center",
     render: (isAvailable: boolean) => (
       <StatusTag status={isAvailable ? "available" : "unavailable"} />
@@ -736,81 +758,83 @@ export const columnsFeedback: ColumnsType<FeedbackListDataType> = [
       );
     },
   },
-     {
-     title: "Images",
-     dataIndex: "images",
-     key: "images",
-     render: (images: string[]) => {
-       if (!images || images.length === 0) {
-         return <Text type="secondary">No images</Text>;
-       }
-       return (
-         <Image.PreviewGroup>
-           <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-             {images.slice(0, 3).map((image, index) => (
-               <Image
-                 key={index}
-                 src={image}
-                 alt={`Feedback image ${index + 1}`}
-                 width={40}
-                 height={40}
-                 style={{
-                   objectFit: 'cover',
-                   borderRadius: '4px',
-                   border: '1px solid #d9d9d9',
-                 }}
-                 preview={{
-                   mask: 'Click to view'
-                 }}
-               />
-             ))}
-             {images.length > 3 && (
-               <Image
-                 src={images[3]}
-                 alt={`Feedback image 4`}
-                 width={40}
-                 height={40}
-                 style={{
-                   objectFit: 'cover',
-                   borderRadius: '4px',
-                   border: '1px solid #d9d9d9',
-                 }}
-                 preview={{
-                   mask: `+${images.length - 3} more`
-                 }}
-               />
-             )}
-           
-             {images.slice(4).map((image, index) => (
-               <Image
-                 key={`hidden-${index + 4}`}
-                 src={image}
-                 alt={`Feedback image ${index + 5}`}
-                 style={{ display: 'none' }}
-               />
-             ))}
-           </div>
-         </Image.PreviewGroup>
-       );
-     },
-   },
+  {
+    title: "Images",
+    dataIndex: "images",
+    key: "images",
+    render: (images: string[]) => {
+      if (!images || images.length === 0) {
+        return <Text type="secondary">No images</Text>;
+      }
+      return (
+        <Image.PreviewGroup>
+          <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+            {images.slice(0, 3).map((image, index) => (
+              <Image
+                key={index}
+                src={image}
+                alt={`Feedback image ${index + 1}`}
+                width={40}
+                height={40}
+                style={{
+                  objectFit: "cover",
+                  borderRadius: "4px",
+                  border: "1px solid #d9d9d9",
+                }}
+                preview={{
+                  mask: "Click to view",
+                }}
+              />
+            ))}
+            {images.length > 3 && (
+              <Image
+                src={images[3]}
+                alt={`Feedback image 4`}
+                width={40}
+                height={40}
+                style={{
+                  objectFit: "cover",
+                  borderRadius: "4px",
+                  border: "1px solid #d9d9d9",
+                }}
+                preview={{
+                  mask: `+${images.length - 3} more`,
+                }}
+              />
+            )}
+
+            {images.slice(4).map((image, index) => (
+              <Image
+                key={`hidden-${index + 4}`}
+                src={image}
+                alt={`Feedback image ${index + 5}`}
+                style={{ display: "none" }}
+              />
+            ))}
+          </div>
+        </Image.PreviewGroup>
+      );
+    },
+  },
   {
     title: "Public",
     dataIndex: "is_public",
     key: "is_public",
     render: (isPublic: boolean) => {
       return (
-                 <span style={{
-           padding: '4px 8px',
-           borderRadius: '4px',
-           fontSize: '12px',
-           fontWeight: '500',
-           backgroundColor: isPublic ? '#f6ffed' : '#fff2e8',
-           color: isPublic ? '#52c41a' : '#fa8c16',
-           border: `1px solid ${isPublic ? '#52c41a' : '#fa8c16'}`
-         }}>
-           {isPublic ? 'True' : 'False'}
-         </span>
+        <span
+          style={{
+            padding: "4px 8px",
+            borderRadius: "4px",
+            fontSize: "12px",
+            fontWeight: "500",
+            backgroundColor: isPublic ? "#f6ffed" : "#fff2e8",
+            color: isPublic ? "#52c41a" : "#fa8c16",
+            border: `1px solid ${isPublic ? "#52c41a" : "#fa8c16"}`,
+          }}
+        >
+          {isPublic ? "True" : "False"}
+        </span>
       );
     },
   },
@@ -874,11 +898,11 @@ export const columnsWorkshiftList: ColumnsType<WorkshiftItem> = [
       return (
         <div>
           {shifts.map((shift, index) => (
-            <div key={index} style={{ marginBottom: index > 0 ? '8px' : '0' }}>
-              <div style={{ fontWeight: '500', color: '#1890ff' }}>
+            <div key={index} style={{ marginBottom: index > 0 ? "8px" : "0" }}>
+              <div style={{ fontWeight: "500", color: "#1890ff" }}>
                 {shift.staffName}
               </div>
-              <div style={{ fontSize: '12px', color: '#666' }}>
+              <div style={{ fontSize: "12px", color: "#666" }}>
                 {shift.startTime} - {shift.endTime}
               </div>
             </div>
@@ -888,4 +912,3 @@ export const columnsWorkshiftList: ColumnsType<WorkshiftItem> = [
     },
   },
 ];
-

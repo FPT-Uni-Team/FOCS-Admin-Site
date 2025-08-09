@@ -16,7 +16,7 @@ const StaffListPage = () => {
       <TitleLine
         title="Staff List"
         onCreate={() => {
-          navigate("/staffs/create");
+          navigate("create");
         }}
       />
       <StaffList fetchData={fetchData} />

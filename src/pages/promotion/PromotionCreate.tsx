@@ -10,6 +10,7 @@ import {
 import type { PromotionPayload } from "../../type/promotion/promotion";
 import { useNavigate } from "react-router-dom";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const PromotionCreatePage = () => {
   const [form] = useForm();
@@ -106,6 +107,18 @@ const PromotionCreatePage = () => {
       dispatch(resetCreatePromotion());
     }
   }, [dispatch, error]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Promotions",
+          link: `/${localStorage.getItem("storeId")}/promotions`,
+        },
+        { name: "New Promotion" },
+      ])
+    );
+  }, [dispatch]);
 
   return (
     <>

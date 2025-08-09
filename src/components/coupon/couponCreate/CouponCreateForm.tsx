@@ -125,52 +125,43 @@ const CouponCreateForm: React.FC<Props> = ({
         },
       }}
     >
-      {mode == "Update" ? (
-        <></>
-      ) : (
-        <Row gutter={36}>
+      <Row gutter={36}>
+        <Col span={12}>
+          <Form.Item
+            label="Coupon Code Type"
+            name={["step1", "coupon_type"]}
+            rules={[
+              {
+                required: true,
+                message: "Please select coupon code type!",
+              },
+            ]}
+          >
+            <Select
+              placeholder="Select coupon type"
+              options={couponCreationOptions}
+              disabled={disableField}
+            />
+          </Form.Item>
+        </Col>
+        {couponType === CouponCreationType.Manual && (
           <Col span={12}>
             <Form.Item
-              label="Coupon Code Type"
-              name={["step1", "coupon_type"]}
+              label="Coupon Code"
+              name={["step1", "code"]}
               rules={[
+                { required: true, message: "Please enter coupon code!" },
                 {
-                  required: true,
-                  message: "Please select coupon code type!",
+                  pattern: /^[A-Z0-9]+$/,
+                  message: "Only uppercase letters and numbers allowed",
                 },
               ]}
             >
-              <Select
-                placeholder="Select coupon type"
-                options={couponCreationOptions}
-                disabled={disableField}
-              />
+              <Input maxLength={20} disabled={disableField} />
             </Form.Item>
           </Col>
-          {couponType === CouponCreationType.Manual && (
-            <Col span={12}>
-              <Form.Item
-                label="Coupon Code"
-                name={["step1", "code"]}
-                rules={[
-                  { required: true, message: "Please enter coupon code!" },
-                  {
-                    pattern: /^[A-Z0-9]+$/,
-                    message: "Only uppercase letters and numbers allowed",
-                  },
-                ]}
-              >
-                <Input
-                  placeholder="Enter coupon code (e.g., SUMMER2024)"
-                  maxLength={20}
-                  disabled={disableField}
-                />
-              </Form.Item>
-            </Col>
-          )}
-        </Row>
-      )}
-
+        )}
+      </Row>
       <Row gutter={36}>
         <Col span={24}>
           <Form.Item

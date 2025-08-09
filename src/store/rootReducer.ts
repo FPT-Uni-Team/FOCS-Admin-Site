@@ -57,6 +57,7 @@ import workshiftListSlice from "./slices/workshift/workshiftListSlice";
 import workshiftDetailSlice from "./slices/workshift/workshiftDetailSlice";
 import workshiftCreateSlice from "./slices/workshift/workshiftCreateSlice";
 import workshiftDeleteSlice from "./slices/workshift/workshiftDeleteSlice";
+import breadcrumbSlice from "./slices/breadcumb/breadcrumbSlice";
 
 const rootReducer = combineReducers({
   promotion: promotionSlice,
@@ -113,10 +114,11 @@ const rootReducer = combineReducers({
   feedbackList: feedbackListSlice,
   feedbackDetail: feedbackDetailSlice,
   feedbackUpdate: feedbackUpdateSlice,
-      workshiftList: workshiftListSlice,
-    workshiftDetail: workshiftDetailSlice,
-    workshiftCreate: workshiftCreateSlice,
-    workshiftDelete: workshiftDeleteSlice,
+  workshiftList: workshiftListSlice,
+  workshiftDetail: workshiftDetailSlice,
+  workshiftCreate: workshiftCreateSlice,
+  workshiftDelete: workshiftDeleteSlice,
+  breadcrumb: breadcrumbSlice,
 });
 
 export default rootReducer;

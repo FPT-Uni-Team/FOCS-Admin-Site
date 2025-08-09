@@ -9,14 +9,22 @@ import { changeStatusPromotionsStart } from "../../store/slices/promotion/promot
 import { checkActive, checkShowEdit } from "../../helper/checkStatus";
 import { Modal } from "antd";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
-import { deletePromotionStart, clearDeletePromotionState } from "../../store/slices/promotion/promotionDeleteSlice";
+import {
+  deletePromotionStart,
+  clearDeletePromotionState,
+} from "../../store/slices/promotion/promotionDeleteSlice";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const PromotionDetailPage = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { promotionId } = useParams();
   const { promotion } = useAppSelector((state) => state.promotionDetail);
   const { success } = useAppSelector((state) => state.changeStatusPromotion);
-  const { loading: deleteLoading, success: deleteSuccess, error: deleteError } = useAppSelector((state) => state.promotionDelete);
+  const {
+    loading: deleteLoading,
+    success: deleteSuccess,
+    error: deleteError,
+  } = useAppSelector((state) => state.promotionDelete);
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -36,7 +44,6 @@ const PromotionDetailPage = () => {
     dispatch(fetchPromotionDetailStart(promotionId || ""));
   }, [success, dispatch, promotionId]);
 
-
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete promotion success!");
@@ -51,6 +58,18 @@ const PromotionDetailPage = () => {
       dispatch(clearDeletePromotionState());
     }
   }, [deleteError, dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Promotions",
+          link: `/${localStorage.getItem("storeId")}/promotions`,
+        },
+        { name: promotionId as string },
+      ])
+    );
+  }, [promotionId, dispatch]);
   return (
     <>
       <TitleLine
@@ -81,7 +100,7 @@ const PromotionDetailPage = () => {
         deleteLoading={deleteLoading}
       />
       <PromotionDetail promotionDetail={promotion} />
-      
+
       <Modal
         title="Delete Promotion"
         open={isDeleteModalOpen}
@@ -94,7 +113,10 @@ const PromotionDetailPage = () => {
         okType="danger"
         cancelText="Cancel"
       >
-        <p>Are you sure you want to delete this promotion? This action cannot be undone.</p>
+        <p>
+          Are you sure you want to delete this promotion? This action cannot be
+          undone.
+        </p>
       </Modal>
     </>
   );
