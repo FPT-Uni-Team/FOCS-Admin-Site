@@ -19,6 +19,7 @@ import { useAppSelector, useAppDispatch } from "../../../hooks/redux";
 import { fetchStaffListStart } from "../../../store/slices/staff/staffListSlice";
 import type { StaffDataType } from "../../../type/staff/staff";
 
+
 import styles from "./WorkshiftDetail.module.scss";
 
 interface Props {
@@ -34,7 +35,6 @@ const WorkshiftDetail: React.FC<Props> = ({ form, workshiftDetail, mode = "View"
   const [staffOptions, setStaffOptions] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
-    // Fetch staff list để hiển thị tên nhân viên
     dispatch(fetchStaffListStart({
       page: 1,
       page_size: 100,
@@ -117,64 +117,64 @@ const WorkshiftDetail: React.FC<Props> = ({ form, workshiftDetail, mode = "View"
                    }
                   className={`${styles.shiftItemCard} mb-4`}
                 >
-                  <Row gutter={16}>
+                                    <Row gutter={16}>
+                    <Col span={8}>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "staffName"]}
+                        label="Staff Name"
+                        rules={[{ required: true, message: "Please select staff!" }]}
+                      >
+                        {isEditMode ? (
+                          <Select
+                            placeholder="Select staff"
+                            options={staffOptions}
+                            className={styles.staffSelect}
+                            onChange={(value) => {
+                              const staffOption = staffOptions.find(option => option.value === value);
+                              form.setFieldValue(['shift', name, 'staffName'], staffOption?.label || '');
+                            }}
+                          />
+                        ) : (
+                          <Input
+                            placeholder="Staff name"
+                            disabled={true}
+                            className={styles.staffInput}
+                            value={form.getFieldValue(['shift', name, 'staffName']) || 'Loading...'}
+                          />
+                        )}
+                      </Form.Item>
+                    </Col>
                                          <Col span={8}>
-                                               <Form.Item
-                          {...restField}
-                          name={[name, "staffName"]}
-                          label="Staff Name"
-                          rules={[{ required: true, message: "Please select staff!" }]}
-                        >
-                          {isEditMode ? (
-                            <Select
-                              placeholder="Select staff"
-                              options={staffOptions}
-                              className={styles.staffSelect}
-                              onChange={(value) => {
-                                const staffOption = staffOptions.find(option => option.value === value);
-                                form.setFieldValue(['shift', name, 'staffName'], staffOption?.label || '');
-                              }}
-                            />
-                          ) : (
-                            <Input
-                              placeholder="Staff name"
-                              disabled={true}
-                              className={styles.staffInput}
-                              value={form.getFieldValue(['shift', name, 'staffName']) || 'Loading...'}
-                            />
-                          )}
-                        </Form.Item>
+                                                                                                                             <Form.Item
+                             {...restField}
+                             name={[name, "startTime"]}
+                             label="Start Time"
+                             rules={[{ required: true, message: "Please enter start time!" }]}
+                           >
+                             <Input
+                               type="time"
+                               placeholder="HH:MM"
+                               disabled={!isEditMode}
+                               className={styles.timeInput}
+                             />
+                           </Form.Item>
                      </Col>
-                    <Col span={8}>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "startTime"]}
-                        label="Start Time"
-                        rules={[{ required: true, message: "Please enter start time!" }]}
-                      >
-                        <Input
-                          type="time"
-                          placeholder="HH:MM"
-                          disabled={!isEditMode}
-                          className={styles.timeInput}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "endTime"]}
-                        label="End Time"
-                        rules={[{ required: true, message: "Please enter end time!" }]}
-                      >
-                        <Input
-                          type="time"
-                          placeholder="HH:MM"
-                          disabled={!isEditMode}
-                          className={styles.timeInput}
-                        />
-                      </Form.Item>
-                    </Col>
+                     <Col span={8}>
+                                                                                                                             <Form.Item
+                             {...restField}
+                             name={[name, "endTime"]}
+                             label="End Time"
+                             rules={[{ required: true, message: "Please enter end time!" }]}
+                           >
+                             <Input
+                               type="time"
+                               placeholder="HH:MM"
+                               disabled={!isEditMode}
+                               className={styles.timeInput}
+                             />
+                           </Form.Item>
+                     </Col>
                   </Row>
                 </Card>
               ))}
