@@ -23,7 +23,7 @@ const TableDetailPage = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { tableId } = useParams<{ tableId: string }>();
+  const { tableId, storeId } = useParams<{ tableId: string; storeId: string }>();
   const { table } = useAppSelector((state) => state.tableDetail);
   const { success, error } = useAppSelector((state) => state.changeTableStatus);
   const {
@@ -67,7 +67,7 @@ const TableDetailPage = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete table success!");
-      navigate("/tables");
+      navigate(`/${storeId}/tables`);
       dispatch(clearDeleteTableState());
     }
   }, [deleteSuccess, navigate, dispatch]);
@@ -139,7 +139,7 @@ const TableDetailPage = () => {
           ) && (
             <Button
               icon={<EditOutlined />}
-              onClick={() => navigate(`/tables/update/${tableId}`)}
+              onClick={() => navigate(`/${storeId}/tables/update/${tableId}`)}
               color="primary"
               variant="outlined"
             >

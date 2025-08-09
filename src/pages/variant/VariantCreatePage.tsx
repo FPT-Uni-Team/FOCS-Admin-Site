@@ -8,12 +8,13 @@ import {
   resetVariantCreate,
 } from "../../store/slices/variant/variantCreateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const VariantCreatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { storeId } = useParams();
   const { success, error } = useAppSelector((state) => state.variantCreate);
 
   const handleCreateVariant = useCallback(() => {
@@ -37,9 +38,9 @@ const VariantCreatePage = () => {
     if (success) {
       showNotification("success", "Create variant success!");
       dispatch(resetVariantCreate());
-      navigate("/variants");
+      navigate(`/${storeId}/variants`);
     }
-  }, [dispatch, navigate, success]);
+  }, [dispatch, navigate, success, storeId]);
 
   useEffect(() => {
     if (error) {

@@ -16,10 +16,12 @@ const LoginPage = () => {
     const { email, password } = values;
     dispatch(loginRequest({ email, password }));
   };
-  console.log(localStorage.getItem("storeId"));
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(`/${localStorage.getItem("storeId")}/promotions`);
+      const id = localStorage.getItem("storeId");
+      if (id) {
+        navigate(`/${id}/promotions`);
+      }
     }
   }, [isAuthenticated, navigate]);
   return (

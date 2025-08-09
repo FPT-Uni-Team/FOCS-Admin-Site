@@ -1,0 +1,118 @@
+.flexClass {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.switchLabel {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+}
+
+.variantInfo {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+// Workshift specific styles
+.scheduleInfo {
+  margin-bottom: 24px;
+}
+
+.shiftTable {
+  .ant-table-thead > tr > th {
+    background-color: #fafafa;
+    font-weight: 600;
+  }
+}
+
+.timeTag {
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.staffName {
+  font-weight: 500;
+  color: #1890ff;
+}
+
+// New styles for form-based structure
+.shiftCard {
+  margin-bottom: 24px;
+  
+  .ant-card-head {
+    background-color: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+  }
+}
+
+.shiftItemCard {
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  
+  .ant-card-head {
+    background-color: #fafafa;
+    padding: 8px 16px;
+    min-height: 40px;
+    
+    .ant-card-head-title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+  
+  .ant-card-body {
+    padding: 16px;
+  }
+}
+
+.addShiftButton {
+  margin-top: 16px;
+  height: 40px;
+  border-style: dashed;
+  border-color: #d9d9d9;
+  color: #666;
+  
+  &:hover {
+    border-color: #1890ff;
+    color: #1890ff;
+  }
+}
+
+.summaryCard {
+  margin-top: 24px;
+  
+  .ant-card-head {
+    background-color: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+  }
+}
+
+.staffInput {
+  .ant-input {
+    background-color: #f5f5f5;
+  }
+}
+
+.staffNameDisplay {
+  padding: 4px 11px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  background-color: #f5f5f5;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: not-allowed;
+}
+
+.timeInput {
+  .ant-input {
+    background-color: #f5f5f5;
+  }
+} 

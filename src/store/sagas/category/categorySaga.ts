@@ -120,7 +120,6 @@ function* fetchChangeStatusCategory(
   action: PayloadAction<{ actionType: string; categoryId: string }>
 ): Generator<Effect, void, AxiosResponse> {
   try {
-    console.log(action.payload);
     yield call(() =>
       changeStatus(action.payload.actionType, action.payload.categoryId)
     );

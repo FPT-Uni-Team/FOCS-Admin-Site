@@ -15,7 +15,7 @@ const VariantUpdatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { variantId } = useParams<{ variantId: string }>();
+  const { variantId, storeId } = useParams<{ variantId: string; storeId: string }>();
 
   const { variant } = useAppSelector((state) => state.variantDetail);
   const { success, error } = useAppSelector((state) => state.variantUpdate);
@@ -57,7 +57,7 @@ const VariantUpdatePage = () => {
     if (success) {
       showNotification("success", "Update variant success!");
       dispatch(resetVariantUpdate());
-      navigate(`/variants/${variantId}`);
+      navigate(`/${storeId}/variants/${variantId}`);
     }
   }, [dispatch, navigate, variantId, success]);
 

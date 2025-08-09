@@ -18,7 +18,7 @@ const VariantDetailPage = () => {
   const { variant, loading } = useAppSelector((state) => state.variantDetail);
   const { loading: deleteLoading, success: deleteSuccess, error: deleteError } = useAppSelector((state) => state.variantDelete);
 
-  const { variantId } = useParams<{ variantId: string }>();
+  const { variantId, storeId } = useParams<{ variantId: string; storeId: string }>();
   const navigate = useNavigate();
 
   const handleDeleteVariant = () => {
@@ -63,7 +63,7 @@ const VariantDetailPage = () => {
         isActive={variant.is_available ? 1 : 0}
         contentModal="this variant"
         onEdit={() => {
-          navigate(`/variants/${variantId}/update`);
+          navigate(`/${storeId}/variants/${variantId}/update`);
         }}
         onDelete={handleDeleteVariant}
         hasMoreAction={true}

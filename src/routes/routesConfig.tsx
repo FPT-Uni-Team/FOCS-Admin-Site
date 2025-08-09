@@ -26,7 +26,6 @@ const PromotionUpdatePage = lazy(
 const CouponListPage = lazy(() => import("../pages/coupon/CouponList"));
 const CouponCreatePage = lazy(() => import("../pages/coupon/CouponCreate"));
 const CouponUpdatePage = lazy(() => import("../pages/coupon/CouponUpdate"));
-const LoginPage = lazy(() => import("../pages/login/LoginPage"));
 const CouponDetailPage = lazy(() => import("../pages/coupon/CouponDetail"));
 const MenuItemListPage = lazy(() => import("../pages/menuItem/MenuItemList"));
 const CategoryListPage = lazy(
@@ -82,18 +81,18 @@ const VariantUpdatePage = lazy(
 );
 const OrderListPage = lazy(() => import("../pages/order/OrderListPage"));
 const OrderDetailPage = lazy(() => import("../pages/order/OrderDetailPage"));
-const FeedbackListPage = lazy(
-  () => import("../pages/feedback/FeedbackListPage")
+const FeedbackListPage = lazy(() => import("../pages/feedback/FeedbackListPage"));
+const FeedbackDetailPage = lazy(() => import("../pages/feedback/FeedbackDetailPage"));
+const FeedbackUpdatePage = lazy(() => import("../pages/feedback/FeedbackUpdatePage"));
+const WorkshiftListPage = lazy(() => import("../pages/workshift/WorkshiftListPage"));
+const WorkshiftCreatePage = lazy(
+  () => import("../pages/workshift/WorkshiftCreatePage")
 );
-const FeedbackDetailPage = lazy(
-  () => import("../pages/feedback/FeedbackDetailPage")
+const WorkshiftDetailPage = lazy(
+  () => import("../pages/workshift/WorkshiftDetailPage")
 );
-const FeedbackUpdatePage = lazy(
-  () => import("../pages/feedback/FeedbackUpdatePage")
-);
-const WorkshiftListPage = lazy(
-  () => import("../pages/workshift/WorkshiftListPage")
-);
+
+
 
 export interface AppRoute {
   path: string;
@@ -127,13 +126,7 @@ export const routes: AppRoute[] = [
     component: PromotionUpdatePage,
     hidden: true,
   },
-  {
-    path: "/:storeId/login",
-    component: LoginPage,
-    label: "Login",
-    hidden: true,
-    isNotLayout: true,
-  },
+  
   {
     path: "coupons",
     component: CouponListPage,
@@ -320,6 +313,17 @@ export const routes: AppRoute[] = [
     label: "Workshifts",
     icon: <ClockCircleOutlined />,
   },
+  {
+    path: "workshifts/create",
+    component: WorkshiftCreatePage,
+    hidden: true,
+  },
+  {
+    path: "workshifts/:id",
+    component: WorkshiftDetailPage,
+    hidden: true,
+  },
+
 ];
 
 export default routes;

@@ -1,0 +1,56 @@
+.workshiftForm {
+  .shiftCard {
+    margin-bottom: 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+
+    .ant-card-head {
+      background-color: #fafafa;
+      border-bottom: 1px solid #d9d9d9;
+    }
+
+    .ant-card-head-title {
+      font-weight: 500;
+    }
+
+    .ant-card-extra {
+      .anticon {
+        cursor: pointer;
+        font-size: 16px;
+        
+        &:hover {
+          color: #ff7875;
+        }
+      }
+    }
+  }
+
+  .addShiftButton {
+    margin-top: 16px;
+    border: 2px dashed #d9d9d9;
+    border-radius: 6px;
+    
+    &:hover {
+      border-color: #1890ff;
+      color: #1890ff;
+    }
+  }
+
+  .timeInput {
+    .ant-input {
+      text-align: center;
+    }
+  }
+
+  .staffSelect {
+    .ant-select-selector {
+      border-radius: 6px;
+    }
+  }
+
+  .datePicker {
+    .ant-picker {
+      width: 100%;
+    }
+  }
+} 
