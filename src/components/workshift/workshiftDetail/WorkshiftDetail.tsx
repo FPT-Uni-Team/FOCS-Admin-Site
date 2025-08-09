@@ -8,9 +8,9 @@ import {
   type FormInstance,
   Typography,
   Card,
-  Table,
   Tag,
   Button,
+  Select,
 } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -18,6 +18,7 @@ import type { WorkshiftDetailResponseActual } from "../../../type/workshift/work
 import { useAppSelector, useAppDispatch } from "../../../hooks/redux";
 import { fetchStaffListStart } from "../../../store/slices/staff/staffListSlice";
 import type { StaffDataType } from "../../../type/staff/staff";
+
 import styles from "./WorkshiftDetail.module.scss";
 
 interface Props {
@@ -30,11 +31,10 @@ const WorkshiftDetail: React.FC<Props> = ({ form, workshiftDetail, mode = "View"
   const dispatch = useAppDispatch();
   const isEditMode = mode === "Update";
   const { staff } = useAppSelector((state) => state.staffList);
-
   const [staffOptions, setStaffOptions] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
-    // Fetch staff list for dropdown
+    // Fetch staff list để hiển thị tên nhân viên
     dispatch(fetchStaffListStart({
       page: 1,
       page_size: 100,
@@ -62,41 +62,13 @@ const WorkshiftDetail: React.FC<Props> = ({ form, workshiftDetail, mode = "View"
         workDate: workshiftDetail.workDate ? dayjs(workshiftDetail.workDate) : undefined,
         shift: (workshiftDetail.shift || []).map((shift) => ({
           staffId: shift.staffId,
+          staffName: shift.staffName,
           startTime: shift.startTime,
           endTime: shift.endTime,
         })),
       });
     }
   }, [workshiftDetail, form]);
-
-  const shiftColumns = [
-    {
-      title: "Staff Name",
-      dataIndex: "staffName",
-      key: "staffName",
-      render: (text: string) => <span className={styles.staffName}>{text}</span>,
-    },
-    {
-      title: "Start Time",
-      dataIndex: "startTime",
-      key: "startTime",
-      render: (text: string) => (
-        <Tag color="green" className={styles.timeTag}>
-          {text}
-        </Tag>
-      ),
-    },
-    {
-      title: "End Time",
-      dataIndex: "endTime",
-      key: "endTime",
-      render: (text: string) => (
-        <Tag color="red" className={styles.timeTag}>
-          {text}
-        </Tag>
-      ),
-    },
-  ];
 
   return (
     <Form form={form} layout="vertical" name="workshiftDetailForm" colon={true}>
@@ -135,31 +107,44 @@ const WorkshiftDetail: React.FC<Props> = ({ form, workshiftDetail, mode = "View"
                   key={key}
                   size="small"
                   title={`Shift ${name + 1}`}
-                  extra={
-                    !isEditMode && (
-                      <MinusCircleOutlined
-                        onClick={() => remove(name)}
-                        style={{ color: "#ff4d4f" }}
-                      />
-                    )
-                  }
+                                     extra={
+                     isEditMode && (
+                       <MinusCircleOutlined
+                         onClick={() => remove(name)}
+                         style={{ color: "#ff4d4f" }}
+                       />
+                     )
+                   }
                   className={`${styles.shiftItemCard} mb-4`}
                 >
                   <Row gutter={16}>
-                    <Col span={8}>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "staffId"]}
-                        label="Staff Name"
-                        rules={[{ required: true, message: "Please select staff!" }]}
-                      >
-                        <Input
-                          placeholder="Staff name"
-                          disabled={!isEditMode}
-                          className={styles.staffInput}
-                        />
-                      </Form.Item>
-                    </Col>
+                                         <Col span={8}>
+                                               <Form.Item
+                          {...restField}
+                          name={[name, "staffName"]}
+                          label="Staff Name"
+                          rules={[{ required: true, message: "Please select staff!" }]}
+                        >
+                          {isEditMode ? (
+                            <Select
+                              placeholder="Select staff"
+                              options={staffOptions}
+                              className={styles.staffSelect}
+                              onChange={(value) => {
+                                const staffOption = staffOptions.find(option => option.value === value);
+                                form.setFieldValue(['shift', name, 'staffName'], staffOption?.label || '');
+                              }}
+                            />
+                          ) : (
+                            <Input
+                              placeholder="Staff name"
+                              disabled={true}
+                              className={styles.staffInput}
+                              value={form.getFieldValue(['shift', name, 'staffName']) || 'Loading...'}
+                            />
+                          )}
+                        </Form.Item>
+                     </Col>
                     <Col span={8}>
                       <Form.Item
                         {...restField}
@@ -193,36 +178,23 @@ const WorkshiftDetail: React.FC<Props> = ({ form, workshiftDetail, mode = "View"
                   </Row>
                 </Card>
               ))}
-              {!isEditMode && (
-                <Form.Item>
-                  <Button
-                    type="dashed"
-                    onClick={() => add()}
-                    block
-                    icon={<PlusOutlined />}
-                    className={styles.addShiftButton}
-                  >
-                    Add Shift
-                  </Button>
-                </Form.Item>
-              )}
+                             {isEditMode && (
+                 <Form.Item>
+                   <Button
+                     type="dashed"
+                     onClick={() => add()}
+                     block
+                     icon={<PlusOutlined />}
+                     className={styles.addShiftButton}
+                   >
+                     Add Shift
+                   </Button>
+                 </Form.Item>
+               )}
             </>
           )}
         </Form.List>
-      </Card>
-
-      {/* Display table for view mode */}
-      {!isEditMode && workshiftDetail?.shift && workshiftDetail.shift.length > 0 && (
-        <Card title="Shift Summary" className={styles.summaryCard}>
-          <Table
-            columns={shiftColumns}
-            dataSource={workshiftDetail.shift}
-            rowKey="staffId"
-            pagination={false}
-            className={styles.shiftTable}
-          />
-        </Card>
-      )}
+            </Card>
     </Form>
   );
 };

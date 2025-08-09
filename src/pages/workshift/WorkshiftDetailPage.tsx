@@ -2,6 +2,7 @@ import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Modal } from "antd";
+import dayjs from "dayjs";
 
 import TitleLine from "../../components/common/Title/TitleLine";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
@@ -47,7 +48,7 @@ const WorkshiftDetailPage = () => {
   return (
     <>
       <TitleLine
-        title={`Workshift - ${workshiftDetail.workDate}`}
+        title={`Workshift - ${workshiftDetail.workDate ? dayjs(workshiftDetail.workDate).format('YYYY-MM-DD') : ''}`}
         contentModal="this workshift"
         onEdit={() => {
           navigate(`/workshifts/${id}/update`);
