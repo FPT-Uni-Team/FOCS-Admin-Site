@@ -124,11 +124,11 @@ export const promotionOptions = [
 
 export const promotionApplyOption = [
   {
-    value: 0,
-    label: "Item",
+    value: 1,
+    label: "Apply To Item",
   },
   {
-    value: 1,
-    label: "Order",
+    value: 0,
+    label: "Apply To Order",
   },
 ];

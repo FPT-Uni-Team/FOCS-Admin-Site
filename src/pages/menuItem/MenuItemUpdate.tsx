@@ -16,6 +16,7 @@ import {
   resetMenuItem,
   updateMenuItemStart,
 } from "../../store/slices/menuItem/menuItemUpdateSlice";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const MenuItemUpdatePage = () => {
   const [form] = useForm();
@@ -226,6 +227,18 @@ const MenuItemUpdatePage = () => {
       dispatch(resetMenuItem());
     }
   }, [dispatch, error]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Menu Items",
+          link: `/${localStorage.getItem("storeId")}/menu-items`,
+        },
+        { name: menuItemId as string },
+      ])
+    );
+  }, [dispatch, menuItemId]);
 
   return (
     <>

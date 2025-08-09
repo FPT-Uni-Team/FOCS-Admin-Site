@@ -10,6 +10,7 @@ import {
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 import { useNavigate, useParams } from "react-router-dom";
 import type { TableCreateRequest } from "../../type/table/table";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const TableCreatePage = () => {
   const [form] = useForm();
@@ -49,6 +50,18 @@ const TableCreatePage = () => {
     }
   }, [dispatch, error]);
 
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Tables",
+          link: `/${localStorage.getItem("storeId")}/tables`,
+        },
+        { name: "New Table" },
+      ])
+    );
+  }, [dispatch]);
+
   return (
     <>
       <TitleLine title="New Table" onCreate={handleCreateTable} />
@@ -57,4 +70,4 @@ const TableCreatePage = () => {
   );
 };
 
-export default TableCreatePage; 
+export default TableCreatePage;

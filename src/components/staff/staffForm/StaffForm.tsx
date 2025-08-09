@@ -9,7 +9,7 @@ interface Props {
   initData?: StaffDetailPayload;
 }
 
-const roleOptions = ["admin", "staff", "manager"];
+const roleOptions = ["kitchenstaff", "staff"];
 
 const StaffForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
   const isDetail = mode === "Detail";
@@ -159,7 +159,7 @@ const StaffForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
                   allowClear
                   placeholder="Select roles"
                   options={roleOptions.map((role) => ({
-                    label: role,
+                    label: role.charAt(0).toUpperCase() + role.slice(1),
                     value: role,
                   }))}
                 />

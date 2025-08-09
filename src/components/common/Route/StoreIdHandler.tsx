@@ -8,6 +8,5 @@ export const StoreIdHandler = () => {
       localStorage.setItem("storeId", storeId);
     }
   }, [storeId]);
-
   return null;
 };

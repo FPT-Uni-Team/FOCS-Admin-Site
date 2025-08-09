@@ -63,7 +63,7 @@ const PromotionForm: FC<Props> = ({
   const promotionScope = Form.useWatch(["step2", "promotion_scope"], form);
   const useCoupon = Form.useWatch(["step1", "use_coupon"], form);
   const promotionType = Form.useWatch(["step1", "promotionType"], form);
-  const showMenuItemSelection = promotionScope === 0;
+  const showMenuItemSelection = promotionScope === 1;
   const disableField =
     mode == "Update" &&
     (canEditField == 0 ? true : canEditField == 2 ? false : true);
@@ -409,7 +409,7 @@ const PromotionForm: FC<Props> = ({
                         className={styles.textInputLabelDisabled}
                       />
                     </Col>
-                    <Col span={3}>
+                    <Col span={6}>
                       <Form.Item
                         name={["step2", "minimun_item_in_cart"]}
                         normalize={(value) => {
@@ -419,6 +419,18 @@ const PromotionForm: FC<Props> = ({
 
                           return formatted;
                         }}
+                        rules={[
+                          {
+                            validator: (_, value) => {
+                              if (!value || Number(value) <= 0) {
+                                return Promise.reject(
+                                  new Error("Value must be greater than 0")
+                                );
+                              }
+                              return Promise.resolve();
+                            },
+                          },
+                        ]}
                       >
                         <Input disabled={disableField} />
                       </Form.Item>
@@ -432,7 +444,7 @@ const PromotionForm: FC<Props> = ({
                         className={styles.textInputLabelDisabled}
                       />
                     </Col>
-                    <Col span={3}>
+                    <Col span={6}>
                       <Form.Item
                         name={["step2", "max_usage"]}
                         normalize={(value) => {
@@ -443,6 +455,18 @@ const PromotionForm: FC<Props> = ({
 
                           return formatted;
                         }}
+                        rules={[
+                          {
+                            validator: (_, value) => {
+                              if (!value || Number(value) <= 0) {
+                                return Promise.reject(
+                                  new Error("Value must be greater than 0")
+                                );
+                              }
+                              return Promise.resolve();
+                            },
+                          },
+                        ]}
                       >
                         <Input disabled={disableField} />
                       </Form.Item>
@@ -477,6 +501,18 @@ const PromotionForm: FC<Props> = ({
                             );
                             return formatted;
                           }}
+                          rules={[
+                            {
+                              validator: (_, value) => {
+                                if (!value || Number(value) <= 0) {
+                                  return Promise.reject(
+                                    new Error("Value must be greater than 0")
+                                  );
+                                }
+                                return Promise.resolve();
+                              },
+                            },
+                          ]}
                         >
                           <Input
                             placeholder="From VND"
@@ -514,6 +550,18 @@ const PromotionForm: FC<Props> = ({
                           );
                           return formatted;
                         }}
+                        rules={[
+                          {
+                            validator: (_, value) => {
+                              if (!value || Number(value) <= 0) {
+                                return Promise.reject(
+                                  new Error("Value must be greater than 0")
+                                );
+                              }
+                              return Promise.resolve();
+                            },
+                          },
+                        ]}
                       >
                         <Input
                           placeholder="From VND"
@@ -637,11 +685,16 @@ const PromotionForm: FC<Props> = ({
                           },
                           {
                             validator: (_, value) => {
-                              if (promotionType !== 1) {
+                              if (value !== "" && value != null) {
                                 const numericValue = Number(
-                                  String(value)?.replace(/\./g, "")
+                                  String(value).replace(/\./g, "")
                                 );
-                                if (numericValue > 100) {
+                                if (numericValue <= 0) {
+                                  return Promise.reject(
+                                    "Percentage discount must be greater than 0."
+                                  );
+                                }
+                                if (promotionType !== 1 && numericValue > 100) {
                                   return Promise.reject(
                                     "Percentage discount cannot exceed 100."
                                   );

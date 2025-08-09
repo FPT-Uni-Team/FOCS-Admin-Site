@@ -15,6 +15,7 @@ import {
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 import { useNavigate } from "react-router-dom";
 import type { MenuItemCreatePayload } from "../../type/menu/menu";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const MenuItemCreatePage = () => {
   const [form] = useForm();
@@ -70,7 +71,7 @@ const MenuItemCreatePage = () => {
     if (success) {
       showNotification("success", "Create menu item success!");
       dispatch(resetMenuItemCreate());
-      navigate("/menu-items");
+      navigate(`/${localStorage.getItem("storeId")}/menu-items`);
     }
   }, [dispatch, navigate, success]);
 
@@ -80,6 +81,18 @@ const MenuItemCreatePage = () => {
       dispatch(resetMenuItemCreate());
     }
   }, [dispatch, error]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Menu Items",
+          link: `/${localStorage.getItem("storeId")}/menu-items`,
+        },
+        { name: "New Menu Item" },
+      ])
+    );
+  }, [dispatch]);
   return (
     <>
       <TitleLine title="New Menu Item" onCreate={handleSubMit} />

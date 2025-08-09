@@ -1,9 +1,10 @@
 .mainLayout {
   min-height: 100vh;
   .customHeader {
+    padding: 20px;
     height: 50px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
   }
 }

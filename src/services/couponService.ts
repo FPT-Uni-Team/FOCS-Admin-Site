@@ -1,3 +1,4 @@
+import type { AxiosError } from "axios";
 import axiosClient from "../api/axiosClient";
 import endpoints from "../api/endpoint";
 import type { ListPageParams } from "../type/common/common";
@@ -38,15 +39,21 @@ export const updateCoupon = async (
     );
 
     return response.data;
-  } catch {
-    throw new Error();
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred";
+    throw message;
   }
 };
 
 export const createCoupon = async (couponData: CouponCreateRequest) => {
   const requestBody: Record<string, unknown> = {
     ...couponData,
-    code: couponData.coupon_type === 1 ? couponData.code : "AUTO",
+    code: couponData.coupon_type === 1 ? couponData.code : "",
     start_date: new Date(couponData.start_date).toISOString(),
     end_date: new Date(couponData.end_date).toISOString(),
   };
@@ -57,8 +64,14 @@ export const createCoupon = async (couponData: CouponCreateRequest) => {
       requestBody
     );
     return response.data;
-  } catch {
-    throw new Error();
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    const data = axiosError.response?.data as { message?: string } | undefined;
+    const message =
+      data && typeof data.message === "string"
+        ? data.message
+        : "An error occurred";
+    throw message;
   }
 };
 
@@ -67,7 +80,6 @@ export const deleteCoupon = async (couponId: string) => {
     const response = await axiosClient.delete(
       endpoints.coupon.delete(couponId)
     );
-
     return response.data;
   } catch {
     throw new Error();

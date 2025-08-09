@@ -12,6 +12,7 @@ import type { CouponCreateRequest } from "../../type/coupon/coupon";
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 import { useAppSelector } from "../../hooks/redux";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const CouponCreatePage = () => {
   const [form] = useForm();
@@ -41,6 +42,8 @@ const CouponCreatePage = () => {
     };
     if (allFormValues?.step1?.coupon_type === 1) {
       couponData.code = allFormValues?.step1?.code?.trim();
+    } else {
+      couponData.code = "";
     }
     if (allFormValues?.step2?.max_usage_per_user) {
       couponData.max_usage_per_user = Number(
@@ -82,15 +85,28 @@ const CouponCreatePage = () => {
     if (success) {
       showNotification("success", "Create coupon success!");
       dispatch(resetCreateCoupon());
-      navigate("/coupons");
+      navigate(`/${localStorage.getItem("storeId")}/coupons`);
     }
   }, [dispatch, navigate, success]);
 
   useEffect(() => {
     if (error) {
       showNotification("error", error);
+      dispatch(resetCreateCoupon());
     }
-  }, [error]);
+  }, [dispatch, error]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Coupons",
+          link: `/${localStorage.getItem("storeId")}/coupons`,
+        },
+        { name: "New Coupon" },
+      ])
+    );
+  }, [dispatch]);
 
   return (
     <>

@@ -4,6 +4,8 @@ import PromotionList from "../../components/promotion/promotionList/PromotionLis
 import { useAppDispatch } from "../../hooks/redux";
 import { fetchPromotionsStart } from "../../store/slices/promotion/promotionListSlice";
 import type { PromotionListParams } from "../../type/promotion/promotion";
+import { useEffect } from "react";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const PromotionListPage = () => {
   const dispatch = useAppDispatch();
@@ -11,12 +13,15 @@ const PromotionListPage = () => {
   const fetchData = async (params: PromotionListParams) => {
     dispatch(fetchPromotionsStart(params));
   };
+  useEffect(() => {
+    dispatch(setBreadcrumb([]));
+  }, [dispatch]);
   return (
     <>
       <TitleLine
         title="Promotions List"
         onCreate={() => {
-          navigate("/promotions/create");
+          navigate("create");
         }}
       />
       <PromotionList fetchData={fetchData} />

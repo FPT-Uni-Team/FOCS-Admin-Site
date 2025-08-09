@@ -9,6 +9,7 @@ import {
 } from "../../store/slices/category/categoryCreateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 import { useNavigate } from "react-router-dom";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 const CategoryPage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
@@ -43,6 +44,18 @@ const CategoryPage = () => {
       dispatch(resetCategoryCreate());
     }
   }, [dispatch, error]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Categories",
+          link: `/${localStorage.getItem("storeId")}/categories`,
+        },
+        { name: "New Category" },
+      ])
+    );
+  }, [dispatch]);
 
   return (
     <>

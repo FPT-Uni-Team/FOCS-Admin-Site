@@ -14,7 +14,11 @@ import { checkActive, checkShowEdit } from "../../helper/checkStatus";
 import { setCouponStatusRequest } from "../../store/slices/coupon/couponSetStatusSlice";
 import { Modal } from "antd";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
-import { deleteCouponStart, clearDeleteCouponState } from "../../store/slices/coupon/couponDeleteSlice";
+import {
+  deleteCouponStart,
+  clearDeleteCouponState,
+} from "../../store/slices/coupon/couponDeleteSlice";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const CouponDetailPage = () => {
   const [form] = useForm();
@@ -22,7 +26,11 @@ const CouponDetailPage = () => {
   const dispatch = useAppDispatch();
   const { coupon } = useAppSelector((state) => state.couponDetail);
   const { success } = useAppSelector((state) => state.couponSetStatus);
-  const { loading: deleteLoading, success: deleteSuccess, error: deleteError } = useAppSelector((state) => state.couponDelete);
+  const {
+    loading: deleteLoading,
+    success: deleteSuccess,
+    error: deleteError,
+  } = useAppSelector((state) => state.couponDelete);
 
   const { couponId } = useParams<{ couponId: string }>();
   const navigate = useNavigate();
@@ -61,6 +69,18 @@ const CouponDetailPage = () => {
     }
   }, [deleteError, dispatch]);
 
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Coupons",
+          link: `/${localStorage.getItem("storeId")}/coupons`,
+        },
+        { name: `${couponId}` },
+      ])
+    );
+  }, [couponId, dispatch]);
+
   return (
     <>
       <TitleLine
@@ -74,7 +94,9 @@ const CouponDetailPage = () => {
         contentModal="this coupon"
         onAction={fetchChangeStatusCoupon}
         onEdit={() => {
-          navigate(`/coupons/${couponId}/edit`);
+          navigate(
+            `/${localStorage.getItem("storeId")}/coupons/${couponId}/edit`
+          );
         }}
         onDelete={handleDeleteCoupon}
         hasMoreAction
@@ -87,7 +109,7 @@ const CouponDetailPage = () => {
       <ContentInner>
         <CouponDetail form={form} couponDetail={coupon as CouponDetailType} />
       </ContentInner>
-      
+
       <Modal
         title="Delete Coupon"
         open={isDeleteModalOpen}
@@ -100,7 +122,10 @@ const CouponDetailPage = () => {
         okType="danger"
         cancelText="Cancel"
       >
-        <p>Are you sure you want to delete this coupon? This action cannot be undone.</p>
+        <p>
+          Are you sure you want to delete this coupon? This action cannot be
+          undone.
+        </p>
       </Modal>
     </>
   );
