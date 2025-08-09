@@ -20,7 +20,7 @@ const FeedbackUpdatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { feedbackId } = useParams();
+  const { feedbackId, storeId } = useParams();
 
   const { feedback } = useAppSelector((state) => state.feedbackDetail);
   const { success, error } = useAppSelector((state) => state.feedbackUpdate);
@@ -57,7 +57,7 @@ const FeedbackUpdatePage = () => {
       if (feedbackId) {
         dispatch(fetchFeedbackDetailStart({ feedbackId }));
       }
-      navigate(`/feedbacks/${feedbackId}`);
+      navigate(`/${storeId}/feedbacks/${feedbackId}`);
     }
   }, [dispatch, navigate, feedbackId, success, params]);
 
@@ -82,7 +82,7 @@ const FeedbackUpdatePage = () => {
         totalSteps={1}
         onCreate={handleUpdateFeedback}
         createButtonText="Update"
-        onPrevious={() => navigate(`/feedbacks/${feedbackId}`)}
+        onPrevious={() => navigate(`/${storeId}/feedbacks/${feedbackId}`)}
       />
       <ContentInner>
         <Card title="Feedback Information" style={{ marginBottom: 16 }}>

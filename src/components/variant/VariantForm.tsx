@@ -65,12 +65,12 @@ const VariantForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
                 },
               ]}
             >
-                             <InputNumber
-                 placeholder="Enter price"
-                 style={{ width: "100%" }}
-                 min={0}
-                 disabled={isDetail}
-               />
+              <InputNumber
+                placeholder="Enter price"
+                style={{ width: "100%" }}
+                min={0}
+                disabled={isDetail}
+              />
             </Form.Item>
           </Col>
         </Row>

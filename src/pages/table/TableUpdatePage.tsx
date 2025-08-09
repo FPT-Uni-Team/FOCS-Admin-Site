@@ -16,7 +16,7 @@ const TableUpdatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { tableId } = useParams();
+  const { tableId, storeId } = useParams();
   const { table } = useAppSelector((state) => state.tableDetail);
   const { success, error } = useAppSelector((state) => state.tableUpdate);
 
@@ -34,7 +34,7 @@ const TableUpdatePage = () => {
     if (success) {
       showNotification("success", "Update table success!");
       dispatch(resetTableUpdate());
-      navigate(`/tables/${tableId}`);
+      navigate(`/${storeId}/tables/${tableId}`);
     }
   }, [dispatch, navigate, tableId, success]);
 

@@ -34,7 +34,6 @@ const WorkshiftDetail: React.FC<Props> = ({ form, workshiftDetail, mode = "View"
   const [staffOptions, setStaffOptions] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
-    // Fetch staff list để hiển thị tên nhân viên
     dispatch(fetchStaffListStart({
       page: 1,
       page_size: 100,

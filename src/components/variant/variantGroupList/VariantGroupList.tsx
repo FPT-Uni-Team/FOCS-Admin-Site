@@ -55,9 +55,12 @@ const VariantGroupList: FC<VariantGroupListProps> = ({ fetchData }) => {
       key: "group_name",
       width: 400,
       sorter: true,
-      render: (text: string, record: VariantGroup) => (
-        <CustomLink title={text} href={`/variant-groups/${record.id}`} />
-      ),
+      render: (text: string, record: VariantGroup) => {
+        const storeId = localStorage.getItem("storeId");
+        return (
+          <CustomLink title={text} href={`/${storeId}/variant-groups/${record.id}`} />
+        );
+      },
     },
     {
       title: "Variants Count",

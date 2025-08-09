@@ -16,7 +16,7 @@ const WorkshiftDetailPage = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id, storeId } = useParams();
   
   const { workshiftDetail, loading, error } = useAppSelector(
     (state) => state.workshiftDetail
@@ -48,7 +48,7 @@ const WorkshiftDetailPage = () => {
     if (deleteSuccess) {
       showNotification("success", "Workshift deleted successfully");
       dispatch(clearDeleteWorkshiftState());
-      navigate("/workshifts");
+      navigate(`/${storeId}/workshifts`);
     }
   }, [deleteSuccess, dispatch, navigate]);
 
@@ -77,7 +77,7 @@ const WorkshiftDetailPage = () => {
         title={`Workshift - ${workshiftDetail.workDate ? dayjs(workshiftDetail.workDate).format('YYYY-MM-DD') : ''}`}
         contentModal="this workshift"
         onEdit={() => {
-          navigate(`/workshifts/${id}/update`);
+          navigate(`/${storeId}/workshifts/${id}/update`);
         }}
         onDelete={handleDeleteWorkshift}
         hasMoreAction={true}

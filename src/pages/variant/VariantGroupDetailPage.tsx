@@ -16,26 +16,28 @@ const VariantGroupDetailPage = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { variantGroupDetail } = useAppSelector((state) => state.variantGroupDetail);
+  const { variantGroupDetail, loading, error } = useAppSelector((state) => state.variantGroupDetail);
   const { loading: deleteLoading, success: deleteSuccess, error: deleteError } = useAppSelector((state) => state.variantGroupDelete);
 
-  const { variantGroupId } = useParams<{ variantGroupId: string }>();
+  const { variantGroupId, storeId } = useParams<{ variantGroupId: string; storeId: string }>();
 
   const handleDeleteVariantGroup = () => {
     setIsDeleteModalOpen(true);
   };
 
   useEffect(() => {
-    dispatch(fetchVariantGroupDetailStart(variantGroupId || ""));
+    if (variantGroupId) {
+      dispatch(fetchVariantGroupDetailStart(variantGroupId));
+    }
   }, [dispatch, variantGroupId]);
 
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete variant group success!");
-      navigate("/variant-groups");
+      navigate(`/${storeId}/variant-groups`);
       dispatch(clearDeleteVariantGroupState());
     }
-  }, [deleteSuccess, navigate, dispatch]);
+  }, [deleteSuccess, navigate, dispatch, storeId]);
 
   useEffect(() => {
     if (deleteError) {
@@ -44,8 +46,16 @@ const VariantGroupDetailPage = () => {
     }
   }, [deleteError, dispatch]);
 
-  if (!variantGroupDetail) {
+  if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!variantGroupDetail) {
+    return <div>Variant group not found</div>;
   }
 
   return (
@@ -56,7 +66,7 @@ const VariantGroupDetailPage = () => {
         isActive={1}
         contentModal="this variant group"
         onEdit={() => {
-          navigate(`/variant-groups/${variantGroupId}/update`);
+          navigate(`/${storeId}/variant-groups/${variantGroupId}/update`);
         }}
         onDelete={handleDeleteVariantGroup}
         hasMoreAction={true}

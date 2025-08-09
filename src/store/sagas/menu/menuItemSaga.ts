@@ -78,10 +78,7 @@ function* fetchMenuItemCreate(
       menuItemId: menuItemId as string,
     });
     yield put(createMenuItemSuccess());
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    // const errorMsg = error.errors.Description;
-    console.log(error);
+  } catch {
     yield put(createMenuItemFailure("Create Failed" as string));
   }
 }
@@ -90,14 +87,12 @@ function* fetchMenuItemUpdate(
   action: PayloadAction<MenuItem>
 ): Generator<Effect, void, AxiosResponse<MenuItem>> {
   try {
-    console.log(action.payload);
     const response = yield call(() =>
       menuItemUpdate({
         menuItemId: action.payload.id as string,
         data: action.payload,
       })
     );
-    console.log("response", response);
     yield put(updateMenuItemSuccess(response.data));
   } catch (error: unknown) {
     const errorMessage =

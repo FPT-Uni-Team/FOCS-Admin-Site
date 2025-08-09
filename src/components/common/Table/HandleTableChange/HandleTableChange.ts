@@ -13,7 +13,6 @@ export function createOnTableChangeHandler<T>(config: OnTableChangeParams) {
     _filters: Record<string, FilterValue | null>,
     sorter: SorterResult<T> | SorterResult<T>[]
   ) => {
-    console.log("pagination", pagination);
     let sort_by = "";
     let sort_order = "";
 

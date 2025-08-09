@@ -24,7 +24,6 @@ const WorkshiftForm: React.FC<Props> = ({ mode = "Create", form, initData }) => 
   const { staff } = useAppSelector((state) => state.staffList);
 
   useEffect(() => {
-    // Fetch staff list for dropdown
     dispatch(fetchStaffListStart({
       page: 1,
       page_size: 100,

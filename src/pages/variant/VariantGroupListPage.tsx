@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TitleLine from "../../components/common/Title/TitleLine";
 import { useAppDispatch } from "../../hooks/redux";
 import { fetchVariantGroupsStart } from "../../store/slices/variant/variantGroupSlice";
@@ -9,6 +9,7 @@ import { useCallback } from "react";
 const VariantGroupListPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { storeId } = useParams();
   
   const fetchData = useCallback(
     async (params: ListPageParams) => {
@@ -22,7 +23,7 @@ const VariantGroupListPage = () => {
       <TitleLine
         title="Variant Groups List"
         onCreate={() => {
-          navigate("/variant-groups/create");
+          navigate(`/${storeId}/variant-groups/create`);
         }}
       />
       <VariantGroupList fetchData={fetchData} />
