@@ -7,8 +7,7 @@ const BASE_URL: string = "/api";
 const axiosClient = axios.create({
   baseURL: BASE_URL,
   headers: {
-    // "Content-Type": "application/json",
-    storeId: "550e8400-e29b-41d4-a716-446655440000",
+    storeId: localStorage.getItem("storeId"),
   },
   timeout: 10000,
   withCredentials: true,

@@ -1,4 +1,14 @@
-import { Col, Form, Input, InputNumber, Row, Select, Switch, Typography, type FormInstance } from "antd";
+import {
+  Col,
+  Form,
+  Input,
+  InputNumber,
+  Row,
+  Select,
+  Switch,
+  Typography,
+  type FormInstance,
+} from "antd";
 import React from "react";
 import ContentInner from "../../../layouts/MainLayout/ContentInner/ContentInner";
 import type { TableDTO } from "../../../type/table/table";
@@ -33,7 +43,7 @@ const TableForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
 
   React.useEffect(() => {
     if (isCreate) {
-      const defaultStoreId = localStorage.getItem("storeId") || "550e8400-e29b-41d4-a716-446655440000";
+      const defaultStoreId = localStorage.getItem("storeId");
       form.setFieldsValue({
         is_active: true,
         status: TableStatus.Available,
@@ -86,13 +96,21 @@ const TableForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
 
             <Row gutter={36}>
               <Col span={12}>
-                <Form.Item label="Active" name="is_active" valuePropName="checked">
+                <Form.Item
+                  label="Active"
+                  name="is_active"
+                  valuePropName="checked"
+                >
                   <Switch disabled={isDetail} />
                 </Form.Item>
               </Col>
               {mode === "Update" && (
                 <Col span={12}>
-                  <Form.Item label="Generate QR Code" name="generate_qr" valuePropName="checked">
+                  <Form.Item
+                    label="Generate QR Code"
+                    name="generate_qr"
+                    valuePropName="checked"
+                  >
                     <Switch disabled={isDetail} />
                   </Form.Item>
                 </Col>
@@ -104,7 +122,9 @@ const TableForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
                 <Form.Item
                   label="Store ID"
                   name="store_id"
-                  rules={[{ required: true, message: "Please input store ID!" }]}
+                  rules={[
+                    { required: true, message: "Please input store ID!" },
+                  ]}
                 >
                   <Input placeholder="Store ID" disabled />
                 </Form.Item>
@@ -116,7 +136,7 @@ const TableForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
             </Form.Item>
           </Form>
         </Col>
-        
+
         <Col span={8}>
           <div style={{ textAlign: "center", padding: "20px" }}>
             <Typography.Title level={4} style={{ marginBottom: "20px" }}>
@@ -135,7 +155,11 @@ const TableForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
                   justifyContent: "center",
                 }}
               >
-                <img src={initData.qr_code} alt="QR Code" style={{ maxWidth: "150px", maxHeight: "150px" }} />
+                <img
+                  src={initData.qr_code}
+                  alt="QR Code"
+                  style={{ maxWidth: "150px", maxHeight: "150px" }}
+                />
               </div>
             ) : (
               <div

@@ -3,8 +3,6 @@ import endpoints from "../api/endpoint";
 import type { ListPageParams } from "../type/common/common";
 import type { PromotionPayload } from "../type/promotion/promotion";
 
-// const fake_stroreId = "550e8400-e29b-41d4-a716-446655440000";
-
 const promotionService = {
   getListPromtions: (params: ListPageParams) =>
     axiosClient.post(endpoints.promotion.list(), params),

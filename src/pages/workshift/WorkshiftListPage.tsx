@@ -11,11 +11,11 @@ const WorkshiftListPage = () => {
 
   useEffect(() => {
     const storedStoreId = localStorage.getItem("storeId");
-    const defaultStoreId = "550e8400-e29b-41d4-a716-446655440000";
+    const defaultStoreId = localStorage.getItem("storeId");
     const currentStoreId = storedStoreId || defaultStoreId;
-    setStoreId(currentStoreId);
+    setStoreId(currentStoreId as string);
   }, []);
-  
+
   const fetchData = useCallback(
     async (params: WorkshiftListParams) => {
       dispatch(fetchWorkshiftListStart(params));
@@ -26,7 +26,7 @@ const WorkshiftListPage = () => {
   if (!storeId) {
     return <div>Loading...</div>;
   }
-  
+
   return (
     <>
       <TitleLine
@@ -41,4 +41,4 @@ const WorkshiftListPage = () => {
   );
 };
 
-export default WorkshiftListPage; 
+export default WorkshiftListPage;

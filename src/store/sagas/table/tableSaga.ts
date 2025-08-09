@@ -2,7 +2,13 @@ import { call, put, takeLatest, type Effect } from "redux-saga/effects";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { AxiosResponse, AxiosError } from "axios";
 
-import type { TableListParams, TableListResponse, TableDataType, TableCreateRequest, TableDTO } from "../../../type/table/table";
+import type {
+  TableListParams,
+  TableListResponse,
+  TableDataType,
+  TableCreateRequest,
+  TableDTO,
+} from "../../../type/table/table";
 import {
   fetchTablesFailure,
   fetchTablesStart,
@@ -36,7 +42,15 @@ import {
 import tableService from "../../../services/tableService";
 import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 
-const { getListTables, getTableDetail, createTable, updateTable, generateTableQR, changeStatus, deleteTable } = tableService;
+const {
+  getListTables,
+  getTableDetail,
+  createTable,
+  updateTable,
+  generateTableQR,
+  changeStatus,
+  deleteTable,
+} = tableService;
 
 function* fetchTableList(
   action: PayloadAction<TableListParams>
@@ -72,10 +86,10 @@ function* fetchCreateTable(
 ): Generator<Effect, void, AxiosResponse<TableDTO>> {
   try {
     const response = yield call(() => createTable(action.payload));
-    
-    const storeId = action.payload.store_id || "550e8400-e29b-41d4-a716-446655440000";
+
+    const storeId = action.payload.store_id;
     yield call(() => generateTableQR(response.data.id, storeId));
-    
+
     yield put(createTableSuccess(response.data));
   } catch (error: unknown) {
     const axiosError = error as AxiosError;
@@ -94,12 +108,12 @@ function* fetchUpdateTable(
   try {
     const { id, data } = action.payload;
     yield call(() => updateTable(id, data));
-    
+
     if (data.generate_qr) {
-      const storeId = data.store_id || "550e8400-e29b-41d4-a716-446655440000";
-      yield call(() => generateTableQR(id, storeId));
+      const storeId = data.store_id;
+      yield call(() => generateTableQR(id, storeId as string));
     }
-    
+
     yield put(updateTableSuccess());
   } catch (error: unknown) {
     const axiosError = error as AxiosError;
@@ -157,4 +171,4 @@ export function* watchTableSaga() {
     yield* withGlobalLoading(fetchChangeTableStatus, action);
   });
   yield takeLatest(deleteTableStart.type, handleDeleteTable);
-} 
+}
