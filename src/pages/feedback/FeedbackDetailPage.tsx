@@ -15,7 +15,7 @@ const FeedbackDetailPage = () => {
   const { feedback, loading } = useAppSelector((state) => state.feedbackDetail);
   const navigate = useNavigate();
 
-  const { feedbackId } = useParams<{ feedbackId: string }>();
+  const { feedbackId, storeId } = useParams<{ feedbackId: string; storeId: string }>();
 
   useEffect(() => {
     if (feedbackId) {
@@ -44,7 +44,7 @@ const FeedbackDetailPage = () => {
   };
 
   const handleEdit = () => {
-    navigate(`/feedbacks/${feedbackId}/update`);
+    navigate(`/${storeId}/feedbacks/${feedbackId}/update`);
   };
   
   return (

@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import TitleLine from "../../components/common/Title/TitleLine";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchWorkshiftDetailStart } from "../../store/slices/workshift/workshiftDetailSlice";
+import { deleteWorkshiftStart, clearDeleteWorkshiftState } from "../../store/slices/workshift/workshiftDeleteSlice";
 import WorkshiftDetail from "../../components/workshift/workshiftDetail/WorkshiftDetail";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 
@@ -14,10 +15,18 @@ const WorkshiftDetailPage = () => {
   const [form] = useForm();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const { id } = useParams();
+
+
+  const navigate = useNavigate();
+  const { id, storeId } = useParams();
+
   
   const { workshiftDetail, loading, error } = useAppSelector(
     (state) => state.workshiftDetail
+  );
+  
+  const { loading: deleteLoading, success: deleteSuccess, error: deleteError } = useAppSelector(
+    (state) => state.workshiftDelete
   );
 
   useEffect(() => {
@@ -32,8 +41,29 @@ const WorkshiftDetailPage = () => {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (deleteError) {
+      showNotification("error", deleteError);
+    }
+  }, [deleteError]);
+
+  useEffect(() => {
+    if (deleteSuccess) {
+      showNotification("success", "Workshift deleted successfully");
+      dispatch(clearDeleteWorkshiftState());
+      navigate(`/${storeId}/workshifts`);
+    }
+  }, [deleteSuccess, dispatch, navigate]);
+
   const handleDeleteWorkshift = () => {
     setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (id) {
+      dispatch(deleteWorkshiftStart({ workshiftId: id }));
+      setIsDeleteModalOpen(false);
+    }
   };
 
   if (!id) {
@@ -49,6 +79,9 @@ const WorkshiftDetailPage = () => {
       <TitleLine
         title={`Workshift - ${workshiftDetail.workDate ? dayjs(workshiftDetail.workDate).format('YYYY-MM-DD') : ''}`}
         contentModal="this workshift"
+        onEdit={() => {
+          navigate(`/${storeId}/workshifts/${id}/update`);
+        }}
         onDelete={handleDeleteWorkshift}
         hasMoreAction={true}
         promotionId={id}
@@ -64,14 +97,12 @@ const WorkshiftDetailPage = () => {
       <Modal
         title="Delete Workshift"
         open={isDeleteModalOpen}
-        onOk={() => {
-          setIsDeleteModalOpen(false);
-          // TODO: Implement delete functionality
-        }}
+        onOk={handleConfirmDelete}
         onCancel={() => setIsDeleteModalOpen(false)}
         okText="Delete"
         okType="danger"
         cancelText="Cancel"
+        confirmLoading={deleteLoading}
       >
         <p>Are you sure you want to delete this workshift? This action cannot be undone.</p>
       </Modal>

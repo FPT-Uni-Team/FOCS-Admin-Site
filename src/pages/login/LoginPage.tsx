@@ -18,7 +18,10 @@ const LoginPage = () => {
   };
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      const id = localStorage.getItem("storeId");
+      if (id) {
+        navigate(`/${id}/promotions`);
+      }
     }
   }, [isAuthenticated, navigate]);
   return (

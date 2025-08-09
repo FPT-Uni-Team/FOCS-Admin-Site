@@ -17,6 +17,8 @@ const workshiftService = {
         storeId: storeId,
       },
     }),
+  deleteWorkshift: (id: string) =>
+    axiosClient.delete(endpoints.workshift.delete(id)),
 };
 
 export default workshiftService; 

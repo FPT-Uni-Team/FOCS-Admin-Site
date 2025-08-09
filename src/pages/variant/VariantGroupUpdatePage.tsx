@@ -15,7 +15,7 @@ const VariantGroupUpdatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { variantGroupId } = useParams<{ variantGroupId: string }>();
+  const { variantGroupId, storeId } = useParams<{ variantGroupId: string; storeId: string }>();
 
   const { variantGroupDetail } = useAppSelector((state) => state.variantGroupDetail);
   const { success, error } = useAppSelector((state) => state.variantGroupUpdate);
@@ -38,7 +38,7 @@ const VariantGroupUpdatePage = () => {
     if (success) {
       showNotification("success", "Update variant group success!");
       dispatch(resetVariantGroupUpdate());
-      navigate(`/variant-groups/${variantGroupId}`);
+      navigate(`/${storeId}/variant-groups/${variantGroupId}`);
     }
   }, [dispatch, navigate, variantGroupId, success]);
 

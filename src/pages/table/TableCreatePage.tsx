@@ -8,13 +8,14 @@ import {
   resetTableCreate,
 } from "../../store/slices/table/tableCreateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { TableCreateRequest } from "../../type/table/table";
 
 const TableCreatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { storeId } = useParams();
   const { success, error } = useAppSelector((state) => state.tableCreate);
 
   const handleCreateTable = useCallback(() => {
@@ -37,9 +38,9 @@ const TableCreatePage = () => {
     if (success) {
       showNotification("success", "Create table success!");
       dispatch(resetTableCreate());
-      navigate("/tables");
+      navigate(`/${storeId}/tables`);
     }
-  }, [dispatch, navigate, success]);
+  }, [dispatch, navigate, success, storeId]);
 
   useEffect(() => {
     if (error) {

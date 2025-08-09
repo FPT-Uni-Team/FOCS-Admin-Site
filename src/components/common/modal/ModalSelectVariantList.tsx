@@ -116,8 +116,8 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
         setDisplayVariantGroups(newData);
         setEditingKey("");
       }
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
+    } catch {
+      /* no-op */
     }
   };
 
@@ -135,8 +135,8 @@ const VariantSelectionAdmin: React.FC<VariantSelectionModalProps> = ({
       });
       setDisplayVariantGroups(newVariantGroups);
       setEditingVariantKey("");
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
+    } catch {
+      /* no-op */
     }
   };
 

@@ -7,15 +7,16 @@ import type {
   SetCouponStatusResponse,
 } from "../type/coupon/coupon";
 
-const fake_stroreId = "550e8400-e29b-41d4-a716-446655440000";
-
 export const couponService = {
   getListValidCoupon: (params: ListPageParams, promotionId?: string) =>
     axiosClient.post(endpoints.coupon.listValid(promotionId), params),
   getListCouponByIDs: (params: string[]) =>
     axiosClient.post(endpoints.coupon.listByIds(), params),
   getCouponList: (params: ListPageParams) =>
-    axiosClient.post(endpoints.coupon.list(fake_stroreId), params),
+    axiosClient.post(
+      endpoints.coupon.list(localStorage.getItem("storeId") as string),
+      params
+    ),
   couponDetail: (params: string) =>
     axiosClient.get(endpoints.coupon.detail(params)),
 };

@@ -7,12 +7,13 @@ import {
   resetVariantGroupCreate,
 } from "../../store/slices/variant/variantGroupCreateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const VariantGroupCreatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { storeId } = useParams();
   const { success, error, loading } = useAppSelector((state) => state.variantGroupCreate);
   const [modalVisible, setModalVisible] = useState(true);
 
@@ -26,7 +27,7 @@ const VariantGroupCreatePage = () => {
 
   const handleCancel = () => {
     setModalVisible(false);
-    navigate("/variant-groups");
+    navigate(`/${storeId}/variant-groups`);
   };
 
   useEffect(() => {
@@ -34,9 +35,9 @@ const VariantGroupCreatePage = () => {
       showNotification("success", "Create variant group success!");
       dispatch(resetVariantGroupCreate());
       setModalVisible(false);
-      navigate("/variant-groups");
+      navigate(`/${storeId}/variant-groups`);
     }
-  }, [dispatch, navigate, success]);
+  }, [dispatch, navigate, success, storeId]);
 
   useEffect(() => {
     if (error) {
