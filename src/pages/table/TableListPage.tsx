@@ -4,11 +4,8 @@ import { useAppDispatch } from "../../hooks/redux";
 import type { TableListParams } from "../../type/table/table";
 import { fetchTablesStart } from "../../store/slices/table/tableListSlice";
 import TableList from "../../components/table/tableList/TableList";
-<<<<<<< Updated upstream
-=======
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
->>>>>>> Stashed changes
 
 const TableListPage = () => {
   const dispatch = useAppDispatch();
