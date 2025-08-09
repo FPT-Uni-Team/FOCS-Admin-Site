@@ -93,14 +93,14 @@ const WorkshiftForm: React.FC<Props> = ({ mode = "Create", form, initData }) => 
                     }
                     className={`${styles.shiftCard} mb-4`}
                   >
-                    <Row gutter={16}>
+                                        <Row gutter={16}>
                       <Col span={8}>
-                                                 <Form.Item
-                           {...restField}
-                           name={[name, "staffId"]}
-                           label="Staff Name"
-                           rules={[{ required: true, message: "Please select staff!" }]}
-                         >
+                        <Form.Item
+                          {...restField}
+                          name={[name, "staffId"]}
+                          label="Staff Name"
+                          rules={[{ required: true, message: "Please select staff!" }]}
+                        >
                           <Select
                             placeholder="Select staff"
                             options={staffOptions}

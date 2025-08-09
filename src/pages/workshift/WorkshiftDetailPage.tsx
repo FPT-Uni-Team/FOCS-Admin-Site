@@ -1,6 +1,6 @@
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Modal } from "antd";
 import dayjs from "dayjs";
 
@@ -15,8 +15,11 @@ const WorkshiftDetailPage = () => {
   const [form] = useForm();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
+
+
   const navigate = useNavigate();
   const { id, storeId } = useParams();
+
   
   const { workshiftDetail, loading, error } = useAppSelector(
     (state) => state.workshiftDetail
@@ -82,7 +85,7 @@ const WorkshiftDetailPage = () => {
         onDelete={handleDeleteWorkshift}
         hasMoreAction={true}
         promotionId={id}
-        isShowEdit={true}
+        isShowEdit={false}
       />
       
       <WorkshiftDetail 
