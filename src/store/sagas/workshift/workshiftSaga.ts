@@ -18,8 +18,13 @@ import {
   createWorkshiftSuccess,
   createWorkshiftFailure,
 } from "../../slices/workshift/workshiftCreateSlice";
+import {
+  deleteWorkshiftStart,
+  deleteWorkshiftSuccess,
+  deleteWorkshiftFailure,
+} from "../../slices/workshift/workshiftDeleteSlice";
 
-const { getListWorkshifts, getWorkshiftDetail, createWorkshift } = workshiftService;
+const { getListWorkshifts, getWorkshiftDetail, createWorkshift, deleteWorkshift } = workshiftService;
 
 function* fetchWorkshiftList(
   action: PayloadAction<WorkshiftListParams>
@@ -64,8 +69,23 @@ function* createWorkshiftSaga(
   }
 }
 
+function* handleDeleteWorkshift(
+  action: PayloadAction<{ workshiftId: string }>
+): Generator<unknown, void, unknown> {
+  try {
+    const { workshiftId } = action.payload;
+    yield call(deleteWorkshift, workshiftId);
+    yield put(deleteWorkshiftSuccess({ workshiftId }));
+  } catch (error: unknown) {
+    const err = error as { message?: string };
+    const errorMessage = err.message || "Failed to delete workshift";
+    yield put(deleteWorkshiftFailure(errorMessage));
+  }
+}
+
 export function* watchWorkshiftSaga() {
   yield takeLatest(fetchWorkshiftListStart.type, fetchWorkshiftList);
   yield takeLatest(fetchWorkshiftDetailStart.type, fetchWorkshiftDetail);
   yield takeLatest(createWorkshiftStart.type, createWorkshiftSaga);
+  yield takeLatest(deleteWorkshiftStart.type, handleDeleteWorkshift);
 } 
