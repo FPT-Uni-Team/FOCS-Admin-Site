@@ -22,9 +22,7 @@ const WorkshiftCreatePage = () => {
 
   useEffect(() => {
     const storedStoreId = localStorage.getItem("storeId");
-    const defaultStoreId = "550e8400-e29b-41d4-a716-446655440000";
-    const currentStoreId = storedStoreId || defaultStoreId;
-    setStoreId(currentStoreId);
+    setStoreId(storedStoreId || "");
   }, []);
 
   const handleCreateWorkshift = useCallback(() => {
@@ -35,10 +33,14 @@ const WorkshiftCreatePage = () => {
         const dataPayload: WorkshiftCreatePayload = {
           workDate: dayjs(values.workDate).format("YYYY-MM-DD"),
           shift: (values.shift || []).map((shift: any) => {
-            const selectedStaff = staff.find((s: any) => s.id === shift.staffId);
+            const selectedStaff = staff.find(
+              (s: any) => s.id === shift.staffId
+            );
             return {
               staffId: shift.staffId,
-              staffName: selectedStaff ? `${selectedStaff.first_name} ${selectedStaff.last_name}` : "",
+              staffName: selectedStaff
+                ? `${selectedStaff.first_name} ${selectedStaff.last_name}`
+                : "",
               startTime: shift.startTime,
               endTime: shift.endTime,
             };
@@ -76,4 +78,4 @@ const WorkshiftCreatePage = () => {
   );
 };
 
-export default WorkshiftCreatePage; 
+export default WorkshiftCreatePage;
