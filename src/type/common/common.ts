@@ -46,3 +46,16 @@ export const defaultParams = (page_size = 10) => {
     filters: {},
   };
 };
+
+export type SelectOption<T = string> = {
+  value: T;
+  label: string;
+};
+
+export type SelectConfigCommon<T = string> = {
+  name: string;
+  type: "select";
+  label: string;
+  placeholder?: string;
+  options: SelectOption<T>[];
+};

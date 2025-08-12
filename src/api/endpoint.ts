@@ -72,7 +72,8 @@ const endpoints = {
     detail: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
     update: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
     delete: (id: string) => `${API_BASE_URL}/admin/variant-group/${id}`,
-    assignVariants: () => `${API_BASE_URL}/admin/menu-item-variant/assign-to-variant-group`,
+    assignVariants: () =>
+      `${API_BASE_URL}/admin/menu-item-variant/assign-to-variant-group`,
   },
   variant: {
     list: () => `${API_BASE_URL}/admin/menu-item-variant/list`,
@@ -98,12 +99,13 @@ const endpoints = {
     update: (id: string) => `${API_BASE_URL}/manager/table/${id}`,
     delete: (id: string) => `${API_BASE_URL}/manager/table/${id}`,
     generateQR: () => `${API_BASE_URL}/manager/table/qrcode`,
-    changeStatus: (tableId: string, storeId: string) => 
+    changeStatus: (tableId: string, storeId: string) =>
       `${API_BASE_URL}/manager/table/status?tableId=${tableId}&storeId=${storeId}`,
   },
   order: {
     list: () => `${API_BASE_URL}/cashier/orders`,
-    detail: (orderCode: string) => `${API_BASE_URL}/order/order-by-code/${orderCode}`,
+    detail: (orderCode: string) =>
+      `${API_BASE_URL}/order/order-by-code/${orderCode}`,
   },
   feedback: {
     list: () => `${API_BASE_URL}/feedback/list`,
@@ -115,6 +117,10 @@ const endpoints = {
     create: () => `${API_BASE_URL}/workshift`,
     detail: (id: string) => `${API_BASE_URL}/Workshift/shift/${id}`,
     delete: (id: string) => `${API_BASE_URL}/Workshift/schedule/${id}`,
+  },
+  storeSetting: {
+    detail: (id: string) => `${API_BASE_URL}/admin/store-setting/${id}`,
+    update: (id: string) => `${API_BASE_URL}/admin/store-setting/update/${id}`,
   },
 };
 

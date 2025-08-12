@@ -8,6 +8,7 @@ import {
   ShoppingCartOutlined,
   MessageOutlined,
   ClockCircleOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import React, { lazy, type LazyExoticComponent, type ReactNode } from "react";
 
@@ -81,10 +82,18 @@ const VariantUpdatePage = lazy(
 );
 const OrderListPage = lazy(() => import("../pages/order/OrderListPage"));
 const OrderDetailPage = lazy(() => import("../pages/order/OrderDetailPage"));
-const FeedbackListPage = lazy(() => import("../pages/feedback/FeedbackListPage"));
-const FeedbackDetailPage = lazy(() => import("../pages/feedback/FeedbackDetailPage"));
-const FeedbackUpdatePage = lazy(() => import("../pages/feedback/FeedbackUpdatePage"));
-const WorkshiftListPage = lazy(() => import("../pages/workshift/WorkshiftListPage"));
+const FeedbackListPage = lazy(
+  () => import("../pages/feedback/FeedbackListPage")
+);
+const FeedbackDetailPage = lazy(
+  () => import("../pages/feedback/FeedbackDetailPage")
+);
+const FeedbackUpdatePage = lazy(
+  () => import("../pages/feedback/FeedbackUpdatePage")
+);
+const WorkshiftListPage = lazy(
+  () => import("../pages/workshift/WorkshiftListPage")
+);
 const WorkshiftCreatePage = lazy(
   () => import("../pages/workshift/WorkshiftCreatePage")
 );
@@ -92,7 +101,10 @@ const WorkshiftDetailPage = lazy(
   () => import("../pages/workshift/WorkshiftDetailPage")
 );
 
-
+const StoreSettingPage = lazy(() => import("../pages/setting/StoreSetting"));
+const StoreSettingUpdatePage = lazy(
+  () => import("../pages/setting/StoreSettingUpdate")
+);
 
 export interface AppRoute {
   path: string;
@@ -126,7 +138,7 @@ export const routes: AppRoute[] = [
     component: PromotionUpdatePage,
     hidden: true,
   },
-  
+
   {
     path: "coupons",
     component: CouponListPage,
@@ -323,7 +335,17 @@ export const routes: AppRoute[] = [
     component: WorkshiftDetailPage,
     hidden: true,
   },
-
+  {
+    path: "setting",
+    component: StoreSettingPage,
+    label: "Store Settings",
+    icon: <SettingOutlined />,
+  },
+  {
+    path: "setting/update",
+    component: StoreSettingUpdatePage,
+    hidden: true,
+  },
 ];
 
 export default routes;
