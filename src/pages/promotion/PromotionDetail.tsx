@@ -87,7 +87,11 @@ const PromotionDetailPage = () => {
         contentModal="this promotion"
         onAction={fetchChangeStatusPromotion}
         onEdit={() => {
-          navigate(`/promotions/update/${promotionId}`);
+          navigate(
+            `${localStorage.getItem(
+              "storeId"
+            )}/promotions/update/${promotionId}`
+          );
         }}
         onDelete={handleDeletePromotion}
         hasMoreAction
