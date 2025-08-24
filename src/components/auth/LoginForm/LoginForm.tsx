@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Input, Button, Alert, Card, type FormInstance } from "antd";
 import styles from "./LoginForm.module.scss";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { LockOutlined, PhoneOutlined } from "@ant-design/icons";
 
 interface LoginFormProps {
   loading: boolean;
@@ -22,16 +22,19 @@ const LoginForm: React.FC<LoginFormProps> = ({
         <Form layout="vertical" onFinish={onSubmit} form={form}>
           <div className={styles.formFields}>
             <Form.Item
-              name="email"
+              name="phone"
               rules={[
-                { required: true, message: "Please enter your email!" },
-                { type: "email", message: "Invalid email address!" },
+                { required: true, message: "Please enter your phone number!" },
+                {
+                  pattern: /^[0-9]{9,11}$/,
+                  message: "Phone number must be 9 to 11 digits!",
+                },
               ]}
             >
               <Input
-                type="email"
-                placeholder="Enter your email"
-                prefix={<UserOutlined />}
+                type="tel"
+                placeholder="Enter your phone number"
+                prefix={<PhoneOutlined />}
               />
             </Form.Item>
 

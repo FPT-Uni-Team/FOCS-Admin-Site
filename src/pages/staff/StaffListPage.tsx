@@ -4,6 +4,8 @@ import { useAppDispatch } from "../../hooks/redux";
 import { fetchStaffListStart } from "../../store/slices/staff/staffListSlice";
 import type { ListPageParams } from "../../type/common/common";
 import StaffList from "../../components/staff/staffList/StaffList";
+import { useEffect } from "react";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const StaffListPage = () => {
   const dispatch = useAppDispatch();
@@ -11,6 +13,10 @@ const StaffListPage = () => {
   const fetchData = async (params: ListPageParams) => {
     dispatch(fetchStaffListStart(params));
   };
+  useEffect(() => {
+    dispatch(setBreadcrumb([]));
+  }, [dispatch]);
+
   return (
     <>
       <TitleLine
