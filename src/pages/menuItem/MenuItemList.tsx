@@ -20,6 +20,7 @@ const MenuItemPage = () => {
   useEffect(() => {
     dispatch(setBreadcrumb([]));
   }, [dispatch]);
+
   return (
     <>
       <TitleLine
