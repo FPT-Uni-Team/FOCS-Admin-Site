@@ -12,6 +12,7 @@ import {
 } from "../../store/slices/staff/staffUpdateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 import StaffForm from "../../components/staff/staffForm/StaffForm";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const StaffUpdatePage = () => {
   const [form] = useForm();
@@ -51,7 +52,7 @@ const StaffUpdatePage = () => {
     if (success) {
       showNotification("success", "Update staff success!");
       dispatch(resetStaffUpdate());
-      navigate(`/staffs/${staffId}`);
+      navigate(`/${localStorage.getItem("storeId")}/staffs/${staffId}`);
     }
   }, [dispatch, navigate, staffId, success]);
 
@@ -61,6 +62,18 @@ const StaffUpdatePage = () => {
       dispatch(resetStaffUpdate());
     }
   }, [dispatch, error]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Staffs",
+          link: `/${localStorage.getItem("storeId")}/staffs`,
+        },
+        { name: `${staffId}` },
+      ])
+    );
+  }, [staffId, dispatch]);
 
   return (
     <>

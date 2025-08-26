@@ -11,6 +11,7 @@ import {
   resetTableUpdate,
 } from "../../store/slices/table/tableUpdateSlice";
 import { TableStatusLabel } from "../../type/table/table";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const TableUpdatePage = () => {
   const [form] = useForm();
@@ -51,6 +52,18 @@ const TableUpdatePage = () => {
     }
   }, [dispatch, tableId]);
 
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Tables",
+          link: `/${localStorage.getItem("storeId")}/tables`,
+        },
+        { name: `Table ${table.table_number}` },
+      ])
+    );
+  }, [table.table_number, dispatch]);
+
   return (
     <>
       <TitleLine
@@ -64,4 +77,4 @@ const TableUpdatePage = () => {
   );
 };
 
-export default TableUpdatePage; 
+export default TableUpdatePage;

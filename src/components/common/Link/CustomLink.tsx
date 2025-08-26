@@ -10,7 +10,10 @@ interface Props {
 const CustomLink: FC<Props> = ({ title, href }) => {
   const navigate = useNavigate();
   return (
-    <div onClick={() => navigate(href)} className={styles.customTile}>
+    <div
+      onClick={() => navigate(`/${localStorage.getItem("storeId")}/${href}`)}
+      className={styles.customTile}
+    >
       {title}
     </div>
   );

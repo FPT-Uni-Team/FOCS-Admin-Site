@@ -4,20 +4,25 @@ import { useAppDispatch } from "../../hooks/redux";
 import { fetchVariantsStart } from "../../store/slices/variant/variantListSlice";
 import VariantList from "../../components/variant/variantList/VariantList";
 import type { ListPageParams } from "../../type/common/common";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const VariantListPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { storeId } = useParams();
-  
+
   const fetchData = useCallback(
     async (params: ListPageParams) => {
       dispatch(fetchVariantsStart(params));
     },
     [dispatch]
   );
-  
+
+  useEffect(() => {
+    dispatch(setBreadcrumb([]));
+  }, [dispatch]);
+
   return (
     <>
       <TitleLine

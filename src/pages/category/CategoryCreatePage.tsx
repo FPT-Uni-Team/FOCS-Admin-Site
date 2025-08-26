@@ -34,7 +34,7 @@ const CategoryPage = () => {
     if (success) {
       showNotification("success", "Create promotion success!");
       dispatch(resetCategoryCreate());
-      navigate("/categories");
+      navigate(`/${localStorage.getItem("storeId")}/categories`);
     }
   }, [dispatch, navigate, success]);
 

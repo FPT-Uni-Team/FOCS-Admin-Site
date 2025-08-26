@@ -21,7 +21,7 @@ const PromotionListPage = () => {
       <TitleLine
         title="Promotions List"
         onCreate={() => {
-          navigate("create");
+          navigate(`/${localStorage.getItem("storeId")}/create`);
         }}
       />
       <PromotionList fetchData={fetchData} />

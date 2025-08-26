@@ -26,7 +26,7 @@ const MenuItemPage = () => {
       <TitleLine
         title="Menu Item List"
         onCreate={() => {
-          navigate("create");
+          navigate(`/${localStorage.getItem("storeId")}/create`);
         }}
       />
       <MenuItemList fetchData={fetchData} />

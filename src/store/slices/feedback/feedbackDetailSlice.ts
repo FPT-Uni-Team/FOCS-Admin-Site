@@ -17,13 +17,14 @@ const feedbackDetailSlice = createSlice({
   name: "feedbackDetail",
   initialState,
   reducers: {
-                    fetchFeedbackDetailStart: (
-                  state,
-                  _action: PayloadAction<{ feedbackId: string }>
-                ) => {
-                  state.loading = true;
-                  state.error = null;
-                },
+    fetchFeedbackDetailStart: (
+      state,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      action: PayloadAction<{ feedbackId: string }>
+    ) => {
+      state.loading = true;
+      state.error = null;
+    },
     fetchFeedbackDetailSuccess: (
       state,
       action: PayloadAction<FeedbackListDataType>

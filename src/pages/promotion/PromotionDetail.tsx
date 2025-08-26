@@ -47,7 +47,7 @@ const PromotionDetailPage = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete promotion success!");
-      navigate("/promotions");
+      navigate(`/${localStorage.getItem("storeId")}/promotions`);
       dispatch(clearDeletePromotionState());
     }
   }, [deleteSuccess, navigate, dispatch]);

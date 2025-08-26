@@ -15,6 +15,7 @@ import {
 import { fetchFeedbacksStart } from "../../store/slices/feedback/feedbackListSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 import type { FeedbackUpdateRequest } from "../../type/feedback/feedback";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const FeedbackUpdatePage = () => {
   const [form] = useForm();
@@ -35,10 +36,12 @@ const FeedbackUpdatePage = () => {
           public: values.public,
           reply: values.reply,
         };
-        dispatch(updateFeedbackStart({
-          feedbackId: feedbackId || "",
-          payload
-        }));
+        dispatch(
+          updateFeedbackStart({
+            feedbackId: feedbackId || "",
+            payload,
+          })
+        );
       })
       .catch(() => {});
   }, [dispatch, form, feedbackId]);
@@ -67,6 +70,18 @@ const FeedbackUpdatePage = () => {
       dispatch(resetUpdateFeedback());
     }
   }, [dispatch, error]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Feedbacks",
+          link: `/${localStorage.getItem("storeId")}/feedbacks`,
+        },
+        { name: `${feedbackId}` },
+      ])
+    );
+  }, [feedbackId, dispatch]);
 
   if (!feedback) {
     return <div>Loading...</div>;
@@ -99,10 +114,7 @@ const FeedbackUpdatePage = () => {
               name="public"
               valuePropName="checked"
             >
-              <Switch 
-                checkedChildren="Public" 
-                unCheckedChildren="Private"
-              />
+              <Switch checkedChildren="Public" unCheckedChildren="Private" />
             </Form.Item>
           </Form>
         </Card>

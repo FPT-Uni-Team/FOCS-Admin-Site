@@ -78,14 +78,7 @@ export const columnsMenuItemNoSort = [
     key: "name",
 
     render: (value: string, _record: MenuListDataType) => {
-      return (
-        <CustomLink
-          title={value}
-          href={`/${localStorage.getItem("storeId")}/menu-item/${
-            _record.menuId
-          }`}
-        />
-      );
+      return <CustomLink title={value} href={_record.menuId} />;
     },
   },
   {
@@ -185,7 +178,7 @@ export const columnsCouponListNoSort: ColumnsType<CouponAdminDTO> = [
         <>
           <CustomLink
             title={record.code}
-            href={`/coupons/${record.id}`}
+            href={`coupons/${record.id}`}
             key={record.id}
           />
         </>
@@ -240,7 +233,7 @@ export const columnsPromotionList: ColumnsType<PromotionListDataType> = [
       return (
         <CustomLink
           title={record.promotionName}
-          href={`/promotions/${record.promotionId}`}
+          href={`promotions/${record.promotionId}`}
           key={record.promotionId}
         />
       );
@@ -308,7 +301,7 @@ export const columnsPromotionListNoSort: ColumnsType<PromotionListDataType> = [
       return (
         <CustomLink
           title={record.promotionName}
-          href={`/promotions/${record.promotionId}`}
+          href={`promotions/${record.promotionId}`}
           key={record.promotionId}
         />
       );
@@ -492,7 +485,7 @@ export const columnsStaffList: ColumnsType<StaffDataType> = [
       return (
         <CustomLink
           title={record.first_name}
-          href={`/staffs/${record.id}`}
+          href={`staffs/${record.id}`}
           key={record.id}
         />
       );
@@ -575,11 +568,10 @@ export const columnsOrderList: ColumnsType<OrderListDataType> = [
       "ascend" as SortOrder,
     ],
     render: (_, record) => {
-      const storeId = localStorage.getItem("storeId");
       return (
         <CustomLink
           title={record.order_code}
-          href={`/${storeId}/orders/${record.order_code}`}
+          href={`orders/${record.order_code}`}
         />
       );
     },
@@ -694,10 +686,7 @@ export const columnsVariantList: ColumnsType<Variant> = [
       "ascend" as SortOrder,
     ],
     render: (text: string, record: Variant) => {
-      const storeId = localStorage.getItem("storeId");
-      return (
-        <CustomLink title={text} href={`/${storeId}/variants/${record.id}`} />
-      );
+      return <CustomLink title={text} href={`variants/${record.id}`} />;
     },
     sorter: true,
   },
@@ -880,11 +869,10 @@ export const columnsWorkshiftList: ColumnsType<WorkshiftItem> = [
       "ascend" as SortOrder,
     ],
     render: (workDate: string, record: WorkshiftItem) => {
-      const storeId = localStorage.getItem("storeId");
       return (
         <CustomLink
           title={formatDate(workDate)}
-          href={`/${storeId}/workshifts/${record.id}`}
+          href={`workshifts/${record.id}`}
         />
       );
     },

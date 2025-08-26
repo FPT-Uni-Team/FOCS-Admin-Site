@@ -10,6 +10,7 @@ import {
   hideLoading,
   showLoading,
 } from "../../store/slices/loading/loadingSlice";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const StoreSettingPage = () => {
   const [form] = useForm();
@@ -33,9 +34,16 @@ const StoreSettingPage = () => {
     fetchStoreSetting();
   }, [dispatch, form]);
 
+  useEffect(() => {
+    dispatch(setBreadcrumb([]));
+  }, [dispatch]);
+
   return (
     <>
-      <TitleLine title="Store Setting" onEdit={() => navigate("update")} />
+      <TitleLine
+        title="Store Setting"
+        onEdit={() => navigate(`/${localStorage.getItem("storeId")}/update`)}
+      />
       {storeData && (
         <StoreSettingDetail form={form} initData={storeData} mode="Detail" />
       )}

@@ -57,7 +57,7 @@ const CouponDetailPage = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete coupon success!");
-      navigate("/coupons");
+      navigate(`/${localStorage.getItem("storeId")}/coupons`);
       dispatch(clearDeleteCouponState());
     }
   }, [deleteSuccess, navigate, dispatch]);

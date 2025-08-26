@@ -39,7 +39,7 @@ const CategoryUpdatePage = () => {
     if (success) {
       showNotification("success", "Update category success!");
       dispatch(resetCategoryUpdate());
-      navigate(`/categories/${categoryId}`);
+      navigate(`/${localStorage.getItem("storeId")}/categories/${categoryId}`);
     }
   }, [dispatch, navigate, categoryId, success]);
 

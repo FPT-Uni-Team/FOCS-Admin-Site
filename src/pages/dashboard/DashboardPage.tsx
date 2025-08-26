@@ -19,6 +19,7 @@ import {
 import TitleLine from "../../components/common/Title/TitleLine";
 import { formatPrice } from "../../helper/formatPrice";
 import type { ColumnsType } from "antd/es/table";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const { Title, Text } = Typography;
 
@@ -133,6 +134,10 @@ const DashboardPage = () => {
       }
     : null;
 
+  useEffect(() => {
+    dispatch(setBreadcrumb([]));
+  }, [dispatch]);
+
   if (error) {
     return (
       <div>
@@ -147,7 +152,6 @@ const DashboardPage = () => {
   return (
     <div>
       <TitleLine title="Dashboard" />
-      
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} lg={6}>
           <Card>
@@ -195,12 +199,18 @@ const DashboardPage = () => {
 
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} lg={12}>
-          <Card title="Thống kê đơn hàng theo trạng thái" loading={loading.orderStatistic}>
+          <Card
+            title="Thống kê đơn hàng theo trạng thái"
+            loading={loading.orderStatistic}
+          >
             {orderStatusData.length > 0 && <Pie {...pieConfig} height={300} />}
           </Card>
         </Col>
         <Col xs={24} lg={12}>
-          <Card title="Doanh thu theo thời gian" loading={loading.financeStatistic}>
+          <Card
+            title="Doanh thu theo thời gian"
+            loading={loading.financeStatistic}
+          >
             {columnConfig && <Column {...columnConfig} height={300} />}
           </Card>
         </Col>
@@ -263,7 +273,10 @@ const DashboardPage = () => {
 
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={12}>
-          <Card title="Doanh thu theo phương thức thanh toán" loading={loading.financeStatistic}>
+          <Card
+            title="Doanh thu theo phương thức thanh toán"
+            loading={loading.financeStatistic}
+          >
             <Table
               columns={paymentMethodColumns}
               dataSource={financeStatistic?.revenue_by_payment_method || []}

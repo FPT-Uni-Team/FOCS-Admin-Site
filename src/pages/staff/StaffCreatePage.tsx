@@ -9,6 +9,7 @@ import {
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 import { useNavigate } from "react-router-dom";
 import StaffForm from "../../components/staff/staffForm/StaffForm";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const StaffPage = () => {
   const [form] = useForm();
@@ -38,7 +39,7 @@ const StaffPage = () => {
     if (success) {
       showNotification("success", "Staff created successfully!");
       dispatch(resetCreateStaff());
-      navigate("/staffs");
+      navigate(`/${localStorage.getItem("storeId")}/staffs`);
     }
   }, [dispatch, navigate, success]);
 
@@ -48,6 +49,18 @@ const StaffPage = () => {
       dispatch(resetCreateStaff());
     }
   }, [dispatch, error]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Staffs",
+          link: `/${localStorage.getItem("storeId")}/staffs`,
+        },
+        { name: "New Staff" },
+      ])
+    );
+  }, [dispatch]);
 
   return (
     <>

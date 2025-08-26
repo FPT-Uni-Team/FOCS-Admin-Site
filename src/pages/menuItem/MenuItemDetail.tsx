@@ -52,7 +52,7 @@ const MenuItemDetailPage = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete menu item success!");
-      navigate("/menu-items");
+      navigate(`/${localStorage.getItem("storeId")}/menu-items`);
       dispatch(clearDeleteMenuItemState());
     }
   }, [deleteSuccess, navigate, dispatch]);
@@ -87,7 +87,11 @@ const MenuItemDetailPage = () => {
         contentModal="this menu item"
         onAction={fetchChangeStatusMenuItem}
         onEdit={() => {
-          navigate(`/menu-items/update/${menuItemId}`);
+          navigate(
+            `/${localStorage.getItem(
+              "storeId"
+            )}/menu-items/update/${menuItemId}`
+          );
         }}
         onDelete={handleDeleteMenuItem}
         hasMoreAction
