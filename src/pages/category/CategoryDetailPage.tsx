@@ -48,7 +48,7 @@ const CategoryPage = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete category success!");
-      navigate("/categories");
+      navigate(`/${localStorage.getItem("storeId")}/categories`);
       dispatch(clearDeleteCategoryState());
     }
   }, [deleteSuccess, navigate, dispatch]);
@@ -80,7 +80,11 @@ const CategoryPage = () => {
         contentModal="this category"
         onAction={fetchChangeStatusCategory}
         onEdit={() => {
-          navigate(`/categories/update/${categoryId}`);
+          navigate(
+            `/${localStorage.getItem(
+              "storeId"
+            )}/categories/update/${categoryId}`
+          );
         }}
         onDelete={handleDeleteCategory}
         hasMoreAction

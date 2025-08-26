@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import WorkshiftForm from "../../components/workshift/workshiftForm/WorkshiftForm";
 import type { WorkshiftCreatePayload } from "../../type/workshift/workshift";
 import dayjs from "dayjs";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const WorkshiftCreatePage = () => {
   const [form] = useForm();
@@ -55,7 +56,7 @@ const WorkshiftCreatePage = () => {
     if (success) {
       showNotification("success", "Workshift created successfully!");
       dispatch(resetCreateWorkshift());
-      navigate("/workshifts");
+      navigate(`/${localStorage.getItem("storeId")}/workshifts`);
     }
   }, [dispatch, navigate, success]);
 
@@ -65,6 +66,18 @@ const WorkshiftCreatePage = () => {
       dispatch(resetCreateWorkshift());
     }
   }, [dispatch, error]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Workshifts",
+          link: `/${localStorage.getItem("storeId")}/workshifts`,
+        },
+        { name: "New Workshift" },
+      ])
+    );
+  }, [dispatch]);
 
   if (!storeId) {
     return <div>Loading...</div>;

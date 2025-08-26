@@ -8,13 +8,16 @@ import {
 } from "../../store/slices/variant/variantGroupCreateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 import { useNavigate, useParams } from "react-router-dom";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const VariantGroupCreatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { storeId } = useParams();
-  const { success, error, loading } = useAppSelector((state) => state.variantGroupCreate);
+  const { success, error, loading } = useAppSelector(
+    (state) => state.variantGroupCreate
+  );
   const [modalVisible, setModalVisible] = useState(true);
 
   const handleCreateVariantGroup = useCallback(() => {
@@ -46,6 +49,18 @@ const VariantGroupCreatePage = () => {
     }
   }, [dispatch, error]);
 
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Variant Groups",
+          link: `/${localStorage.getItem("storeId")}/variant-groups`,
+        },
+        { name: "New Variant Group" },
+      ])
+    );
+  }, [dispatch]);
+
   return (
     <VariantGroupCreateModal
       visible={modalVisible}
@@ -57,4 +72,4 @@ const VariantGroupCreatePage = () => {
   );
 };
 
-export default VariantGroupCreatePage; 
+export default VariantGroupCreatePage;

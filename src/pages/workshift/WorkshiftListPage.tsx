@@ -1,10 +1,11 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../hooks/redux";
 import { fetchWorkshiftListStart } from "../../store/slices/workshift/workshiftListSlice";
 import WorkshiftList from "../../components/workshift/workshiftList/WorkshiftList";
 import type { WorkshiftListParams } from "../../type/workshift/workshift";
 import TitleLine from "../../components/common/Title/TitleLine";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const WorkshiftListPage = () => {
   const dispatch = useAppDispatch();
@@ -17,6 +18,10 @@ const WorkshiftListPage = () => {
     },
     [dispatch]
   );
+
+  useEffect(() => {
+    dispatch(setBreadcrumb([]));
+  }, [dispatch]);
 
   return (
     <>

@@ -9,6 +9,7 @@ import {
 } from "../../store/slices/variant/variantCreateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 import { useNavigate, useParams } from "react-router-dom";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const VariantCreatePage = () => {
   const [form] = useForm();
@@ -48,6 +49,18 @@ const VariantCreatePage = () => {
       dispatch(resetVariantCreate());
     }
   }, [dispatch, error]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Variants",
+          link: `/${localStorage.getItem("storeId")}/variants`,
+        },
+        { name: "New Variant" },
+      ])
+    );
+  }, [dispatch]);
 
   return (
     <>

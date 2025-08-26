@@ -21,7 +21,11 @@ import {
   updateFeedbackSuccess,
   updateFeedbackFailure,
 } from "../../slices/feedback/feedbackUpdateSlice";
-import type { FeedbackListDataType, FeedbackUpdateRequest } from "../../../type/feedback/feedback";
+import type {
+  FeedbackListDataType,
+  FeedbackUpdateRequest,
+} from "../../../type/feedback/feedback";
+import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 
 const { getListFeedback, getFeedbackDetail, updateFeedback } = feedbackService;
 
@@ -45,11 +49,15 @@ function* fetchFeedbackDetail(
   action: PayloadAction<{ feedbackId: string }>
 ): Generator<Effect, void, AxiosResponse<FeedbackListDataType>> {
   try {
-    const response = yield call(() => getFeedbackDetail(action.payload.feedbackId));
+    const response = yield call(() =>
+      getFeedbackDetail(action.payload.feedbackId)
+    );
     yield put(fetchFeedbackDetailSuccess(response.data));
   } catch (error: unknown) {
     const errorMessage =
-      error instanceof Error ? error.message : "Failed to fetch feedback detail";
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch feedback detail";
     yield put(fetchFeedbackDetailFailure(errorMessage));
   }
 }
@@ -58,7 +66,7 @@ function* fetchUpdateFeedback(
   action: PayloadAction<{ feedbackId: string; payload: FeedbackUpdateRequest }>
 ): Generator<Effect, void, AxiosResponse<FeedbackListDataType>> {
   try {
-    yield call(() => 
+    yield call(() =>
       updateFeedback(action.payload.feedbackId, action.payload.payload)
     );
     yield put(updateFeedbackSuccess());
@@ -71,6 +79,8 @@ function* fetchUpdateFeedback(
 
 export function* watchFeedbackSaga() {
   yield takeLatest(fetchFeedbacksStart.type, fetchFeedbackList);
-  yield takeLatest(fetchFeedbackDetailStart.type, fetchFeedbackDetail);
+  yield takeLatest(fetchFeedbackDetailStart.type, function* (action) {
+    yield* withGlobalLoading(fetchFeedbackDetail, action);
+  });
   yield takeLatest(updateFeedbackStart.type, fetchUpdateFeedback);
 }

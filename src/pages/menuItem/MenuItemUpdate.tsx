@@ -49,7 +49,7 @@ const MenuItemUpdatePage = () => {
         description: allFormValues.description,
         base_price: allFormValues.base_price,
         is_available: allFormValues.is_available,
-        store_id: "550E8400-E29B-41D4-A716-446655440000",
+        store_id: localStorage.getItem("storeId"),
       };
     } catch (e) {
       console.log(e);
@@ -217,7 +217,7 @@ const MenuItemUpdatePage = () => {
     if (success) {
       showNotification("success", "Update menu item success!");
       dispatch(resetMenuItem());
-      navigate(`/menu-items/${menuItemId}`);
+      navigate(`/${localStorage.getItem("storeId")}/menu-items/${menuItemId}`);
     }
   }, [dispatch, menuItemId, navigate, success]);
 

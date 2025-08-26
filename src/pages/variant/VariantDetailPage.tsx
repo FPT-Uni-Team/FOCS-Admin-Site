@@ -1,7 +1,10 @@
 import { useForm } from "antd/es/form/Form";
 import VariantDetail from "../../components/variant/variantDetail/VariantDetail";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { fetchVariantDetailStart, clearVariantDetail } from "../../store/slices/variant/variantDetailSlice";
+import {
+  fetchVariantDetailStart,
+  clearVariantDetail,
+} from "../../store/slices/variant/variantDetailSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
@@ -9,16 +12,27 @@ import TitleLine from "../../components/common/Title/TitleLine";
 import type { Variant } from "../../type/variant/variant";
 import { Modal } from "antd";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
-import { deleteVariantStart, clearDeleteVariantState } from "../../store/slices/variant/variantDeleteSlice";
+import {
+  deleteVariantStart,
+  clearDeleteVariantState,
+} from "../../store/slices/variant/variantDeleteSlice";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const VariantDetailPage = () => {
   const [form] = useForm();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const { variant, loading } = useAppSelector((state) => state.variantDetail);
-  const { loading: deleteLoading, success: deleteSuccess, error: deleteError } = useAppSelector((state) => state.variantDelete);
+  const {
+    loading: deleteLoading,
+    success: deleteSuccess,
+    error: deleteError,
+  } = useAppSelector((state) => state.variantDelete);
 
-  const { variantId, storeId } = useParams<{ variantId: string; storeId: string }>();
+  const { variantId, storeId } = useParams<{
+    variantId: string;
+    storeId: string;
+  }>();
   const navigate = useNavigate();
 
   const handleDeleteVariant = () => {
@@ -29,8 +43,7 @@ const VariantDetailPage = () => {
     if (variantId) {
       dispatch(fetchVariantDetailStart({ variantId }));
     }
-    
-    
+
     return () => {
       dispatch(clearVariantDetail());
     };
@@ -50,6 +63,18 @@ const VariantDetailPage = () => {
       dispatch(clearDeleteVariantState());
     }
   }, [deleteError, dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Variants",
+          link: `/${localStorage.getItem("storeId")}/variants`,
+        },
+        { name: `${variantId}` },
+      ])
+    );
+  }, [variantId, dispatch]);
 
   if (loading || !variant) {
     return <div>Loading...</div>;
@@ -74,7 +99,7 @@ const VariantDetailPage = () => {
       <ContentInner>
         <VariantDetail form={form} variantDetail={variant as Variant} />
       </ContentInner>
-      
+
       <Modal
         title="Delete Variant"
         open={isDeleteModalOpen}
@@ -87,7 +112,10 @@ const VariantDetailPage = () => {
         okType="danger"
         cancelText="Cancel"
       >
-        <p>Are you sure you want to delete this variant? This action cannot be undone.</p>
+        <p>
+          Are you sure you want to delete this variant? This action cannot be
+          undone.
+        </p>
       </Modal>
     </>
   );

@@ -21,7 +21,7 @@ const CouponListPage = () => {
       <TitleLine
         title="Coupons List"
         onCreate={() => {
-          navigate("create");
+          navigate(`/${localStorage.getItem("storeId")}/create`);
         }}
       />
       <CouponList fetchData={fetchData} />

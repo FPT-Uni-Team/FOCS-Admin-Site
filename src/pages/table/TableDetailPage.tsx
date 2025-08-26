@@ -18,12 +18,16 @@ import {
   deleteTableStart,
   clearDeleteTableState,
 } from "../../store/slices/table/tableDeleteSlice";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const TableDetailPage = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { tableId, storeId } = useParams<{ tableId: string; storeId: string }>();
+  const { tableId, storeId } = useParams<{
+    tableId: string;
+    storeId: string;
+  }>();
   const { table } = useAppSelector((state) => state.tableDetail);
   const { success, error } = useAppSelector((state) => state.changeTableStatus);
   const {
@@ -78,6 +82,18 @@ const TableDetailPage = () => {
       dispatch(clearDeleteTableState());
     }
   }, [deleteError, dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Tables",
+          link: `/${localStorage.getItem("storeId")}/tables`,
+        },
+        { name: `Table ${table.table_number}` },
+      ])
+    );
+  }, [table.table_number, dispatch]);
 
   return (
     <>

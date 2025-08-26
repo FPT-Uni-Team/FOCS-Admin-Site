@@ -13,6 +13,7 @@ import {
 } from "../../store/slices/workshift/workshiftDeleteSlice";
 import WorkshiftDetail from "../../components/workshift/workshiftDetail/WorkshiftDetail";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const WorkshiftDetailPage = () => {
   const [form] = useForm();
@@ -68,6 +69,18 @@ const WorkshiftDetailPage = () => {
       setIsDeleteModalOpen(false);
     }
   };
+
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Workshifts",
+          link: `/${localStorage.getItem("storeId")}/workshifts`,
+        },
+        { name: `${workshiftDetail?.id}` },
+      ])
+    );
+  }, [workshiftDetail?.id, dispatch]);
 
   if (!id) {
     return <div>ID not found</div>;

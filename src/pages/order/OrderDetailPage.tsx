@@ -6,14 +6,13 @@ import { useEffect } from "react";
 import type { OrderDTO } from "../../type/order/order";
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 import TitleLine from "../../components/common/Title/TitleLine";
-import {
-  getOrderStatusText,
-} from "../../type/order/order";
+import { getOrderStatusText } from "../../type/order/order";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const OrderDetailPage = () => {
   const dispatch = useAppDispatch();
-  const { order, loading } = useAppSelector((state) => state.orderDetail);
-  
+  const { order } = useAppSelector((state) => state.orderDetail);
+
   const { orderCode } = useParams<{ orderCode: string }>();
 
   useEffect(() => {
@@ -22,9 +21,17 @@ const OrderDetailPage = () => {
     }
   }, [orderCode, dispatch]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Orders",
+          link: `/${localStorage.getItem("storeId")}/orders`,
+        },
+        { name: `${orderCode}` },
+      ])
+    );
+  }, [orderCode, dispatch]);
 
   if (!order) {
     return <div>Order not found</div>;
@@ -35,12 +42,10 @@ const OrderDetailPage = () => {
       <TitleLine
         title={`Order ${order.order_code}`}
         status={getOrderStatusText(order.order_status)}
-        onEdit={() => {
-          
-        }}
-        hasMoreAction={false} 
+        onEdit={() => {}}
+        hasMoreAction={false}
         promotionId={orderCode}
-        isShowEdit={false} 
+        isShowEdit={false}
       />
       <ContentInner>
         <OrderDetail orderDetail={order as OrderDTO} />

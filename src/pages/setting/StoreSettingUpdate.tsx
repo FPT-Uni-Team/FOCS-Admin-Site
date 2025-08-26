@@ -10,6 +10,7 @@ import {
   showLoading,
 } from "../../store/slices/loading/loadingSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const StoreSettingUpdate = () => {
   const [form] = useForm();
@@ -63,6 +64,10 @@ const StoreSettingUpdate = () => {
 
     fetchStoreSetting();
   }, [dispatch, form]);
+
+  useEffect(() => {
+    dispatch(setBreadcrumb([]));
+  }, [dispatch]);
 
   return (
     <>

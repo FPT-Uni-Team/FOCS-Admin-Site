@@ -10,12 +10,16 @@ import {
   resetVariantUpdate,
 } from "../../store/slices/variant/variantUpdateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const VariantUpdatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { variantId, storeId } = useParams<{ variantId: string; storeId: string }>();
+  const { variantId, storeId } = useParams<{
+    variantId: string;
+    storeId: string;
+  }>();
 
   const { variant } = useAppSelector((state) => state.variantDetail);
   const { success, error } = useAppSelector((state) => state.variantUpdate);
@@ -25,21 +29,22 @@ const VariantUpdatePage = () => {
       .validateFields()
       .then(() => {
         const allFormValues = form.getFieldsValue();
-        
-       
-        const priceValue = allFormValues.price 
-          ? parseInt(allFormValues.price.replace(/\./g, ""), 10) 
+
+        const priceValue = allFormValues.price
+          ? parseInt(allFormValues.price.replace(/\./g, ""), 10)
           : 0;
-        
-       
-        const prepPerTime = allFormValues.prep_per_time && allFormValues.prep_per_time !== "" 
-          ? parseInt(allFormValues.prep_per_time, 10) 
-          : null;
-        
-        const quantityPerTime = allFormValues.quantity_per_time && allFormValues.quantity_per_time !== "" 
-          ? parseInt(allFormValues.quantity_per_time, 10) 
-          : null;
-        
+
+        const prepPerTime =
+          allFormValues.prep_per_time && allFormValues.prep_per_time !== ""
+            ? parseInt(allFormValues.prep_per_time, 10)
+            : null;
+
+        const quantityPerTime =
+          allFormValues.quantity_per_time &&
+          allFormValues.quantity_per_time !== ""
+            ? parseInt(allFormValues.quantity_per_time, 10)
+            : null;
+
         const dataPayload = {
           id: variantId || "",
           name: allFormValues.name,
@@ -74,6 +79,18 @@ const VariantUpdatePage = () => {
     }
   }, [dispatch, variantId]);
 
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Variants",
+          link: `/${localStorage.getItem("storeId")}/variants`,
+        },
+        { name: `${variantId}` },
+      ])
+    );
+  }, [variantId, dispatch]);
+
   return (
     <>
       <TitleLine
@@ -82,11 +99,7 @@ const VariantUpdatePage = () => {
         createButtonText="Update"
       />
       {variant && (
-        <VariantDetail
-          form={form}
-          mode="Update"
-          variantDetail={variant}
-        />
+        <VariantDetail form={form} mode="Update" variantDetail={variant} />
       )}
     </>
   );

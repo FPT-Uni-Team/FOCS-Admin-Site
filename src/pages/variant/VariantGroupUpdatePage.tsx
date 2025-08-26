@@ -10,15 +10,23 @@ import {
   resetVariantGroupUpdate,
 } from "../../store/slices/variant/variantGroupUpdateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
+import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
 
 const VariantGroupUpdatePage = () => {
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { variantGroupId, storeId } = useParams<{ variantGroupId: string; storeId: string }>();
+  const { variantGroupId, storeId } = useParams<{
+    variantGroupId: string;
+    storeId: string;
+  }>();
 
-  const { variantGroupDetail } = useAppSelector((state) => state.variantGroupDetail);
-  const { success, error } = useAppSelector((state) => state.variantGroupUpdate);
+  const { variantGroupDetail } = useAppSelector(
+    (state) => state.variantGroupDetail
+  );
+  const { success, error } = useAppSelector(
+    (state) => state.variantGroupUpdate
+  );
 
   const handleUpdateVariantGroup = useCallback(() => {
     form
@@ -53,6 +61,20 @@ const VariantGroupUpdatePage = () => {
     dispatch(fetchVariantGroupDetailStart(variantGroupId || ""));
   }, [dispatch, variantGroupId]);
 
+  useEffect(() => {
+    dispatch(
+      setBreadcrumb([
+        {
+          name: "Variant Groups",
+          link: `/${localStorage.getItem("storeId")}/variant-groups`,
+        },
+        {
+          name: variantGroupDetail?.group_name ?? "Unnamed Group",
+        },
+      ])
+    );
+  }, [variantGroupDetail, dispatch]);
+
   return (
     <>
       <TitleLine
@@ -60,7 +82,11 @@ const VariantGroupUpdatePage = () => {
         onCreate={handleUpdateVariantGroup}
         createButtonText="Update"
       />
-      <VariantGroupForm form={form} mode="Update" initData={variantGroupDetail || undefined} />
+      <VariantGroupForm
+        form={form}
+        mode="Update"
+        initData={variantGroupDetail || undefined}
+      />
     </>
   );
 };
