@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react";
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import routes, { type AppRoute } from "./routesConfig";
 import MainLayout from "../layouts/MainLayout/MainLayout";
 import FallBack from "../components/common/Fallback/FallBack";
@@ -51,6 +51,7 @@ const AppRoutes = () => (
           </>
         }
       >
+        <Route index element={<Navigate to="dashboard" replace />} />
         {renderRoutes(appRoutes)}
         <Route path="*" element={<NotFound />} />
       </Route>

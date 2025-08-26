@@ -13,8 +13,8 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const handleSubmit = () => {
     const values = form.getFieldsValue();
-    const { phone, password } = values;
-    dispatch(loginRequest({ phone, password }));
+    const { email, password } = values;
+    dispatch(loginRequest({ email, password }));
   };
   useEffect(() => {
     if (isAuthenticated) {
