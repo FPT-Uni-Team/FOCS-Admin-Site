@@ -122,6 +122,12 @@ const endpoints = {
     detail: (id: string) => `${API_BASE_URL}/admin/store-setting/${id}`,
     update: (id: string) => `${API_BASE_URL}/admin/store-setting/update/${id}`,
   },
+  dashboard: {
+    orderStatistic: () => `${API_BASE_URL}/order-statistic`,
+    overview: () => `${API_BASE_URL}/overview`,
+    kitchenStatistic: () => `${API_BASE_URL}/kitchen-statistic`,
+    financeStatistic: () => `${API_BASE_URL}/finance-statistic`,
+  },
 };
 
 export default endpoints;

@@ -14,7 +14,7 @@ interface AuthResponse {
 }
 
 function* handleLogin(
-  action: PayloadAction<{ phone: string; password: string }>
+  action: PayloadAction<{ email: string; password: string }>
 ): Generator<unknown, void, { data: AuthResponse }> {
   try {
     const response = yield call(login, action.payload);

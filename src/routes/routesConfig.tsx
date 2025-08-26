@@ -9,6 +9,7 @@ import {
   MessageOutlined,
   ClockCircleOutlined,
   SettingOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 import React, { lazy, type LazyExoticComponent, type ReactNode } from "react";
 
@@ -105,6 +106,7 @@ const StoreSettingPage = lazy(() => import("../pages/setting/StoreSetting"));
 const StoreSettingUpdatePage = lazy(
   () => import("../pages/setting/StoreSettingUpdate")
 );
+const DashboardPage = lazy(() => import("../pages/dashboard/DashboardPage"));
 
 export interface AppRoute {
   path: string;
@@ -117,6 +119,12 @@ export interface AppRoute {
 }
 
 export const routes: AppRoute[] = [
+  {
+    path: "dashboard",
+    component: DashboardPage,
+    label: "Dashboard",
+    icon: <DashboardOutlined />,
+  },
   {
     path: "promotions",
     component: PromotionListPage,
