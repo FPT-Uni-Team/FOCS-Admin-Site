@@ -96,7 +96,6 @@ const ModalMenuItem: React.FC<MenuItemSelectionModalProps> = ({
         onFilter={onFilter}
         selectConfigs={selectConfigsMenuStatus}
         onSearch={onSearch}
-        isShowFilter={true}
       />
       <TableReuse
         columns={columnsMenuItem}

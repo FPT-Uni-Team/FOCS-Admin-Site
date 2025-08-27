@@ -17,6 +17,7 @@ import styles from "./VariantGroupDetail.module.scss";
 import ModalAssignVariant from "../../common/modal/ModalAssignVariant";
 import { fetchVariantGroupDetailStart } from "../../../store/slices/variant/variantGroupDetailSlice";
 import { useAppDispatch } from "../../../hooks/redux";
+import CustomLink from "../../common/Link/CustomLink";
 
 interface Props {
   form: FormInstance;
@@ -24,11 +25,15 @@ interface Props {
   mode?: "View" | "Update";
 }
 
-const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = "View" }) => {
+const VariantGroupDetail: React.FC<Props> = ({
+  form,
+  variantGroupDetail,
+  mode = "View",
+}) => {
   const dispatch = useAppDispatch();
   const isEditMode = mode === "Update";
   const [showAssignModal, setShowAssignModal] = useState(false);
-  
+
   useEffect(() => {
     if (variantGroupDetail?.group_name) {
       form.setFieldsValue({
@@ -37,16 +42,22 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = 
     }
   }, [variantGroupDetail, form]);
 
-  if (!variantGroupDetail) {
-    return <div>Loading...</div>;
-  }
-
   const variantColumns = [
     {
       title: "Variant Name",
       dataIndex: "name",
       key: "name",
       width: "30%",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      render: (_: any, record: any) => {
+        return (
+          <CustomLink
+            title={record.name}
+            href={`variants/${record.id}`}
+            key={record.id}
+          />
+        );
+      },
     },
     {
       title: "Price",
@@ -66,22 +77,6 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = 
         </Tag>
       ),
     },
-    {
-      title: "Prep Time (min)",
-      dataIndex: "prep_per_time",
-      key: "prep_per_time",
-      width: "15%",
-      render: (prep_per_time: number | undefined) =>
-        prep_per_time ? `${prep_per_time} min` : "-",
-    },
-    {
-      title: "Quantity per Time",
-      dataIndex: "quantity_per_time",
-      key: "quantity_per_time",
-      width: "20%",
-      render: (quantity_per_time: number | undefined) =>
-        quantity_per_time || "-",
-    },
   ];
 
   const handleAssignSuccess = () => {
@@ -92,11 +87,16 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = 
   };
 
   const getAssignedVariantIds = () => {
-    return variantGroupDetail?.variants?.map(variant => variant.id) || [];
+    return variantGroupDetail?.variants?.map((variant) => variant.id) || [];
   };
 
   return (
-    <Form form={form} layout="vertical" name="variantGroupDetailForm" colon={true}>
+    <Form
+      form={form}
+      layout="vertical"
+      name="variantGroupDetailForm"
+      colon={true}
+    >
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item label="Group Name" name="group_name">
@@ -107,14 +107,17 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = 
 
       <Row className={styles.variantTable}>
         <Col span={24}>
-          <Card 
-            title="Variants" 
+          <Card
+            title="Variants"
             size="small"
             extra={
               !isEditMode && (
                 <Button
                   type="primary"
                   icon={<PlusOutlined />}
+                  style={{
+                    margin: "12px",
+                  }}
                   onClick={() => setShowAssignModal(true)}
                 >
                   Assign Variants
@@ -124,7 +127,7 @@ const VariantGroupDetail: React.FC<Props> = ({ form, variantGroupDetail, mode = 
           >
             <Table
               columns={variantColumns}
-              dataSource={variantGroupDetail.variants || []}
+              dataSource={variantGroupDetail?.variants || []}
               rowKey="id"
               pagination={{
                 pageSize: 10,

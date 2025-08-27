@@ -31,7 +31,7 @@ const MenuItemDetailForm: React.FC<Props> = ({ form, menuItemDetail }) => {
       form.setFieldsValue({
         name: menuItemDetail.name,
         description: menuItemDetail.description,
-        base_price: menuItemDetail.base_price,
+        base_price: menuItemDetail.base_price?.toLocaleString("vi-VN"),
       });
       setDataCategorySeleted({
         keys: (menuItemDetail.categories || []).map((item) => item.id),
@@ -74,9 +74,7 @@ const MenuItemDetailForm: React.FC<Props> = ({ form, menuItemDetail }) => {
               <Col span={24}>
                 <Form.Item name="category_ids">
                   <Row>
-                    <div
-                      className={styles.customTableSelect}
-                    >
+                    <div className={styles.customTableSelect}>
                       <div className={styles.titleSelectCustom}>
                         <Typography.Title level={5}>
                           Select Category
@@ -99,9 +97,7 @@ const MenuItemDetailForm: React.FC<Props> = ({ form, menuItemDetail }) => {
               <Col span={24}>
                 <Form.Item name="variant_groups">
                   <Row>
-                    <div
-                      className={styles.customTableSelect}
-                    >
+                    <div className={styles.customTableSelect}>
                       <VariantDisplayDetail
                         displayVariantGroups={
                           menuItemDetail?.variant_groups || []

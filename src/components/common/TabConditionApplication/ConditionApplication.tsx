@@ -49,11 +49,21 @@ const ConditionApplication: FC<Props> = ({ dataGeneral, form }) => {
           promotion_scope: dataGeneral.promotion_scope,
           minimun_item_in_cart: dataGeneral.minimum_item_quantity,
           max_usage: dataGeneral.max_usage,
-          max_discount_value: dataGeneral.max_discount_value,
-          minimun_order_value: dataGeneral.minimum_order_amount,
+          max_discount_value:
+            dataGeneral.max_discount_value &&
+            dataGeneral.max_discount_value
+              .toLocaleString("vi-VN")
+              .replace("đ", ""),
+          minimun_order_value:
+            dataGeneral.minimum_order_amount &&
+            dataGeneral.minimum_order_amount
+              .toLocaleString("vi-VN")
+              .replace("đ", ""),
           buy_x: dataGeneral.promotion_item_condition?.buy_quantity,
           get_y: dataGeneral.promotion_item_condition?.get_quantity,
-          discount_value: dataGeneral.discount_value,
+          discount_value: dataGeneral.discount_value
+            ?.toLocaleString("vi-VN")
+            .replace("đ", ""),
           menu_item_select_discount: dataGeneral?.accept_for_items,
           menu_item_select_buyX:
             dataGeneral?.promotion_item_condition?.buy_item_id,

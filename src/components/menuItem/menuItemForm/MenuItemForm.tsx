@@ -142,7 +142,9 @@ const MenuItemForm = forwardRef<MenuItemFormRef, MenuItemFormProps>(
         form.setFieldsValue({
           name: initData.name,
           description: initData.description,
-          base_price: initData.base_price,
+          base_price: initData.base_price
+            ?.toLocaleString("vi-VN")
+            .replace("đ", ""),
           is_available: initData.is_available,
           category_ids: (initData.categories || []).map((item) => item.id),
           variant_groups: initData.variant_groups,

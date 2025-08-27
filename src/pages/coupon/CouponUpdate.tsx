@@ -38,7 +38,7 @@ const CouponUpdatePage = () => {
       description: allFormValues?.step1?.description?.trim(),
       code: coupon?.code,
       discount_type: allFormValues?.step1?.discount_type,
-      value: Number(allFormValues?.step1?.value),
+      value: Number(allFormValues?.step1?.value.replaceAll(".", "")),
       start_date: allFormValues?.step1?.start_date?.format(
         "YYYY-MM-DD HH:mm:ss"
       ),
@@ -61,7 +61,7 @@ const CouponUpdatePage = () => {
     }
     if (allFormValues?.step2?.minimum_order_amount) {
       couponData.minimum_order_amount = Number(
-        allFormValues?.step2?.minimum_order_amount
+        allFormValues?.step2?.minimum_order_amount.replaceAll(".", "")
       );
     }
     if (allFormValues?.step2?.minimum_item_quantity) {

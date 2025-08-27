@@ -42,7 +42,9 @@ const PromotionCreatePage = () => {
       });
   };
   const checkLegitValue = (value: string) => {
-    return value !== undefined ? Number(value) : undefined;
+    return value !== undefined
+      ? Number(String(value).replace(/\./g, ""))
+      : undefined;
   };
 
   const handleModifyDataPromotion = (): PromotionPayload => {

@@ -117,20 +117,6 @@ const TableForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
               )}
             </Row>
 
-            <Row gutter={36}>
-              <Col span={24}>
-                <Form.Item
-                  label="Store ID"
-                  name="store_id"
-                  rules={[
-                    { required: true, message: "Please input store ID!" },
-                  ]}
-                >
-                  <Input placeholder="Store ID" disabled />
-                </Form.Item>
-              </Col>
-            </Row>
-
             <Form.Item name="qr_code" hidden>
               <Input />
             </Form.Item>

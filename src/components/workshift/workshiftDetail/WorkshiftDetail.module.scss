@@ -43,7 +43,7 @@
 // New styles for form-based structure
 .shiftCard {
   margin-bottom: 24px;
-  
+
   .ant-card-head {
     background-color: #fafafa;
     border-bottom: 1px solid #f0f0f0;
@@ -53,18 +53,18 @@
 .shiftItemCard {
   border: 1px solid #d9d9d9;
   border-radius: 6px;
-  
+  margin-bottom: 16px;
   .ant-card-head {
     background-color: #fafafa;
     padding: 8px 16px;
     min-height: 40px;
-    
+
     .ant-card-head-title {
       font-size: 14px;
       font-weight: 500;
     }
   }
-  
+
   .ant-card-body {
     padding: 16px;
   }
@@ -76,7 +76,7 @@
   border-style: dashed;
   border-color: #d9d9d9;
   color: #666;
-  
+
   &:hover {
     border-color: #1890ff;
     color: #1890ff;
@@ -85,7 +85,7 @@
 
 .summaryCard {
   margin-top: 24px;
-  
+
   .ant-card-head {
     background-color: #fafafa;
     border-bottom: 1px solid #f0f0f0;
@@ -111,8 +111,8 @@
   cursor: not-allowed;
 }
 
-  .timeInput {
-    .ant-input {
-      text-align: center;
-    }
-  } 
+.timeInput {
+  .ant-input {
+    text-align: center;
+  }
+}

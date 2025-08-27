@@ -50,22 +50,22 @@ const DashboardPage = () => {
   const orderStatusData = orderStatistic
     ? [
         {
-          status: "Chờ xử lý",
+          status: "Pending",
           count: orderStatistic.pending_orders,
           color: "#FF9800",
         },
         {
-          status: "Đang xử lý",
+          status: "In Progress",
           count: orderStatistic.inprogress_orders,
           color: "#2196F3",
         },
         {
-          status: "Hoàn thành",
+          status: "Completed",
           count: orderStatistic.completed_orders,
           color: "#4CAF50",
         },
         {
-          status: "Đã hủy",
+          status: "Cancelled",
           count: orderStatistic.cancelled_orders,
           color: "#F44336",
         },
@@ -74,13 +74,13 @@ const DashboardPage = () => {
 
   const paymentMethodColumns: ColumnsType<PaymentMethodData> = [
     {
-      title: "Phương thức thanh toán",
+      title: "Payment Method",
       dataIndex: "payment_method",
       key: "payment_method",
       render: (text: string) => <Text strong>{text}</Text>,
     },
     {
-      title: "Doanh thu",
+      title: "Revenue",
       dataIndex: "total_revenue",
       key: "total_revenue",
       render: (value: number) => (
@@ -108,9 +108,9 @@ const DashboardPage = () => {
   const columnConfig = financeStatistic
     ? {
         data: [
-          { period: "Hôm nay", revenue: financeStatistic.daily_revenue },
-          { period: "Tuần này", revenue: financeStatistic.weekly_revenue },
-          { period: "Tháng này", revenue: financeStatistic.monthly_revenue },
+          { period: "Today", revenue: financeStatistic.daily_revenue },
+          { period: "This Week", revenue: financeStatistic.weekly_revenue },
+          { period: "This Month", revenue: financeStatistic.monthly_revenue },
         ],
         xField: "period",
         yField: "revenue",
@@ -127,7 +127,7 @@ const DashboardPage = () => {
         },
         meta: {
           revenue: {
-            alias: "Doanh thu",
+            alias: "Revenue",
             formatter: (value: number) => formatPrice(value),
           },
         },
@@ -143,7 +143,7 @@ const DashboardPage = () => {
       <div>
         <TitleLine title="Dashboard" />
         <Card>
-          <Text type="danger">Lỗi tải dữ liệu: {error}</Text>
+          <Text type="danger">Error loading data: {error}</Text>
         </Card>
       </div>
     );
@@ -156,7 +156,7 @@ const DashboardPage = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="Tổng đơn hàng hôm nay"
+              title="Total Orders Today"
               value={overviewStatistic?.total_orders || 0}
               prefix={<ShoppingCartOutlined />}
               loading={loading.overviewStatistic}
@@ -166,10 +166,10 @@ const DashboardPage = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="Doanh thu hôm nay"
+              title="Revenue Today"
               value={overviewStatistic?.total_revenue_today || 0}
               prefix={<DollarOutlined />}
-              formatter={(value) => formatPrice(Number(value))}
+              formatter={(value) => value.toLocaleString("vi-VN")}
               loading={loading.overviewStatistic}
             />
           </Card>
@@ -177,7 +177,7 @@ const DashboardPage = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="Bàn đang sử dụng"
+              title="Active Tables"
               value={overviewStatistic?.active_tables || 0}
               prefix={<TableOutlined />}
               loading={loading.overviewStatistic}
@@ -187,9 +187,9 @@ const DashboardPage = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card>
             <Statistic
-              title="Thời gian hoàn thành TB"
+              title="Average Completion Time"
               value={orderStatistic?.average_complete_time || 0}
-              suffix="phút"
+              suffix="minutes"
               prefix={<ClockCircleOutlined />}
               loading={loading.orderStatistic}
             />
@@ -200,17 +200,14 @@ const DashboardPage = () => {
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} lg={12}>
           <Card
-            title="Thống kê đơn hàng theo trạng thái"
+            title="Order Statistics by Status"
             loading={loading.orderStatistic}
           >
             {orderStatusData.length > 0 && <Pie {...pieConfig} height={300} />}
           </Card>
         </Col>
         <Col xs={24} lg={12}>
-          <Card
-            title="Doanh thu theo thời gian"
-            loading={loading.financeStatistic}
-          >
+          <Card title="Revenue Over Time" loading={loading.financeStatistic}>
             {columnConfig && <Column {...columnConfig} height={300} />}
           </Card>
         </Col>
@@ -218,25 +215,25 @@ const DashboardPage = () => {
 
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} lg={12}>
-          <Card title="Thống kê bếp" loading={loading.kitchenStatistic}>
+          <Card title="Kitchen Statistics" loading={loading.kitchenStatistic}>
             <Row gutter={16}>
               <Col span={12}>
                 <Statistic
-                  title="Đơn đang chờ"
+                  title="Pending Orders"
                   value={kitchenStatistic?.orders_not_in_progress || 0}
                   valueStyle={{ color: "#FF9800" }}
                 />
               </Col>
               <Col span={12}>
                 <Statistic
-                  title="Đơn đang làm"
+                  title="Orders in Progress"
                   value={kitchenStatistic?.orders_in_progress || 0}
                   valueStyle={{ color: "#2196F3" }}
                 />
               </Col>
               <Col span={12} style={{ marginTop: 16 }}>
                 <Statistic
-                  title="Đơn hoàn thành"
+                  title="Completed Orders"
                   value={kitchenStatistic?.completed_orders || 0}
                   valueStyle={{ color: "#4CAF50" }}
                   prefix={<CheckCircleOutlined />}
@@ -244,7 +241,7 @@ const DashboardPage = () => {
               </Col>
               <Col span={12} style={{ marginTop: 16 }}>
                 <Statistic
-                  title="Đơn đã hủy"
+                  title="Cancelled Orders"
                   value={kitchenStatistic?.cancelled_orders || 0}
                   valueStyle={{ color: "#F44336" }}
                   prefix={<CloseCircleOutlined />}
@@ -254,14 +251,14 @@ const DashboardPage = () => {
           </Card>
         </Col>
         <Col xs={24} lg={12}>
-          <Card title="Món bán chạy nhất" loading={loading.overviewStatistic}>
+          <Card title="Best Selling Item" loading={loading.overviewStatistic}>
             {overviewStatistic?.best_selling_item && (
               <div style={{ textAlign: "center", padding: "20px 0" }}>
                 <Title level={3} style={{ marginBottom: 8 }}>
                   {overviewStatistic.best_selling_item.item_name}
                 </Title>
                 <Statistic
-                  title="Số lượng đã bán"
+                  title="Quantity Sold"
                   value={overviewStatistic.best_selling_item.quantity}
                   valueStyle={{ fontSize: "2em", color: "#52c41a" }}
                 />
@@ -274,7 +271,7 @@ const DashboardPage = () => {
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={12}>
           <Card
-            title="Doanh thu theo phương thức thanh toán"
+            title="Revenue by Payment Method"
             loading={loading.financeStatistic}
           >
             <Table
@@ -287,7 +284,7 @@ const DashboardPage = () => {
             {financeStatistic?.average_bill_value && (
               <div style={{ marginTop: 16, textAlign: "center" }}>
                 <Statistic
-                  title="Giá trị hóa đơn trung bình"
+                  title="Average Bill Value"
                   value={financeStatistic.average_bill_value}
                   formatter={(value) => formatPrice(Number(value))}
                   valueStyle={{ color: "#1890ff" }}
@@ -297,11 +294,11 @@ const DashboardPage = () => {
           </Card>
         </Col>
         <Col xs={24} lg={12}>
-          <Card title="Thông tin bàn" loading={loading.overviewStatistic}>
+          <Card title="Table Information" loading={loading.overviewStatistic}>
             <Row gutter={16}>
               <Col span={12}>
                 <Statistic
-                  title="Bàn đang sử dụng"
+                  title="Active Tables"
                   value={overviewStatistic?.active_tables || 0}
                   valueStyle={{ color: "#52c41a" }}
                   prefix={<TableOutlined />}
@@ -309,7 +306,7 @@ const DashboardPage = () => {
               </Col>
               <Col span={12}>
                 <Statistic
-                  title="Bàn trống"
+                  title="Available Tables"
                   value={overviewStatistic?.available_tables || 0}
                   valueStyle={{ color: "#1890ff" }}
                   prefix={<TableOutlined />}
@@ -317,7 +314,7 @@ const DashboardPage = () => {
               </Col>
               <Col span={24} style={{ marginTop: 16 }}>
                 <Statistic
-                  title="Tổng số bàn"
+                  title="Total Tables"
                   value={
                     (overviewStatistic?.active_tables || 0) +
                     (overviewStatistic?.available_tables || 0)

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Row,
-  Col,
-  Card,
-  Input,
-} from "antd";
+import { Row, Col, Card, Input } from "antd";
 import dayjs from "dayjs";
 import type { OrderDTO } from "../../../type/order/order";
 import {
@@ -17,12 +12,14 @@ import TableReuse from "../../common/Table/TableReuse";
 import type { ColumnsType } from "antd/es/table";
 import styles from "./OrderDetail.module.scss";
 import StatusTag from "../../common/Status/StatusTag";
+import CustomLink from "../../common/Link/CustomLink";
 
 interface Props {
   orderDetail: OrderDTO;
 }
 
 interface OrderDetailItem {
+  menu_item_id?: string;
   key: string;
   menu_item_name: string;
   variant_name: string;
@@ -33,11 +30,19 @@ interface OrderDetailItem {
 }
 
 const OrderDetail: React.FC<Props> = ({ orderDetail }) => {
+  console.log("orderDetail", orderDetail);
   const orderDetailColumns: ColumnsType<OrderDetailItem> = [
     {
       title: "Menu Item",
       dataIndex: "menu_item_name",
       key: "menu_item_name",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      render: (_: any, record: any) => (
+        <CustomLink
+          title={record.menu_item_name}
+          href={`menu-items/${record.menu_item_id}`}
+        />
+      ),
     },
     {
       title: "Variant",
@@ -72,40 +77,42 @@ const OrderDetail: React.FC<Props> = ({ orderDetail }) => {
   ];
 
   // Map order details to table data
-  const orderDetailsData: OrderDetailItem[] = orderDetail?.order_details?.map((item, index) => ({
-    key: item.id || index.toString(),
-    menu_item_name: item.menu_item_name,
-    variant_name: item.variant_name,
-    quantity: item.quantity,
-    unit_price: item.unit_price,
-    total_price: item.total_price,
-    note: item.note,
-  })) || [];
+  const orderDetailsData: OrderDetailItem[] =
+    orderDetail?.order_details?.map((item, index) => ({
+      key: item.id || index.toString(),
+      menu_item_name: item.menu_item_name,
+      menu_item_id: item.menu_item_id,
+      variant_name: item.variant_name,
+      quantity: item.quantity,
+      unit_price: item.unit_price,
+      total_price: item.total_price,
+      note: item.note,
+    })) || [];
 
   // No need for form.setFieldsValue since we're not using form inputs
 
-    return (
+  return (
     <div className={styles.orderDetailContainer}>
       <Card title="Order Information" className={styles.orderCard}>
         <Row gutter={24}>
           <Col span={6}>
             <div className={styles.infoItem}>
               <div className={styles.label}>Order Code</div>
-                             <Input 
-                 value={orderDetail?.order_code} 
-                 readOnly 
-                 className={styles.infoInput}
-               />
+              <Input
+                value={orderDetail?.order_code}
+                readOnly
+                className={styles.infoInput}
+              />
             </div>
           </Col>
           <Col span={6}>
             <div className={styles.infoItem}>
               <div className={styles.label}>Order Type</div>
-                             <Input 
-                 value={orderDetail && getOrderTypeText(orderDetail.order_type)} 
-                 readOnly 
-                 className={styles.infoInput}
-               />
+              <Input
+                value={orderDetail && getOrderTypeText(orderDetail.order_type)}
+                readOnly
+                className={styles.infoInput}
+              />
             </div>
           </Col>
           <Col span={6}>
@@ -113,7 +120,9 @@ const OrderDetail: React.FC<Props> = ({ orderDetail }) => {
               <div className={styles.label}>Order Status</div>
               <div className={styles.statusContainer}>
                 {orderDetail && (
-                  <StatusTag status={getOrderStatusText(orderDetail.order_status)} />
+                  <StatusTag
+                    status={getOrderStatusText(orderDetail.order_status)}
+                  />
                 )}
               </div>
             </div>
@@ -123,7 +132,9 @@ const OrderDetail: React.FC<Props> = ({ orderDetail }) => {
               <div className={styles.label}>Payment Status</div>
               <div className={styles.statusContainer}>
                 {orderDetail && (
-                  <StatusTag status={getPaymentStatusText(orderDetail.payment_status)} />
+                  <StatusTag
+                    status={getPaymentStatusText(orderDetail.payment_status)}
+                  />
                 )}
               </div>
             </div>
@@ -131,57 +142,30 @@ const OrderDetail: React.FC<Props> = ({ orderDetail }) => {
         </Row>
 
         <Row gutter={24}>
-          <Col span={8}>
-            <div className={styles.infoItem}>
-              <div className={styles.label}>User ID</div>
-                             <Input 
-                 value={orderDetail?.user_id} 
-                 readOnly 
-                 className={styles.infoInput}
-               />
-            </div>
-          </Col>
-          <Col span={8}>
+          <Col span={12}>
             <div className={styles.infoItem}>
               <div className={styles.label}>Created At</div>
-                             <Input 
-                 value={orderDetail && dayjs(orderDetail.created_at).format("DD/MM/YYYY HH:mm")} 
-                 readOnly 
-                 className={styles.infoInput}
-               />
+              <Input
+                value={
+                  orderDetail &&
+                  dayjs(orderDetail.created_at).format("DD/MM/YYYY HH:mm")
+                }
+                readOnly
+                className={styles.infoInput}
+              />
             </div>
           </Col>
-          <Col span={8}>
+          <Col span={12}>
             <div className={styles.infoItem}>
               <div className={styles.label}>Updated At</div>
-                             <Input 
-                 value={orderDetail && dayjs(orderDetail.updated_at).format("DD/MM/YYYY HH:mm")} 
-                 readOnly 
-                 className={styles.infoInput}
-               />
-            </div>
-          </Col>
-        </Row>
-
-        <Row gutter={24}>
-          <Col span={12}>
-            <div className={styles.infoItem}>
-              <div className={styles.label}>Created By</div>
-                             <Input 
-                 value={orderDetail?.created_by} 
-                 readOnly 
-                 className={styles.infoInput}
-               />
-            </div>
-          </Col>
-          <Col span={12}>
-            <div className={styles.infoItem}>
-              <div className={styles.label}>Updated By</div>
-                             <Input 
-                 value={orderDetail?.updated_by || '-'} 
-                 readOnly 
-                 className={styles.infoInput}
-               />
+              <Input
+                value={
+                  orderDetail &&
+                  dayjs(orderDetail.updated_at).format("DD/MM/YYYY HH:mm")
+                }
+                readOnly
+                className={styles.infoInput}
+              />
             </div>
           </Col>
         </Row>
@@ -190,73 +174,76 @@ const OrderDetail: React.FC<Props> = ({ orderDetail }) => {
           <Col span={24}>
             <div className={styles.infoItem}>
               <div className={styles.label}>Customer Note</div>
-                             <Input.TextArea 
-                 value={orderDetail?.customer_note || 'none'} 
-                 readOnly 
-                 rows={3}
-                 className={styles.infoInput}
-               />
+              <Input.TextArea
+                value={orderDetail?.customer_note || ""}
+                readOnly
+                rows={3}
+                className={styles.infoInput}
+              />
             </div>
           </Col>
         </Row>
       </Card>
 
-              <Card title="Order Details" className={styles.orderCard}>
-          <TableReuse
-            columns={orderDetailColumns}
-            dataSource={orderDetailsData}
-            rowKey="key"
-            pagination={false}
-            className={styles.orderItemsTable}
-          />
-        </Card>
+      <Card title="Order Details" className={styles.orderCard}>
+        <TableReuse
+          columns={orderDetailColumns}
+          dataSource={orderDetailsData}
+          rowKey="key"
+          pagination={false}
+          className={styles.orderItemsTable}
+        />
+      </Card>
 
-        <Card title="Order Summary" className={`${styles.orderCard} ${styles.summaryCard}`}>
-          <Row gutter={24}>
-            <Col span={6}>
-              <div className={styles.infoItem}>
-                <div className={styles.label}>Sub Total</div>
-                                 <Input 
-                   value={orderDetail && formatPrice(orderDetail.sub_total_amount)} 
-                   readOnly 
-                   className={styles.infoInput}
-                 />
-              </div>
-            </Col>
-            <Col span={6}>
-              <div className={styles.infoItem}>
-                <div className={styles.label}>Tax Amount</div>
-                                 <Input 
-                   value={orderDetail && formatPrice(orderDetail.tax_amount)} 
-                   readOnly 
-                   className={styles.infoInput}
-                 />
-              </div>
-            </Col>
-            <Col span={6}>
-              <div className={styles.infoItem}>
-                <div className={styles.label}>Discount Amount</div>
-                                 <Input 
-                   value={orderDetail && formatPrice(orderDetail.discount_amount)} 
-                   readOnly 
-                   className={styles.infoInput}
-                 />
-              </div>
-            </Col>
-            <Col span={6}>
-              <div className={`${styles.infoItem} ${styles.totalAmount}`}>
-                <div className={styles.label}>Total Amount</div>
-                                 <Input 
-                   value={orderDetail && formatPrice(orderDetail.total_amount)} 
-                   readOnly 
-                   className={styles.infoInput}
-                 />
-              </div>
-            </Col>
-          </Row>
-        </Card>
-      </div>
-    );
-  };
+      <Card
+        title="Order Summary"
+        className={`${styles.orderCard} ${styles.summaryCard}`}
+      >
+        <Row gutter={24}>
+          <Col span={6}>
+            <div className={styles.infoItem}>
+              <div className={styles.label}>Sub Total</div>
+              <Input
+                value={orderDetail && formatPrice(orderDetail.sub_total_amount)}
+                readOnly
+                className={styles.infoInput}
+              />
+            </div>
+          </Col>
+          <Col span={6}>
+            <div className={styles.infoItem}>
+              <div className={styles.label}>Tax Amount</div>
+              <Input
+                value={orderDetail && formatPrice(orderDetail.tax_amount)}
+                readOnly
+                className={styles.infoInput}
+              />
+            </div>
+          </Col>
+          <Col span={6}>
+            <div className={styles.infoItem}>
+              <div className={styles.label}>Discount Amount</div>
+              <Input
+                value={orderDetail && formatPrice(orderDetail.discount_amount)}
+                readOnly
+                className={styles.infoInput}
+              />
+            </div>
+          </Col>
+          <Col span={6}>
+            <div className={`${styles.infoItem} ${styles.totalAmount}`}>
+              <div className={styles.label}>Total Amount</div>
+              <Input
+                value={orderDetail && formatPrice(orderDetail.total_amount)}
+                readOnly
+                className={styles.infoInput}
+              />
+            </div>
+          </Col>
+        </Row>
+      </Card>
+    </div>
+  );
+};
 
 export default OrderDetail;
