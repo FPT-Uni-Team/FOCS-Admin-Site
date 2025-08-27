@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
-import { Form, Input, InputNumber, Switch, Row, Col, type FormInstance } from "antd";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Switch,
+  Row,
+  Col,
+  type FormInstance,
+} from "antd";
 import type { Variant } from "../../type/variant/variant";
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 
@@ -11,7 +19,7 @@ interface Props {
 
 const VariantForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
   const isDetail = mode === "Detail";
-  
+
   useEffect(() => {
     if (initData && (mode === "Update" || mode === "Detail")) {
       form.setFieldsValue({
@@ -43,10 +51,7 @@ const VariantForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
                 },
               ]}
             >
-              <Input
-                placeholder="Enter variant name"
-                disabled={isDetail}
-              />
+              <Input placeholder="Enter variant name" disabled={isDetail} />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -84,7 +89,8 @@ const VariantForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
                 {
                   type: "number",
                   min: 0,
-                  message: "Preparation time must be greater than or equal to 0!",
+                  message:
+                    "Preparation time must be greater than or equal to 0!",
                 },
               ]}
             >
@@ -104,7 +110,8 @@ const VariantForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
                 {
                   type: "number",
                   min: 0,
-                  message: "Quantity per time must be greater than or equal to 0!",
+                  message:
+                    "Quantity per time must be greater than or equal to 0!",
                 },
               ]}
             >
@@ -126,11 +133,7 @@ const VariantForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
               valuePropName="checked"
               initialValue={true}
             >
-              <Switch 
-                checkedChildren="Available" 
-                unCheckedChildren="Unavailable"
-                disabled={isDetail}
-              />
+              <Switch disabled={isDetail} />
             </Form.Item>
           </Col>
         </Row>
