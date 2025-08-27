@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { fetchOrderDetailStart } from "../../store/slices/order/orderDetailSlice";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import type { OrderDTO } from "../../type/order/order";
+import type { OrderDTO, OrderStatus } from "../../type/order/order";
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 import TitleLine from "../../components/common/Title/TitleLine";
 import { getOrderStatusText } from "../../type/order/order";
@@ -33,15 +33,11 @@ const OrderDetailPage = () => {
     );
   }, [orderCode, dispatch]);
 
-  if (!order) {
-    return <div>Order not found</div>;
-  }
-
   return (
     <>
       <TitleLine
-        title={`Order ${order.order_code}`}
-        status={getOrderStatusText(order.order_status)}
+        title={`Order ${order?.order_code}`}
+        status={getOrderStatusText(order?.order_status as OrderStatus)}
         onEdit={() => {}}
         hasMoreAction={false}
         promotionId={orderCode}

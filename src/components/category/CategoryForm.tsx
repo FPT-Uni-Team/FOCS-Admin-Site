@@ -48,7 +48,9 @@ const CategoryForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
             <Form.Item label="Description" name="description">
               <TextArea
                 rows={4}
-                placeholder="Enter category description"
+                placeholder={`${
+                  mode !== "Detail" ? "Enter category description" : ""
+                }`}
                 disabled={mode == "Detail"}
               />
             </Form.Item>

@@ -13,10 +13,15 @@ import styles from "./WorkshiftForm.module.scss";
 interface Props {
   mode?: "Create" | "Update" | "Detail";
   form: FormInstance;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initData?: any;
 }
 
-const WorkshiftForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
+const WorkshiftForm: React.FC<Props> = ({
+  mode = "Create",
+  form,
+  initData,
+}) => {
   const dispatch = useAppDispatch();
   const isDetail = mode === "Detail";
   const isUpdate = mode === "Update";
@@ -24,21 +29,24 @@ const WorkshiftForm: React.FC<Props> = ({ mode = "Create", form, initData }) => 
   const { staff } = useAppSelector((state) => state.staffList);
 
   useEffect(() => {
-    dispatch(fetchStaffListStart({
-      page: 1,
-      page_size: 100,
-      search_by: "",
-      search_value: "",
-      sort_by: "",
-      sort_order: "",
-      filters: {},
-    }));
+    dispatch(
+      fetchStaffListStart({
+        page: 1,
+        page_size: 100,
+        search_by: "",
+        search_value: "",
+        sort_by: "",
+        sort_order: "",
+        filters: {},
+      })
+    );
   }, []);
 
   useEffect(() => {
     if (initData && (isUpdate || isDetail)) {
       form.setFieldsValue({
         workDate: initData.workDate ? dayjs(initData.workDate) : undefined,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         shift: (initData.shift || []).map((shift: any) => ({
           staffId: shift.staffId,
           startTime: shift.startTime,
@@ -55,7 +63,13 @@ const WorkshiftForm: React.FC<Props> = ({ mode = "Create", form, initData }) => 
 
   return (
     <ContentInner style={{ minHeight: "fit-content" }}>
-      <Form form={form} layout="vertical" name="workshiftForm" colon={true} className={styles.workshiftForm}>
+      <Form
+        form={form}
+        layout="vertical"
+        name="workshiftForm"
+        colon={true}
+        className={styles.workshiftForm}
+      >
         <Row gutter={36}>
           <Col span={12}>
             <Form.Item
@@ -67,7 +81,7 @@ const WorkshiftForm: React.FC<Props> = ({ mode = "Create", form, initData }) => 
                 placeholder="Select work date"
                 disabled={isDetail}
                 style={{ width: "100%" }}
-                format="YYYY-MM-DD"
+                format="DD/MM/YYYY"
                 className={styles.datePicker}
               />
             </Form.Item>
@@ -93,21 +107,26 @@ const WorkshiftForm: React.FC<Props> = ({ mode = "Create", form, initData }) => 
                     }
                     className={`${styles.shiftCard} mb-4`}
                   >
-                                        <Row gutter={16}>
+                    <Row gutter={16}>
                       <Col span={8}>
                         <Form.Item
                           {...restField}
                           name={[name, "staffId"]}
                           label="Staff Name"
-                          rules={[{ required: true, message: "Please select staff!" }]}
+                          rules={[
+                            { required: true, message: "Please select staff!" },
+                          ]}
                         >
                           <Select
                             placeholder="Select staff"
+                            mode="multiple"
                             options={staffOptions}
                             disabled={isDetail}
                             showSearch
                             filterOption={(input, option) =>
-                              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                              (option?.label ?? "")
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
                             }
                             className={styles.staffSelect}
                           />
@@ -118,7 +137,12 @@ const WorkshiftForm: React.FC<Props> = ({ mode = "Create", form, initData }) => 
                           {...restField}
                           name={[name, "startTime"]}
                           label="Start Time"
-                          rules={[{ required: true, message: "Please enter start time!" }]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter start time!",
+                            },
+                          ]}
                         >
                           <Input
                             type="time"
@@ -133,7 +157,12 @@ const WorkshiftForm: React.FC<Props> = ({ mode = "Create", form, initData }) => 
                           {...restField}
                           name={[name, "endTime"]}
                           label="End Time"
-                          rules={[{ required: true, message: "Please enter end time!" }]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter end time!",
+                            },
+                          ]}
                         >
                           <Input
                             type="time"
@@ -168,4 +197,4 @@ const WorkshiftForm: React.FC<Props> = ({ mode = "Create", form, initData }) => 
   );
 };
 
-export default WorkshiftForm; 
+export default WorkshiftForm;

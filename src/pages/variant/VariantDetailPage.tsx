@@ -71,10 +71,10 @@ const VariantDetailPage = () => {
           name: "Variants",
           link: `/${sessionStorage.getItem("storeId")}/variants`,
         },
-        { name: `${variantId}` },
+        { name: `${variant?.name}` },
       ])
     );
-  }, [variantId, dispatch]);
+  }, [dispatch, variant?.name]);
 
   return (
     <>
@@ -92,7 +92,7 @@ const VariantDetailPage = () => {
         isShowEdit={true}
         deleteLoading={deleteLoading}
       />
-      <ContentInner>
+      <ContentInner style={{ minHeight: "fit-content" }}>
         <VariantDetail form={form} variantDetail={variant as Variant} />
       </ContentInner>
 

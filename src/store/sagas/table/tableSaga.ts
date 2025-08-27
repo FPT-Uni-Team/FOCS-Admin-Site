@@ -160,7 +160,9 @@ function* handleDeleteTable(
 
 export function* watchTableSaga() {
   yield takeLatest(fetchTablesStart.type, fetchTableList);
-  yield takeLatest(fetchTableDetailStart.type, fetchTableDetail);
+  yield takeLatest(fetchTableDetailStart.type, function* (action) {
+    yield* withGlobalLoading(fetchTableDetail, action);
+  });
   yield takeLatest(createTableStart.type, function* (action) {
     yield* withGlobalLoading(fetchCreateTable, action);
   });

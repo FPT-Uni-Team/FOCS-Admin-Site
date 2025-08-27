@@ -88,7 +88,7 @@ const MenuItemDetailPage = () => {
         onAction={fetchChangeStatusMenuItem}
         onEdit={() => {
           navigate(
-            `/${localStorage.getItem(
+            `/${sessionStorage.getItem(
               "storeId"
             )}/menu-items/update/${menuItemId}`
           );

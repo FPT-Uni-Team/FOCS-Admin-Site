@@ -59,7 +59,9 @@ const CouponDetail: React.FC<Props> = ({ form, couponDetail }) => {
           coupon_type: couponDetail.coupon_type,
           description: couponDetail.description,
           discount_type: couponDetail.discount_type,
-          value: couponDetail.value,
+          value:
+            couponDetail.value &&
+            couponDetail.value.toLocaleString("vi-VN").replace("đ", ""),
           start_date: couponDetail.start_date
             ? dayjs(couponDetail.start_date)
             : undefined,
@@ -74,7 +76,11 @@ const CouponDetail: React.FC<Props> = ({ form, couponDetail }) => {
           accept_for_items: couponDetail.accept_for_items,
           promotion_id: couponDetail.promotion_id,
           minimum_item_quantity: couponDetail.minimum_item_quantity,
-          minimum_order_amount: couponDetail.minimum_order_amount,
+          minimum_order_amount:
+            couponDetail.minimum_order_amount &&
+            couponDetail.minimum_order_amount
+              .toLocaleString("vi-VN")
+              .replace("đ", ""),
         },
       });
       setDataPromotionSeleted({

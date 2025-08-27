@@ -52,7 +52,7 @@ const StaffList: FC<StaffListProps> = ({ fetchData }) => {
       <FilterReuse
         onFilter={onFilter}
         onSearch={onSearch}
-        isShowFilter={true}
+        isShowFilter={false}
       />
       <ContentInner>
         <TableReuse<StaffDataType>

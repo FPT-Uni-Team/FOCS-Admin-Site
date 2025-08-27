@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
   fetchFeedbackDetailStart,
@@ -8,15 +8,25 @@ import {
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 import TitleLine from "../../components/common/Title/TitleLine";
 import FeedbackDetail from "../../components/feedback/feedbackDetail/FeedbackDetail";
-import type { FeedbackListDataType } from "../../type/feedback/feedback";
+import type {
+  FeedbackListDataType,
+  FeedbackUpdateRequest,
+} from "../../type/feedback/feedback";
 import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
+import { showNotification } from "../../components/common/Notification/ToastCustom";
+import {
+  resetUpdateFeedback,
+  updateFeedbackStart,
+} from "../../store/slices/feedback/feedbackUpdateSlice";
 
 const FeedbackDetailPage = () => {
   const dispatch = useAppDispatch();
+  const { success, error } = useAppSelector((state) => state.feedbackUpdate);
+  const { params } = useAppSelector((state) => state.feedbackList);
   const { feedback } = useAppSelector((state) => state.feedbackDetail);
   const navigate = useNavigate();
 
-  const { feedbackId, storeId } = useParams<{
+  const { feedbackId } = useParams<{
     feedbackId: string;
     storeId: string;
   }>();
@@ -26,18 +36,43 @@ const FeedbackDetailPage = () => {
   };
 
   const getStatusValue = (isPublic: boolean) => {
-    return isPublic ? 1 : 0;
+    return isPublic ? 0 : 1;
   };
 
-  const handleEdit = () => {
-    navigate(`/${storeId}/feedbacks/${feedbackId}/update`);
+  const handleAction = (active: string) => {
+    const payload: FeedbackUpdateRequest = {
+      public: active === "active" ? true : false,
+      reply: "",
+    };
+    dispatch(
+      updateFeedbackStart({
+        feedbackId: feedbackId || "",
+        payload,
+      })
+    );
   };
+
+  useEffect(() => {
+    if (success) {
+      showNotification("success", "Update feedback success!");
+      dispatch(resetUpdateFeedback());
+      if (feedbackId) {
+        dispatch(fetchFeedbackDetailStart({ feedbackId }));
+      }
+    }
+  }, [dispatch, navigate, feedbackId, success, params]);
+
+  useEffect(() => {
+    if (error) {
+      showNotification("error", error);
+      dispatch(resetUpdateFeedback());
+    }
+  }, [dispatch, error]);
 
   useEffect(() => {
     if (feedbackId) {
       dispatch(fetchFeedbackDetailStart({ feedbackId }));
     }
-
     return () => {
       dispatch(clearFeedbackDetail());
     };
@@ -55,23 +90,17 @@ const FeedbackDetailPage = () => {
     );
   }, [feedbackId, dispatch]);
 
-  if (!feedback) {
-    return <div>Feedback not found</div>;
-  }
-
   return (
     <>
       <TitleLine
-        title={`Feedback #${feedback.id.slice(0, 8)}`}
-        status={getStatusText(feedback.is_public)}
-        isActive={getStatusValue(feedback.is_public)}
-        contentModal="this feedback"
-        onEdit={handleEdit}
+        title={`Feedback #${feedback?.id.slice(0, 8)}`}
+        status={getStatusText(feedback?.is_public as boolean)}
+        isActive={getStatusValue(feedback?.is_public as boolean)}
         hasMoreAction={true}
         promotionId={feedbackId}
-        isShowEdit={true}
+        onAction={handleAction}
       />
-      <ContentInner>
+      <ContentInner style={{ minHeight: "fit-content" }}>
         <FeedbackDetail feedbackDetail={feedback as FeedbackListDataType} />
       </ContentInner>
     </>

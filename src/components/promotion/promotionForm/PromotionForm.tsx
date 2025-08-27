@@ -118,11 +118,21 @@ const PromotionForm: FC<Props> = ({
           promotion_scope: initData.promotion_scope,
           minimun_item_in_cart: initData?.minimum_item_quantity,
           max_usage: initData?.max_usage,
-          max_discount_value: initData?.max_discount_value,
-          minimun_order_value: initData?.minimum_order_amount,
+          max_discount_value:
+            initData?.max_discount_value &&
+            initData?.max_discount_value
+              .toLocaleString("vi-VN")
+              .replace("đ", "."),
+          minimun_order_value:
+            initData?.minimum_order_amount &&
+            initData?.minimum_order_amount
+              .toLocaleString("vi-VN")
+              .replace("đ", "."),
           buy_x: String(initData.promotion_item_condition?.buy_quantity),
           get_y: String(initData.promotion_item_condition?.get_quantity),
-          discount_value: initData?.discount_value,
+          discount_value:
+            initData?.discount_value &&
+            initData?.discount_value.toLocaleString("vi-VN").replace("đ", "."),
           menu_item_select_discount: initData?.accept_for_items,
           menu_item_select_buyX: [
             initData?.promotion_item_condition?.buy_item_id,

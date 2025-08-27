@@ -31,17 +31,20 @@ const WorkshiftCreatePage = () => {
       .validateFields()
       .then(() => {
         const values = form.getFieldsValue();
+        console.log("Form Values:", values);
         const dataPayload: WorkshiftCreatePayload = {
           workDate: dayjs(values.workDate).format("YYYY-MM-DD"),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           shift: (values.shift || []).map((shift: any) => {
-            const selectedStaff = staff.find(
-              (s: any) => s.id === shift.staffId
-            );
             return {
-              staffId: shift.staffId,
-              staffName: selectedStaff
-                ? `${selectedStaff.first_name} ${selectedStaff.last_name}`
-                : "",
+              staffs: staff
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                .filter((s: any) => shift.staffId.includes(s.id))
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                .map((s: any) => ({
+                  staffId: s.id,
+                  name: `${s.first_name} ${s.last_name}`,
+                })),
               startTime: shift.startTime,
               endTime: shift.endTime,
             };

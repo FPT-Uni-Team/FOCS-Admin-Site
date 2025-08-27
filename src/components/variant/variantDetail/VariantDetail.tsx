@@ -23,8 +23,6 @@ const VariantDetail: React.FC<Props> = ({
         name: variantDetail.name || "",
         price: formatPrice(variantDetail.price),
         is_available: variantDetail.is_available ?? true,
-        prep_per_time: variantDetail.prep_per_time || "",
-        quantity_per_time: variantDetail.quantity_per_time || "",
       });
     }
   }, [variantDetail, form]);
@@ -54,49 +52,22 @@ const VariantDetail: React.FC<Props> = ({
       </Row>
 
       <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item
-            label="Preparation Time (minutes)"
-            name="prep_per_time"
-            normalize={(value) => {
-              if (!isEditMode) return value;
-              return value.replace(/[^0-9]/g, "");
-            }}
-          >
-            <Input
-              disabled={!isEditMode}
-              placeholder="Enter preparation time"
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            label="Quantity per Time"
-            name="quantity_per_time"
-            normalize={(value) => {
-              if (!isEditMode) return value;
-              return value.replace(/[^0-9]/g, "");
-            }}
-          >
-            <Input
-              disabled={!isEditMode}
-              placeholder="Enter quantity per time"
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Row gutter={24}>
         <Col span={24}>
           <div className={styles.flexClass}>
-            <Form.Item
-              name="is_available"
-              valuePropName="checked"
-              style={{ marginBottom: 0 }}
-            >
-              <Switch disabled={!isEditMode} />
-            </Form.Item>
-            <div className={styles.switchLabel}>Available for ordering</div>
+            {isEditMode ? (
+              <>
+                <Form.Item
+                  name="is_available"
+                  valuePropName="checked"
+                  style={{ marginBottom: 0 }}
+                >
+                  <Switch disabled={!isEditMode} />
+                </Form.Item>
+                <div className={styles.switchLabel}>Available for ordering</div>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         </Col>
       </Row>

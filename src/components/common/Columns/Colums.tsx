@@ -90,7 +90,11 @@ export const columnsMenuItemNoSort = [
     title: "Menu Base Price",
     dataIndex: "menuBasePrice",
     key: "base_price",
+    render: (value: number) => {
+      return formatPrice(value);
+    },
   },
+
   {
     title: "Status",
     dataIndex: "isAvailable",

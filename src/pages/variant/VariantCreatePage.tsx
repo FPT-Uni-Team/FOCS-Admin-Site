@@ -25,10 +25,8 @@ const VariantCreatePage = () => {
         const allFormValues = form.getFieldsValue();
         const dataPayload = {
           name: allFormValues.name,
-          price: allFormValues.price,
+          price: allFormValues.price.replaceAll(".", ""),
           is_available: allFormValues.is_available ?? true,
-          prep_per_time: allFormValues.prep_per_time || undefined,
-          quantity_per_time: allFormValues.quantity_per_time || undefined,
         };
         dispatch(createVariantStart(dataPayload));
       })

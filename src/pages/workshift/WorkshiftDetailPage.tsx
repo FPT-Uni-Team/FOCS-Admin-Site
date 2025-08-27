@@ -14,6 +14,7 @@ import {
 import WorkshiftDetail from "../../components/workshift/workshiftDetail/WorkshiftDetail";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
+import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 
 const WorkshiftDetailPage = () => {
   const [form] = useForm();
@@ -23,7 +24,7 @@ const WorkshiftDetailPage = () => {
   const navigate = useNavigate();
   const { id, storeId } = useParams();
 
-  const { workshiftDetail, loading, error } = useAppSelector(
+  const { workshiftDetail, error } = useAppSelector(
     (state) => state.workshiftDetail
   );
 
@@ -77,25 +78,23 @@ const WorkshiftDetailPage = () => {
           name: "Workshifts",
           link: `/${sessionStorage.getItem("storeId")}/workshifts`,
         },
-        { name: `${workshiftDetail?.id}` },
+        {
+          name: `Workshift - ${
+            workshiftDetail?.workDate
+              ? dayjs(workshiftDetail?.workDate).format("DD-MM-YYYY")
+              : ""
+          }`,
+        },
       ])
     );
-  }, [workshiftDetail?.id, dispatch]);
-
-  if (!id) {
-    return <div>ID not found</div>;
-  }
-
-  if (loading || !workshiftDetail) {
-    return <div>Loading...</div>;
-  }
+  }, [workshiftDetail, dispatch]);
 
   return (
     <>
       <TitleLine
         title={`Workshift - ${
-          workshiftDetail.workDate
-            ? dayjs(workshiftDetail.workDate).format("YYYY-MM-DD")
+          workshiftDetail?.workDate
+            ? dayjs(workshiftDetail?.workDate).format("DD-MM-YYYY")
             : ""
         }`}
         contentModal="this workshift"
@@ -108,11 +107,13 @@ const WorkshiftDetailPage = () => {
         isShowEdit={false}
       />
 
-      <WorkshiftDetail
-        form={form}
-        workshiftDetail={workshiftDetail}
-        mode="View"
-      />
+      <ContentInner style={{ minHeight: "fit-content" }}>
+        <WorkshiftDetail
+          form={form}
+          workshiftDetail={workshiftDetail}
+          mode="View"
+        />
+      </ContentInner>
 
       <Modal
         title="Delete Workshift"

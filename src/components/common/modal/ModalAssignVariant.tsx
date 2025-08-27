@@ -18,7 +18,10 @@ import {
 } from "../../../type/common/common";
 import { fetchVariantsStart } from "../../../store/slices/variant/variantListSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { assignVariantsStart, resetVariantAssign } from "../../../store/slices/variant/variantAssignSlice";
+import {
+  assignVariantsStart,
+  resetVariantAssign,
+} from "../../../store/slices/variant/variantAssignSlice";
 import { formatPrice } from "../../../helper/formatPrice";
 
 const { Text } = Typography;
@@ -45,9 +48,11 @@ const ModalAssignVariant: React.FC<ModalAssignVariantProps> = ({
   const { variants: variantsList, loading: variantsLoading } = useAppSelector(
     (state) => state.variantList
   );
-  const { loading: assignLoading, success, error } = useAppSelector(
-    (state) => state.variantAssign
-  );
+  const {
+    loading: assignLoading,
+    success,
+    error,
+  } = useAppSelector((state) => state.variantAssign);
 
   const [selectedVariantIds, setSelectedVariantIds] = useState<string[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -84,23 +89,29 @@ const ModalAssignVariant: React.FC<ModalAssignVariantProps> = ({
     }
   }, [error, dispatch]);
 
-  const handleSelectVariant = useCallback((variantId: string, checked: boolean) => {
-    setSelectedVariantIds((prev) => {
-      if (checked) {
-        return [...prev, variantId];
-      } else {
-        return prev.filter((id) => id !== variantId);
-      }
-    });
-  }, []);
+  const handleSelectVariant = useCallback(
+    (variantId: string, checked: boolean) => {
+      setSelectedVariantIds((prev) => {
+        if (checked) {
+          return [...prev, variantId];
+        } else {
+          return prev.filter((id) => id !== variantId);
+        }
+      });
+    },
+    []
+  );
 
-  const handleSelectAll = useCallback((checked: boolean) => {
-    if (checked) {
-      setSelectedVariantIds(filteredVariants.map((variant) => variant.id));
-    } else {
-      setSelectedVariantIds([]);
-    }
-  }, [filteredVariants]);
+  const handleSelectAll = useCallback(
+    (checked: boolean) => {
+      if (checked) {
+        setSelectedVariantIds(filteredVariants.map((variant) => variant.id));
+      } else {
+        setSelectedVariantIds([]);
+      }
+    },
+    [filteredVariants]
+  );
 
   const handleAssign = useCallback(() => {
     if (selectedVariantIds.length === 0) {
@@ -136,13 +147,12 @@ const ModalAssignVariant: React.FC<ModalAssignVariantProps> = ({
             selectedVariantIds.length < filteredVariants.length
           }
           onChange={(e) => handleSelectAll(e.target.checked)}
-        >
-          Select All
-        </Checkbox>
+        ></Checkbox>
       ),
       dataIndex: "select",
       key: "select",
-      width: 120,
+      width: "5%",
+      align: "center",
       render: (_, record) => (
         <Checkbox
           checked={selectedVariantIds.includes(record.id)}
@@ -174,22 +184,6 @@ const ModalAssignVariant: React.FC<ModalAssignVariantProps> = ({
         </Text>
       ),
     },
-    {
-      title: "Prep Time (min)",
-      dataIndex: "prep_per_time",
-      key: "prep_per_time",
-      width: "15%",
-      render: (prep_per_time: number | undefined) =>
-        prep_per_time ? `${prep_per_time} min` : "-",
-    },
-    {
-      title: "Quantity per Time",
-      dataIndex: "quantity_per_time",
-      key: "quantity_per_time",
-      width: "20%",
-      render: (quantity_per_time: number | undefined) =>
-        quantity_per_time || "-",
-    },
   ];
 
   return (
@@ -198,6 +192,7 @@ const ModalAssignVariant: React.FC<ModalAssignVariantProps> = ({
       open={visible}
       onCancel={handleCancel}
       width={1000}
+      centered
       footer={[
         <Button key="cancel" onClick={handleCancel}>
           Cancel
@@ -222,11 +217,6 @@ const ModalAssignVariant: React.FC<ModalAssignVariantProps> = ({
             style={{ width: "100%" }}
           />
         </Col>
-        <Col span={12}>
-          <Text type="secondary">
-            {selectedVariantIds.length} of {filteredVariants.length} variants selected
-          </Text>
-        </Col>
       </Row>
 
       <Table
@@ -236,12 +226,9 @@ const ModalAssignVariant: React.FC<ModalAssignVariantProps> = ({
         loading={variantsLoading}
         pagination={{
           total: filteredVariants.length,
-          pageSize: 10,
-          showSizeChanger: true,
-          showQuickJumper: true,
+          pageSize: 5,
           showTotal: (total) => `Total ${total} variants`,
         }}
-        scroll={{ y: 400 }}
       />
     </Modal>
   );

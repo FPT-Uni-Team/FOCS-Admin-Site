@@ -47,7 +47,7 @@ const MenuItemUpdatePage = () => {
         id: menuItemId,
         name: allFormValues.name,
         description: allFormValues.description,
-        base_price: allFormValues.base_price,
+        base_price: allFormValues.base_price.replaceAll(".", ""),
         is_available: allFormValues.is_available,
         store_id: sessionStorage.getItem("storeId"),
       };

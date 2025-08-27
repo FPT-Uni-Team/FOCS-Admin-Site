@@ -88,10 +88,10 @@ const VariantUpdatePage = () => {
           name: "Variants",
           link: `/${sessionStorage.getItem("storeId")}/variants`,
         },
-        { name: `${variantId}` },
+        { name: `${variant?.name}` },
       ])
     );
-  }, [variantId, dispatch]);
+  }, [dispatch, variant?.name]);
 
   return (
     <>
@@ -100,7 +100,7 @@ const VariantUpdatePage = () => {
         onCreate={handleUpdateVariant}
         createButtonText="Update"
       />
-      <ContentInner>
+      <ContentInner style={{ minHeight: "fit-content" }}>
         <VariantDetail
           form={form}
           mode="Update"
