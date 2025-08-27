@@ -39,7 +39,7 @@ const StaffPage = () => {
     if (success) {
       showNotification("success", "Staff created successfully!");
       dispatch(resetCreateStaff());
-      navigate(`/${localStorage.getItem("storeId")}/staffs`);
+      navigate(`/${sessionStorage.getItem("storeId")}/staffs`);
     }
   }, [dispatch, navigate, success]);
 
@@ -55,7 +55,7 @@ const StaffPage = () => {
       setBreadcrumb([
         {
           name: "Staffs",
-          link: `/${localStorage.getItem("storeId")}/staffs`,
+          link: `/${sessionStorage.getItem("storeId")}/staffs`,
         },
         { name: "New Staff" },
       ])

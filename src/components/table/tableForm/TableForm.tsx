@@ -43,7 +43,7 @@ const TableForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
 
   React.useEffect(() => {
     if (isCreate) {
-      const defaultStoreId = localStorage.getItem("storeId");
+      const defaultStoreId = sessionStorage.getItem("storeId");
       form.setFieldsValue({
         is_active: true,
         status: TableStatus.Available,

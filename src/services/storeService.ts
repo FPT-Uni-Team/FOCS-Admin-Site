@@ -17,11 +17,13 @@ export interface StoreConfig {
 const orderService = {
   getDetailStoreSetting: () =>
     axiosClient.get(
-      endpoints.storeSetting.detail(localStorage.getItem("storeId") as string)
+      endpoints.storeSetting.detail(sessionStorage.getItem("storeId") as string)
     ),
   updateStoreSetting: (storeData: StoreConfig) =>
     axiosClient.put(
-      endpoints.storeSetting.update(localStorage.getItem("storeId") as string),
+      endpoints.storeSetting.update(
+        sessionStorage.getItem("storeId") as string
+      ),
       storeData
     ),
 };

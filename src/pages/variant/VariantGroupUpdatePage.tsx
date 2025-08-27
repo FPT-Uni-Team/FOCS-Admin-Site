@@ -66,7 +66,7 @@ const VariantGroupUpdatePage = () => {
       setBreadcrumb([
         {
           name: "Variant Groups",
-          link: `/${localStorage.getItem("storeId")}/variant-groups`,
+          link: `/${sessionStorage.getItem("storeId")}/variant-groups`,
         },
         {
           name: variantGroupDetail?.group_name ?? "Unnamed Group",

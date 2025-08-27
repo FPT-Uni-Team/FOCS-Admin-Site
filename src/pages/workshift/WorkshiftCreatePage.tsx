@@ -22,7 +22,7 @@ const WorkshiftCreatePage = () => {
   const { staff } = useAppSelector((state) => state.staffList);
 
   useEffect(() => {
-    const storedStoreId = localStorage.getItem("storeId");
+    const storedStoreId = sessionStorage.getItem("storeId");
     setStoreId(storedStoreId || "");
   }, []);
 
@@ -56,7 +56,7 @@ const WorkshiftCreatePage = () => {
     if (success) {
       showNotification("success", "Workshift created successfully!");
       dispatch(resetCreateWorkshift());
-      navigate(`/${localStorage.getItem("storeId")}/workshifts`);
+      navigate(`/${sessionStorage.getItem("storeId")}/workshifts`);
     }
   }, [dispatch, navigate, success]);
 
@@ -72,7 +72,7 @@ const WorkshiftCreatePage = () => {
       setBreadcrumb([
         {
           name: "Workshifts",
-          link: `/${localStorage.getItem("storeId")}/workshifts`,
+          link: `/${sessionStorage.getItem("storeId")}/workshifts`,
         },
         { name: "New Workshift" },
       ])

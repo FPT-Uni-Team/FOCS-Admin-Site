@@ -57,7 +57,7 @@ const CouponDetailPage = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete coupon success!");
-      navigate(`/${localStorage.getItem("storeId")}/coupons`);
+      navigate(`/${sessionStorage.getItem("storeId")}/coupons`);
       dispatch(clearDeleteCouponState());
     }
   }, [deleteSuccess, navigate, dispatch]);
@@ -74,7 +74,7 @@ const CouponDetailPage = () => {
       setBreadcrumb([
         {
           name: "Coupons",
-          link: `/${localStorage.getItem("storeId")}/coupons`,
+          link: `/${sessionStorage.getItem("storeId")}/coupons`,
         },
         { name: `${couponId}` },
       ])
@@ -95,7 +95,7 @@ const CouponDetailPage = () => {
         onAction={fetchChangeStatusCoupon}
         onEdit={() => {
           navigate(
-            `/${localStorage.getItem("storeId")}/coupons/${couponId}/edit`
+            `/${sessionStorage.getItem("storeId")}/coupons/${couponId}/edit`
           );
         }}
         onDelete={handleDeleteCoupon}

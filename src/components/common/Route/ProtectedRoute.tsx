@@ -13,7 +13,7 @@ export const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({
     return <FallBack />;
   }
   if (!isAuthenticated) {
-    const id = storeId || localStorage.getItem("storeId");
+    const id = storeId || sessionStorage.getItem("storeId");
     return <Navigate to={id ? `/${id}/login` : "/"} replace />;
   }
 

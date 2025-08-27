@@ -27,8 +27,20 @@ import {
   createVariantGroupFailure,
 } from "../../slices/variant/variantGroupCreateSlice";
 
-import variantGroupsService, { variantService, updateVariant } from "../../../services/variantService";
-import type { VariantGroup, VariantGroupCreateRequest, VariantGroupUpdateRequest, Variant, VariantCreateRequest, VariantUpdateRequest, VariantAssignRequest, VariantAssignResponse } from "../../../type/variant/variant";
+import variantGroupsService, {
+  variantService,
+  updateVariant,
+} from "../../../services/variantService";
+import type {
+  VariantGroup,
+  VariantGroupCreateRequest,
+  VariantGroupUpdateRequest,
+  Variant,
+  VariantCreateRequest,
+  VariantUpdateRequest,
+  VariantAssignRequest,
+  VariantAssignResponse,
+} from "../../../type/variant/variant";
 import { withGlobalLoading } from "../../../utils/globalLoading/withGlobalLoading";
 import {
   fetchVariantsStart,
@@ -66,7 +78,14 @@ import {
   deleteVariantFailure,
 } from "../../slices/variant/variantDeleteSlice";
 
-const { getListVariantGroups, createVariantGroup, getDetailVariantGroup, updateVariantGroup, assignVariantsToGroup, deleteVariantGroup } = variantGroupsService;
+const {
+  getListVariantGroups,
+  createVariantGroup,
+  getDetailVariantGroup,
+  updateVariantGroup,
+  assignVariantsToGroup,
+  deleteVariantGroup,
+} = variantGroupsService;
 const { createVariant, deleteVariant } = variantService;
 
 function* fetchVariantGroupsList(
@@ -96,7 +115,9 @@ function* fetchVariantGroupDetail(
     yield put(fetchVariantGroupDetailSuccess(response.data));
   } catch (error: unknown) {
     const errorMessage =
-      error instanceof Error ? error.message : "Failed to fetch variant group detail";
+      error instanceof Error
+        ? error.message
+        : "Failed to fetch variant group detail";
     yield put(fetchVariantGroupDetailFailure(errorMessage));
   }
 }
@@ -105,7 +126,9 @@ function* fetchUpdateVariantGroup(
   action: PayloadAction<{ id: string; name: string }>
 ): Generator<Effect, void, AxiosResponse<VariantGroupUpdateRequest>> {
   try {
-    const response = yield call(() => updateVariantGroup(action.payload.id, { name: action.payload.name }));
+    const response = yield call(() =>
+      updateVariantGroup(action.payload.id, { name: action.payload.name })
+    );
     yield put(updateVariantGroupSuccess(response.data));
   } catch (error) {
     const axiosError = error as AxiosError;
@@ -139,12 +162,14 @@ function* fetchVariantsList(
   action: PayloadAction<ListPageParams>
 ): Generator<Effect, void, AxiosResponse<ListPageResponse>> {
   try {
-    const response = yield call(() => variantService.getListVariants(action.payload));
+    const response = yield call(() =>
+      variantService.getListVariants(action.payload)
+    );
     const transformedData = {
       total_count: response.data.total_count || 0,
       page_index: action.payload.page || 1,
       page_size: action.payload.page_size || 10,
-      items: response.data.items || []
+      items: response.data.items || [],
     };
     yield put(fetchVariantsSuccess(transformedData));
   } catch (error: unknown) {
@@ -159,7 +184,9 @@ function* fetchVariantDetail(
 ): Generator<Effect, void, AxiosResponse<Variant>> {
   try {
     const { variantId } = action.payload;
-    const response = yield call(() => variantService.getDetailVariant(variantId));
+    const response = yield call(() =>
+      variantService.getDetailVariant(variantId)
+    );
     yield put(fetchVariantDetailSuccess(response.data));
   } catch (error: unknown) {
     const errorMessage =
@@ -253,7 +280,9 @@ function* handleDeleteVariant(
 
 export function* watchVariantSaga() {
   yield takeLatest(fetchVariantGroupsStart.type, fetchVariantGroupsList);
-  yield takeLatest(fetchVariantGroupDetailStart.type, fetchVariantGroupDetail);
+  yield takeLatest(fetchVariantGroupDetailStart.type, function* (action) {
+    yield* withGlobalLoading(fetchVariantGroupDetail, action);
+  });
   yield takeLatest(updateVariantGroupStart.type, function* (action) {
     yield* withGlobalLoading(fetchUpdateVariantGroup, action);
   });

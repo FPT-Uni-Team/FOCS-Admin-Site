@@ -56,10 +56,7 @@ const VariantGroupList: FC<VariantGroupListProps> = ({ fetchData }) => {
       width: 400,
       sorter: true,
       render: (text: string, record: VariantGroup) => {
-        const storeId = localStorage.getItem("storeId");
-        return (
-          <CustomLink title={text} href={`/${storeId}/variant-groups/${record.id}`} />
-        );
+        return <CustomLink title={text} href={`variant-groups/${record.id}`} />;
       },
     },
     {
@@ -79,7 +76,8 @@ const VariantGroupList: FC<VariantGroupListProps> = ({ fetchData }) => {
       width: 250,
       align: "center",
       render: (variants: VariantGroup["variants"]) => {
-        const availableCount = variants?.filter(v => v.is_available)?.length || 0;
+        const availableCount =
+          variants?.filter((v) => v.is_available)?.length || 0;
         const totalCount = variants?.length || 0;
         return (
           <Text type={availableCount === totalCount ? "success" : "warning"}>
@@ -96,14 +94,16 @@ const VariantGroupList: FC<VariantGroupListProps> = ({ fetchData }) => {
         title: "Variant Name",
         dataIndex: "name",
         key: "name",
-              render: (text: string, record: VariantGroup["variants"][0]) => (
-        <div className={styles.variantInfo}>
-          <Text>{text}</Text>
-          {!record.is_available && (
-            <Tag color="red" className={styles.unavailableTag}>Unavailable</Tag>
-          )}
-        </div>
-      ),
+        render: (text: string, record: VariantGroup["variants"][0]) => (
+          <div className={styles.variantInfo}>
+            <Text>{text}</Text>
+            {!record.is_available && (
+              <Tag color="red" className={styles.unavailableTag}>
+                Unavailable
+              </Tag>
+            )}
+          </div>
+        ),
       },
       {
         title: "Price",
@@ -157,8 +157,6 @@ const VariantGroupList: FC<VariantGroupListProps> = ({ fetchData }) => {
       </div>
     );
   };
-
-
 
   const selectConfigs = [
     {

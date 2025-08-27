@@ -42,7 +42,7 @@ const StoreSettingPage = () => {
     <>
       <TitleLine
         title="Store Setting"
-        onEdit={() => navigate(`/${localStorage.getItem("storeId")}/update`)}
+        onEdit={() => navigate(`/${sessionStorage.getItem("storeId")}/update`)}
       />
       {storeData && (
         <StoreSettingDetail form={form} initData={storeData} mode="Detail" />

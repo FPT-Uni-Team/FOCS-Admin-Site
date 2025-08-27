@@ -90,7 +90,7 @@ const CouponUpdatePage = () => {
   useEffect(() => {
     if (success) {
       showNotification("success", "Update coupon success!");
-      navigate(`/${localStorage.getItem("storeId")}/coupons`);
+      navigate(`/${sessionStorage.getItem("storeId")}/coupons`);
     }
   }, [couponId, dispatch, navigate, success]);
 
@@ -115,7 +115,7 @@ const CouponUpdatePage = () => {
       setBreadcrumb([
         {
           name: "Coupons",
-          link: `/${localStorage.getItem("storeId")}/coupons`,
+          link: `/${sessionStorage.getItem("storeId")}/coupons`,
         },
         { name: `${couponId}` },
       ])

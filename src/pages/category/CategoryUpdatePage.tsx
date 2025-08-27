@@ -39,7 +39,9 @@ const CategoryUpdatePage = () => {
     if (success) {
       showNotification("success", "Update category success!");
       dispatch(resetCategoryUpdate());
-      navigate(`/${localStorage.getItem("storeId")}/categories/${categoryId}`);
+      navigate(
+        `/${sessionStorage.getItem("storeId")}/categories/${categoryId}`
+      );
     }
   }, [dispatch, navigate, categoryId, success]);
 
@@ -59,7 +61,7 @@ const CategoryUpdatePage = () => {
       setBreadcrumb([
         {
           name: "Categories",
-          link: `/${localStorage.getItem("storeId")}/categories`,
+          link: `/${sessionStorage.getItem("storeId")}/categories`,
         },
         { name: categoryId as string },
       ])

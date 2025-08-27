@@ -15,7 +15,7 @@ export const couponService = {
     axiosClient.post(endpoints.coupon.listByIds(), params),
   getCouponList: (params: ListPageParams) =>
     axiosClient.post(
-      endpoints.coupon.list(localStorage.getItem("storeId") as string),
+      endpoints.coupon.list(sessionStorage.getItem("storeId") as string),
       params
     ),
   couponDetail: (params: string) =>

@@ -41,7 +41,12 @@ export const columnsMenuItem: ColumnsType<MenuListDataType> = [
       "ascend" as SortOrder,
     ],
     render: (_, record) => {
-      return <CustomLink title={record.menuName} href={record.menuId} />;
+      return (
+        <CustomLink
+          title={record.menuName}
+          href={`menu-items/${record.menuId}`}
+        />
+      );
     },
     sorter: true,
   },
@@ -107,7 +112,11 @@ export const columnsCouponList: ColumnsType<CouponAdminDTO> = [
     render: (_, record: CouponAdminDTO) => {
       return (
         <>
-          <CustomLink title={record.code} href={record.id} key={record.id} />
+          <CustomLink
+            title={record.code}
+            href={`coupons/${record.id}`}
+            key={record.id}
+          />
         </>
       );
     },
@@ -358,7 +367,9 @@ export const columnsCategory: ColumnsType<CategoryListDataType> = [
       "ascend" as SortOrder,
     ],
     render: (_, record) => {
-      return <CustomLink title={record.name} href={`${record.id}`} />;
+      return (
+        <CustomLink title={record.name} href={`categories/${record.id}`} />
+      );
     },
     sorter: true,
   },
@@ -529,7 +540,7 @@ export const columnsTableList: ColumnsType<TableDataType> = [
       return (
         <CustomLink
           title={`Table ${record.table_number}`}
-          href={record.id}
+          href={`tables/${record.id}`}
           key={record.id}
         />
       );

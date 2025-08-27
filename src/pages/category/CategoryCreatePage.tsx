@@ -34,7 +34,7 @@ const CategoryPage = () => {
     if (success) {
       showNotification("success", "Create promotion success!");
       dispatch(resetCategoryCreate());
-      navigate(`/${localStorage.getItem("storeId")}/categories`);
+      navigate(`/${sessionStorage.getItem("storeId")}/categories`);
     }
   }, [dispatch, navigate, success]);
 
@@ -50,7 +50,7 @@ const CategoryPage = () => {
       setBreadcrumb([
         {
           name: "Categories",
-          link: `/${localStorage.getItem("storeId")}/categories`,
+          link: `/${sessionStorage.getItem("storeId")}/categories`,
         },
         { name: "New Category" },
       ])

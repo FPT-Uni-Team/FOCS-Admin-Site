@@ -7,7 +7,7 @@ const BASE_URL: string = "/api";
 const axiosClient = axios.create({
   baseURL: BASE_URL,
   headers: {
-    storeId: localStorage.getItem("storeId"),
+    storeId: sessionStorage.getItem("storeId"),
   },
   timeout: 10000,
   withCredentials: true,

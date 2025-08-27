@@ -7,7 +7,7 @@ export const convertToAntdMenuItems = (
   routesData
     .filter((route) => !route.hidden)
     .map((route) => ({
-      key: `/${localStorage.getItem("storeId")}/${route.path}`,
+      key: `/${sessionStorage.getItem("storeId")}/${route.path}`,
       icon: route.icon,
       label: route.label,
       children: route.children

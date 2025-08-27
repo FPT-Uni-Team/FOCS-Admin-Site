@@ -22,7 +22,7 @@ const CategoryPage = () => {
       <TitleLine
         title="Category List"
         onCreate={() => {
-          navigate(`/${localStorage.getItem("storeId")}/create`);
+          navigate(`/${sessionStorage.getItem("storeId")}/categories/create`);
         }}
       />
       <CategoryList fetchData={fetchData} />

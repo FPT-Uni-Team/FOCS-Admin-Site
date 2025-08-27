@@ -11,6 +11,8 @@ import {
 } from "../../store/slices/variant/variantUpdateSlice";
 import { showNotification } from "../../components/common/Notification/ToastCustom";
 import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
+import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
+import type { Variant } from "../../type/variant/variant";
 
 const VariantUpdatePage = () => {
   const [form] = useForm();
@@ -84,7 +86,7 @@ const VariantUpdatePage = () => {
       setBreadcrumb([
         {
           name: "Variants",
-          link: `/${localStorage.getItem("storeId")}/variants`,
+          link: `/${sessionStorage.getItem("storeId")}/variants`,
         },
         { name: `${variantId}` },
       ])
@@ -98,9 +100,13 @@ const VariantUpdatePage = () => {
         onCreate={handleUpdateVariant}
         createButtonText="Update"
       />
-      {variant && (
-        <VariantDetail form={form} mode="Update" variantDetail={variant} />
-      )}
+      <ContentInner>
+        <VariantDetail
+          form={form}
+          mode="Update"
+          variantDetail={variant as Variant}
+        />
+      </ContentInner>
     </>
   );
 };

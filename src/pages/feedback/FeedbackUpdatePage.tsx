@@ -76,7 +76,7 @@ const FeedbackUpdatePage = () => {
       setBreadcrumb([
         {
           name: "Feedbacks",
-          link: `/${localStorage.getItem("storeId")}/feedbacks`,
+          link: `/${sessionStorage.getItem("storeId")}/feedbacks`,
         },
         { name: `${feedbackId}` },
       ])

@@ -33,7 +33,7 @@ const MenuItemCreatePage = () => {
         description: allFormValues.description,
         base_price: allFormValues.base_price,
         is_available: allFormValues.is_available,
-        store_id: localStorage.getItem("storeId"),
+        store_id: sessionStorage.getItem("storeId"),
         category_ids: allFormValues.category_ids,
         variant_groups: (allFormValues.variant_groups as VariantGroup[])?.map(
           (group) => ({
@@ -71,7 +71,7 @@ const MenuItemCreatePage = () => {
     if (success) {
       showNotification("success", "Create menu item success!");
       dispatch(resetMenuItemCreate());
-      navigate(`/${localStorage.getItem("storeId")}/menu-items`);
+      navigate(`/${sessionStorage.getItem("storeId")}/menu-items`);
     }
   }, [dispatch, navigate, success]);
 
@@ -87,7 +87,7 @@ const MenuItemCreatePage = () => {
       setBreadcrumb([
         {
           name: "Menu Items",
-          link: `/${localStorage.getItem("storeId")}/menu-items`,
+          link: `/${sessionStorage.getItem("storeId")}/menu-items`,
         },
         { name: "New Menu Item" },
       ])
