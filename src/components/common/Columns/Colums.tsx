@@ -915,3 +915,33 @@ export const columnsWorkshiftList: ColumnsType<WorkshiftItem> = [
     },
   },
 ];
+
+export interface CustomerDataType {
+  email: string;
+  phone_number: string;
+  first_name: string;
+  last_name: string;
+}
+
+export const columnsCustomer: ColumnsType<CustomerDataType> = [
+  {
+    title: "First Name",
+    dataIndex: "first_name",
+    key: "first_name",
+  },
+  {
+    title: "Last Name",
+    dataIndex: "last_name",
+    key: "last_name",
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
+  },
+  {
+    title: "Phone Number",
+    dataIndex: "phone_number",
+    key: "phone_number",
+  },
+];

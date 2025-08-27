@@ -1,58 +1,53 @@
 import { Col, Form, Input, Row, type FormInstance } from "antd";
-
 import { useEffect } from "react";
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
-import TextArea from "antd/es/input/TextArea";
-import type { CategoryListDataType } from "../../type/category/category";
 
-interface Props {
-  mode?: "Update" | "Create" | "Detail";
+interface CustomerFormProps {
   form: FormInstance;
-  initData?: CategoryListDataType;
+  initData?: {
+    email: string;
+    phone_number: string;
+    first_name: string;
+    last_name: string;
+  };
 }
 
-const CategoryForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
+const CustomerForm: React.FC<CustomerFormProps> = ({ form, initData }) => {
   useEffect(() => {
-    if (initData && (mode == "Update" || mode == "Detail")) {
+    if (initData) {
       form.setFieldsValue({
-        name: initData.name,
-        description: initData.description,
+        email: initData.email,
+        phone_number: initData.phone_number,
+        first_name: initData.first_name,
+        last_name: initData.last_name,
       });
     }
-  }, [initData, form, mode]);
+  }, [initData, form]);
 
   return (
     <ContentInner style={{ minHeight: "fit-content" }}>
-      <Form form={form} layout="vertical" name="categoryForm" colon={true}>
+      <Form form={form} layout="vertical" name="customerForm" colon={true}>
         <Row gutter={36}>
           <Col span={12}>
-            <Form.Item
-              label="Category Name"
-              name="name"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input category name!",
-                },
-              ]}
-            >
-              <Input
-                placeholder="Enter category name"
-                disabled={mode == "Detail"}
-              />
+            <Form.Item label="First Name" name="first_name">
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Last Name" name="last_name">
+              <Input disabled />
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={36}>
-          <Col span={24}>
-            <Form.Item label="Description" name="description">
-              <TextArea
-                rows={4}
-                placeholder={`${
-                  mode !== "Detail" ? "Enter category description" : ""
-                }`}
-                disabled={mode == "Detail"}
-              />
+          <Col span={12}>
+            <Form.Item label="Email" name="email">
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Phone Number" name="phone_number">
+              <Input disabled />
             </Form.Item>
           </Col>
         </Row>
@@ -61,4 +56,4 @@ const CategoryForm: React.FC<Props> = ({ mode = "Create", form, initData }) => {
   );
 };
 
-export default CategoryForm;
+export default CustomerForm;

@@ -128,6 +128,12 @@ const endpoints = {
     kitchenStatistic: () => `${API_BASE_URL}/kitchen-statistic`,
     financeStatistic: () => `${API_BASE_URL}/finance-statistic`,
   },
+  customer: {
+    list: () => `${API_BASE_URL}/admin/customer`,
+    detail: (params: string) => `${API_BASE_URL}/admin/customer/${params}`,
+    changeStatus: (params: string, id: string) =>
+      `${API_BASE_URL}/admin/customer/${id}/${params}`,
+  },
 };
 
 export default endpoints;
