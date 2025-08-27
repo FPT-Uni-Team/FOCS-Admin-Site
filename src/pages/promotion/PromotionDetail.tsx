@@ -47,7 +47,7 @@ const PromotionDetailPage = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete promotion success!");
-      navigate(`/${localStorage.getItem("storeId")}/promotions`);
+      navigate(`/${sessionStorage.getItem("storeId")}/promotions`);
       dispatch(clearDeletePromotionState());
     }
   }, [deleteSuccess, navigate, dispatch]);
@@ -64,7 +64,7 @@ const PromotionDetailPage = () => {
       setBreadcrumb([
         {
           name: "Promotions",
-          link: `/${localStorage.getItem("storeId")}/promotions`,
+          link: `/${sessionStorage.getItem("storeId")}/promotions`,
         },
         { name: promotionId as string },
       ])
@@ -88,7 +88,7 @@ const PromotionDetailPage = () => {
         onAction={fetchChangeStatusPromotion}
         onEdit={() => {
           navigate(
-            `${localStorage.getItem(
+            `/${localStorage.getItem(
               "storeId"
             )}/promotions/update/${promotionId}`
           );
@@ -104,7 +104,6 @@ const PromotionDetailPage = () => {
         deleteLoading={deleteLoading}
       />
       <PromotionDetail promotionDetail={promotion} />
-
       <Modal
         title="Delete Promotion"
         open={isDeleteModalOpen}

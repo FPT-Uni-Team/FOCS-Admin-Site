@@ -75,7 +75,7 @@ const WorkshiftDetailPage = () => {
       setBreadcrumb([
         {
           name: "Workshifts",
-          link: `/${localStorage.getItem("storeId")}/workshifts`,
+          link: `/${sessionStorage.getItem("storeId")}/workshifts`,
         },
         { name: `${workshiftDetail?.id}` },
       ])

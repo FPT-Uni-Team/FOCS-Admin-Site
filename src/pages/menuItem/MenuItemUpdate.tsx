@@ -49,7 +49,7 @@ const MenuItemUpdatePage = () => {
         description: allFormValues.description,
         base_price: allFormValues.base_price,
         is_available: allFormValues.is_available,
-        store_id: localStorage.getItem("storeId"),
+        store_id: sessionStorage.getItem("storeId"),
       };
     } catch (e) {
       console.log(e);
@@ -217,7 +217,9 @@ const MenuItemUpdatePage = () => {
     if (success) {
       showNotification("success", "Update menu item success!");
       dispatch(resetMenuItem());
-      navigate(`/${localStorage.getItem("storeId")}/menu-items/${menuItemId}`);
+      navigate(
+        `/${sessionStorage.getItem("storeId")}/menu-items/${menuItemId}`
+      );
     }
   }, [dispatch, menuItemId, navigate, success]);
 
@@ -233,7 +235,7 @@ const MenuItemUpdatePage = () => {
       setBreadcrumb([
         {
           name: "Menu Items",
-          link: `/${localStorage.getItem("storeId")}/menu-items`,
+          link: `/${sessionStorage.getItem("storeId")}/menu-items`,
         },
         { name: menuItemId as string },
       ])

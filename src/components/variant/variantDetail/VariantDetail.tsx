@@ -1,13 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Form,
-  Input,
-  Switch,
-  Row,
-  Col,
-  type FormInstance,
-  Typography,
-} from "antd";
+import { Form, Input, Switch, Row, Col, type FormInstance } from "antd";
 import type { Variant } from "../../../type/variant/variant";
 import { formatPrice } from "../../../helper/formatPrice";
 import styles from "./VariantDetail.module.scss";
@@ -18,7 +10,11 @@ interface Props {
   mode?: "View" | "Update";
 }
 
-const VariantDetail: React.FC<Props> = ({ form, variantDetail, mode = "View" }) => {
+const VariantDetail: React.FC<Props> = ({
+  form,
+  variantDetail,
+  mode = "View",
+}) => {
   const isEditMode = mode === "Update";
 
   useEffect(() => {
@@ -35,8 +31,6 @@ const VariantDetail: React.FC<Props> = ({ form, variantDetail, mode = "View" }) 
 
   return (
     <Form form={form} layout="vertical" name="variantDetailForm" colon={true}>
-      <Typography.Title level={4}>Variant Information</Typography.Title>
-      
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item label="Variant Name" name="name">
@@ -44,8 +38,8 @@ const VariantDetail: React.FC<Props> = ({ form, variantDetail, mode = "View" }) 
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item 
-            label="Price (VND)" 
+          <Form.Item
+            label="Price (VND)"
             name="price"
             normalize={(value) => {
               if (!isEditMode) return value;
@@ -54,41 +48,38 @@ const VariantDetail: React.FC<Props> = ({ form, variantDetail, mode = "View" }) 
               return formatted;
             }}
           >
-            <Input 
-              disabled={!isEditMode} 
-              addonBefore="VND"
-            />
+            <Input disabled={!isEditMode} addonBefore="VND" />
           </Form.Item>
         </Col>
       </Row>
 
       <Row gutter={24}>
         <Col span={12}>
-          <Form.Item 
-            label="Preparation Time (minutes)" 
+          <Form.Item
+            label="Preparation Time (minutes)"
             name="prep_per_time"
             normalize={(value) => {
               if (!isEditMode) return value;
               return value.replace(/[^0-9]/g, "");
             }}
           >
-            <Input 
-              disabled={!isEditMode} 
+            <Input
+              disabled={!isEditMode}
               placeholder="Enter preparation time"
             />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item 
-            label="Quantity per Time" 
+          <Form.Item
+            label="Quantity per Time"
             name="quantity_per_time"
             normalize={(value) => {
               if (!isEditMode) return value;
               return value.replace(/[^0-9]/g, "");
             }}
           >
-            <Input 
-              disabled={!isEditMode} 
+            <Input
+              disabled={!isEditMode}
               placeholder="Enter quantity per time"
             />
           </Form.Item>

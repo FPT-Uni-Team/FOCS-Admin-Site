@@ -52,7 +52,7 @@ const MenuItemDetailPage = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete menu item success!");
-      navigate(`/${localStorage.getItem("storeId")}/menu-items`);
+      navigate(`/${sessionStorage.getItem("storeId")}/menu-items`);
       dispatch(clearDeleteMenuItemState());
     }
   }, [deleteSuccess, navigate, dispatch]);
@@ -69,7 +69,7 @@ const MenuItemDetailPage = () => {
       setBreadcrumb([
         {
           name: "Menu Items",
-          link: `/${localStorage.getItem("storeId")}/menu-items`,
+          link: `/${sessionStorage.getItem("storeId")}/menu-items`,
         },
         { name: menuItemId as string },
       ])

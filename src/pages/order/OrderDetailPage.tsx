@@ -26,7 +26,7 @@ const OrderDetailPage = () => {
       setBreadcrumb([
         {
           name: "Orders",
-          link: `/${localStorage.getItem("storeId")}/orders`,
+          link: `/${sessionStorage.getItem("storeId")}/orders`,
         },
         { name: `${orderCode}` },
       ])

@@ -48,7 +48,7 @@ const CategoryPage = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete category success!");
-      navigate(`/${localStorage.getItem("storeId")}/categories`);
+      navigate(`/${sessionStorage.getItem("storeId")}/categories`);
       dispatch(clearDeleteCategoryState());
     }
   }, [deleteSuccess, navigate, dispatch]);
@@ -65,7 +65,7 @@ const CategoryPage = () => {
       setBreadcrumb([
         {
           name: "Categories",
-          link: `/${localStorage.getItem("storeId")}/categories`,
+          link: `/${sessionStorage.getItem("storeId")}/categories`,
         },
         { name: categoryId as string },
       ])

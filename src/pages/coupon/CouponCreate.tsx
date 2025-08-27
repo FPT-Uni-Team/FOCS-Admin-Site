@@ -85,7 +85,7 @@ const CouponCreatePage = () => {
     if (success) {
       showNotification("success", "Create coupon success!");
       dispatch(resetCreateCoupon());
-      navigate(`/${localStorage.getItem("storeId")}/coupons`);
+      navigate(`/${sessionStorage.getItem("storeId")}/coupons`);
     }
   }, [dispatch, navigate, success]);
 
@@ -101,7 +101,7 @@ const CouponCreatePage = () => {
       setBreadcrumb([
         {
           name: "Coupons",
-          link: `/${localStorage.getItem("storeId")}/coupons`,
+          link: `/${sessionStorage.getItem("storeId")}/coupons`,
         },
         { name: "New Coupon" },
       ])

@@ -55,7 +55,7 @@ const VariantCreatePage = () => {
       setBreadcrumb([
         {
           name: "Variants",
-          link: `/${localStorage.getItem("storeId")}/variants`,
+          link: `/${sessionStorage.getItem("storeId")}/variants`,
         },
         { name: "New Variant" },
       ])

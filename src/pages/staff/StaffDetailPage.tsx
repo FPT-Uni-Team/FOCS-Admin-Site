@@ -41,7 +41,7 @@ const StaffDetailPage = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete staff success!");
-      navigate(`/${localStorage.getItem("storeId")}/staffs`);
+      navigate(`/${sessionStorage.getItem("storeId")}/staffs`);
       dispatch(clearDeleteStaffState());
     }
   }, [deleteSuccess, navigate, dispatch]);
@@ -58,7 +58,7 @@ const StaffDetailPage = () => {
       setBreadcrumb([
         {
           name: "Staffs",
-          link: `/${localStorage.getItem("storeId")}/staffs`,
+          link: `/${sessionStorage.getItem("storeId")}/staffs`,
         },
         { name: `${staffId}` },
       ])
@@ -71,7 +71,7 @@ const StaffDetailPage = () => {
         title={`${staff.first_name} ${staff.last_name}`}
         onEdit={() =>
           navigate(
-            `/${localStorage.getItem("storeId")}/staffs/update/${staffId}`
+            `/${sessionStorage.getItem("storeId")}/staffs/update/${staffId}`
           )
         }
         onDelete={handleDeleteStaff}

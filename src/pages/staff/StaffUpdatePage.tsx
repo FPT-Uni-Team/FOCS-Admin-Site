@@ -52,7 +52,7 @@ const StaffUpdatePage = () => {
     if (success) {
       showNotification("success", "Update staff success!");
       dispatch(resetStaffUpdate());
-      navigate(`/${localStorage.getItem("storeId")}/staffs/${staffId}`);
+      navigate(`/${sessionStorage.getItem("storeId")}/staffs/${staffId}`);
     }
   }, [dispatch, navigate, staffId, success]);
 
@@ -68,7 +68,7 @@ const StaffUpdatePage = () => {
       setBreadcrumb([
         {
           name: "Staffs",
-          link: `/${localStorage.getItem("storeId")}/staffs`,
+          link: `/${sessionStorage.getItem("storeId")}/staffs`,
         },
         { name: `${staffId}` },
       ])

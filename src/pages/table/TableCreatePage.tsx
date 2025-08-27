@@ -39,7 +39,7 @@ const TableCreatePage = () => {
     if (success) {
       showNotification("success", "Create table success!");
       dispatch(resetTableCreate());
-      navigate(`/${localStorage.getItem("storeId")}/${storeId}/tables`);
+      navigate(`/${sessionStorage.getItem("storeId")}/${storeId}/tables`);
     }
   }, [dispatch, navigate, success, storeId]);
 
@@ -55,7 +55,7 @@ const TableCreatePage = () => {
       setBreadcrumb([
         {
           name: "Tables",
-          link: `/${localStorage.getItem("storeId")}/tables`,
+          link: `/${sessionStorage.getItem("storeId")}/tables`,
         },
         { name: "New Table" },
       ])

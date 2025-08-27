@@ -40,7 +40,7 @@ const StoreSettingUpdate = () => {
 
       await orderService.updateStoreSetting(payload);
       showNotification("success", "Update store setting success!");
-      navigate(`/${localStorage.getItem("storeId")}/setting`);
+      navigate(`/${sessionStorage.getItem("storeId")}/setting`);
     } catch (error) {
       console.error(error);
       showNotification("error", "Update store setting failed!");

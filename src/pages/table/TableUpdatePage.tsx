@@ -57,7 +57,7 @@ const TableUpdatePage = () => {
       setBreadcrumb([
         {
           name: "Tables",
-          link: `/${localStorage.getItem("storeId")}/tables`,
+          link: `/${sessionStorage.getItem("storeId")}/tables`,
         },
         { name: `Table ${table.table_number}` },
       ])

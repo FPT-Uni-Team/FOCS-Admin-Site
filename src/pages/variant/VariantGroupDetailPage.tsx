@@ -14,13 +14,14 @@ import {
 
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
 import { setBreadcrumb } from "../../store/slices/breadcumb/breadcrumbSlice";
+import type { VariantGroup } from "../../type/variant/variant";
 
 const VariantGroupDetailPage = () => {
   const [form] = useForm();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { variantGroupDetail, loading, error } = useAppSelector(
+  const { variantGroupDetail } = useAppSelector(
     (state) => state.variantGroupDetail
   );
   const {
@@ -64,7 +65,7 @@ const VariantGroupDetailPage = () => {
       setBreadcrumb([
         {
           name: "Variant Groups",
-          link: `/${localStorage.getItem("storeId")}/variant-groups`,
+          link: `/${sessionStorage.getItem("storeId")}/variant-groups`,
         },
         {
           name: variantGroupDetail?.group_name ?? "Unnamed Group",
@@ -73,22 +74,10 @@ const VariantGroupDetailPage = () => {
     );
   }, [variantGroupDetail, dispatch]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!variantGroupDetail) {
-    return <div>Variant group not found</div>;
-  }
-
   return (
     <>
       <TitleLine
-        title={variantGroupDetail.group_name}
+        title={variantGroupDetail?.group_name}
         status="Available"
         isActive={1}
         contentModal="this variant group"
@@ -104,7 +93,7 @@ const VariantGroupDetailPage = () => {
       <ContentInner>
         <VariantGroupDetail
           form={form}
-          variantGroupDetail={variantGroupDetail}
+          variantGroupDetail={variantGroupDetail as VariantGroup}
           mode="View"
         />
       </ContentInner>

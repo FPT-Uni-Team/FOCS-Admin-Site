@@ -22,7 +22,7 @@ const VariantDetailPage = () => {
   const [form] = useForm();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const { variant, loading } = useAppSelector((state) => state.variantDetail);
+  const { variant } = useAppSelector((state) => state.variantDetail);
   const {
     loading: deleteLoading,
     success: deleteSuccess,
@@ -52,7 +52,7 @@ const VariantDetailPage = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showNotification("success", "Delete variant success!");
-      navigate("/variants");
+      navigate(`/${sessionStorage.getItem("storeId")}/variants`);
       dispatch(clearDeleteVariantState());
     }
   }, [deleteSuccess, navigate, dispatch]);
@@ -69,23 +69,19 @@ const VariantDetailPage = () => {
       setBreadcrumb([
         {
           name: "Variants",
-          link: `/${localStorage.getItem("storeId")}/variants`,
+          link: `/${sessionStorage.getItem("storeId")}/variants`,
         },
         { name: `${variantId}` },
       ])
     );
   }, [variantId, dispatch]);
 
-  if (loading || !variant) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <>
       <TitleLine
-        title={variant.name}
-        status={variant.is_available ? "Available" : "Unavailable"}
-        isActive={variant.is_available ? 1 : 0}
+        title={variant?.name}
+        status={variant?.is_available ? "Available" : "Unavailable"}
+        isActive={variant?.is_available ? 1 : 0}
         contentModal="this variant"
         onEdit={() => {
           navigate(`/${storeId}/variants/${variantId}/update`);

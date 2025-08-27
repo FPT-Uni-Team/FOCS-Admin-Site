@@ -11,7 +11,7 @@ const CustomLink: FC<Props> = ({ title, href }) => {
   const navigate = useNavigate();
   return (
     <div
-      onClick={() => navigate(`/${localStorage.getItem("storeId")}/${href}`)}
+      onClick={() => navigate(`/${sessionStorage.getItem("storeId")}/${href}`)}
       className={styles.customTile}
     >
       {title}

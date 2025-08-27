@@ -87,7 +87,7 @@ const PromotionCreatePage = () => {
             }
           : undefined,
       coupon_ids: allFormValues?.step1?.use_coupon_list,
-      store_id: localStorage.getItem("storeId") || "",
+      store_id: sessionStorage.getItem("storeId") || "",
     };
   };
 
@@ -107,7 +107,9 @@ const PromotionCreatePage = () => {
     if (success) {
       showNotification("success", "Update promotion success!");
       dispatch(resetUpdatePromotion());
-      navigate(`/${localStorage.getItem("storeId")}/promotions/${promotionId}`);
+      navigate(
+        `/${sessionStorage.getItem("storeId")}/promotions/${promotionId}`
+      );
     }
   }, [dispatch, navigate, promotionId, success]);
 
@@ -127,7 +129,7 @@ const PromotionCreatePage = () => {
       setBreadcrumb([
         {
           name: "Promotions",
-          link: `/${localStorage.getItem("storeId")}/promotions`,
+          link: `/${sessionStorage.getItem("storeId")}/promotions`,
         },
         { name: promotionId as string },
       ])

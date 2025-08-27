@@ -22,7 +22,7 @@ const StaffListPage = () => {
       <TitleLine
         title="Staff List"
         onCreate={() => {
-          navigate(`/${localStorage.getItem("storeId")}/create`);
+          navigate(`/${sessionStorage.getItem("storeId")}/staffs/create`);
         }}
       />
       <StaffList fetchData={fetchData} />

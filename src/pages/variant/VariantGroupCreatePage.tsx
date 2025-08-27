@@ -54,7 +54,7 @@ const VariantGroupCreatePage = () => {
       setBreadcrumb([
         {
           name: "Variant Groups",
-          link: `/${localStorage.getItem("storeId")}/variant-groups`,
+          link: `/${sessionStorage.getItem("storeId")}/variant-groups`,
         },
         { name: "New Variant Group" },
       ])
