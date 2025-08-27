@@ -10,6 +10,7 @@ import {
   ClockCircleOutlined,
   SettingOutlined,
   DashboardOutlined,
+  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import React, { lazy, type LazyExoticComponent, type ReactNode } from "react";
 
@@ -105,6 +106,8 @@ const StoreSettingUpdatePage = lazy(
   () => import("../pages/setting/StoreSettingUpdate")
 );
 const DashboardPage = lazy(() => import("../pages/dashboard/DashboardPage"));
+
+const CustomerPage = lazy(() => import("../pages/customer/CustomerListPage"));
 
 export interface AppRoute {
   path: string;
@@ -346,6 +349,12 @@ export const routes: AppRoute[] = [
     path: "setting/update",
     component: StoreSettingUpdatePage,
     hidden: true,
+  },
+  {
+    path: "customers",
+    component: CustomerPage,
+    label: "Customers",
+    icon: <UsergroupAddOutlined />,
   },
 ];
 

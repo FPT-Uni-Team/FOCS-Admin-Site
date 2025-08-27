@@ -59,6 +59,8 @@ import workshiftCreateSlice from "./slices/workshift/workshiftCreateSlice";
 import workshiftDeleteSlice from "./slices/workshift/workshiftDeleteSlice";
 import breadcrumbSlice from "./slices/breadcumb/breadcrumbSlice";
 import dashboardSlice from "./slices/dashboard/dashboardSlice";
+import customerSlice from "./slices/customer/customerList";
+import customerDetailSlice from "./slices/customer/customerDetailSlice";
 
 const rootReducer = combineReducers({
   promotion: promotionSlice,
@@ -121,6 +123,8 @@ const rootReducer = combineReducers({
   workshiftDelete: workshiftDeleteSlice,
   breadcrumb: breadcrumbSlice,
   dashboard: dashboardSlice,
+  customerList: customerSlice,
+  customerDetail: customerDetailSlice,
 });
 
 export default rootReducer;
