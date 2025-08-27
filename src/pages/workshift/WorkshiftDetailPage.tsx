@@ -108,11 +108,7 @@ const WorkshiftDetailPage = () => {
       />
 
       <ContentInner style={{ minHeight: "fit-content" }}>
-        <WorkshiftDetail
-          form={form}
-          workshiftDetail={workshiftDetail}
-          mode="View"
-        />
+        <WorkshiftDetail form={form} workshiftDetail={workshiftDetail} />
       </ContentInner>
 
       <Modal
