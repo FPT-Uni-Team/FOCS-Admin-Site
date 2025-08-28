@@ -81,7 +81,7 @@ const CategoryPage = () => {
         onAction={fetchChangeStatusCategory}
         onEdit={() => {
           navigate(
-            `/${localStorage.getItem(
+            `/${sessionStorage.getItem(
               "storeId"
             )}/categories/update/${categoryId}`
           );
@@ -94,7 +94,17 @@ const CategoryPage = () => {
         )}
         deleteLoading={deleteLoading}
       />
-      <CategoryForm form={form} mode="Detail" initData={category} />
+      <CategoryForm
+        form={form}
+        initData={
+          category as unknown as {
+            email: string;
+            phone_number: string;
+            first_name: string;
+            last_name: string;
+          }
+        }
+      />
 
       <Modal
         title="Delete Category"

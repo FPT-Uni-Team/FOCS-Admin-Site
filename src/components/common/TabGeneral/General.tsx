@@ -23,6 +23,11 @@ import styles from "../../promotion/promotionForm/PromotionForm.module.scss";
 import type { CouponAdminDTO } from "../../../type/coupon/coupon";
 import type { SelectedTableItems } from "../../promotion/promotionForm/PromotionForm";
 import clsx from "clsx";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface Props {
   dataGeneral: PromotionPayload;
@@ -43,8 +48,8 @@ const GeneralTab: FC<Props> = ({ dataGeneral, form }) => {
         step1: {
           title: dataGeneral.title,
           description: dataGeneral.description,
-          start_date: dayjs(dataGeneral.start_date),
-          end_date: dayjs(dataGeneral.end_date),
+          start_date: dayjs.utc(dataGeneral.start_date).tz("Asia/Ho_Chi_Minh"),
+          end_date: dayjs.utc(dataGeneral.end_date).tz("Asia/Ho_Chi_Minh"),
           promotionType: dataGeneral.promotion_type,
           use_other_promotion: dataGeneral.can_apply_combine,
           use_coupon:

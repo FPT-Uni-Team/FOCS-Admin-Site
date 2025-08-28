@@ -28,6 +28,11 @@ import {
 import type { MenuListDataType } from "../../../type/menu/menu";
 import type { SelectedTableItems } from "../../promotion/promotionForm/PromotionForm";
 import type { PromotionListDataType } from "../../../type/promotion/promotion";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface Props {
   form: FormInstance;
@@ -63,10 +68,10 @@ const CouponDetail: React.FC<Props> = ({ form, couponDetail }) => {
             couponDetail.value &&
             couponDetail.value.toLocaleString("vi-VN").replace("đ", ""),
           start_date: couponDetail.start_date
-            ? dayjs(couponDetail.start_date)
+            ? dayjs.utc(couponDetail.start_date).tz("Asia/Ho_Chi_Minh")
             : undefined,
           end_date: couponDetail.end_date
-            ? dayjs(couponDetail.end_date)
+            ? dayjs.utc(couponDetail.end_date).tz("Asia/Ho_Chi_Minh")
             : undefined,
           code: couponDetail.code,
         },

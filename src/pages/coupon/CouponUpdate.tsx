@@ -117,11 +117,10 @@ const CouponUpdatePage = () => {
           name: "Coupons",
           link: `/${sessionStorage.getItem("storeId")}/coupons`,
         },
-        { name: `${couponId}` },
+        { name: `${coupon?.code}` },
       ])
     );
-  }, [couponId, dispatch]);
-
+  }, [coupon?.code, dispatch]);
   return (
     <>
       <TitleLine

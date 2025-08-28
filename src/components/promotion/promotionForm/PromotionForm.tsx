@@ -33,6 +33,11 @@ import clsx from "clsx";
 import type { CouponAdminDTO } from "../../../type/coupon/coupon";
 import ModalCouponList from "../../common/modal/ModalCouponList";
 import ModalMenuItem from "../../common/modal/ModalMenuItem";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface Props {
   title?: string;
@@ -107,8 +112,8 @@ const PromotionForm: FC<Props> = ({
         step1: {
           promotionName: initData.title,
           description: initData?.description,
-          start_date: dayjs(initData.start_date),
-          end_date: dayjs(initData.end_date),
+          start_date: dayjs.utc(initData.start_date).tz("Asia/Ho_Chi_Minh"),
+          end_date: dayjs.utc(initData.end_date).tz("Asia/Ho_Chi_Minh"),
           promotionType: initData.promotion_type,
           use_other_promotion: initData.can_apply_combine,
           use_coupon: initData.coupon_ids && initData?.coupon_ids?.length > 0,
