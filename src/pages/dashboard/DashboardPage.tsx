@@ -188,7 +188,7 @@ const DashboardPage = () => {
           <Card>
             <Statistic
               title="Average Completion Time"
-              value={orderStatistic?.average_complete_time || 0}
+              value={orderStatistic?.average_complete_time?.toFixed(2) || 0}
               suffix="minutes"
               prefix={<ClockCircleOutlined />}
               loading={loading.orderStatistic}

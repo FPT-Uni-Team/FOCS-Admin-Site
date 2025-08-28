@@ -66,10 +66,10 @@ const PromotionDetailPage = () => {
           name: "Promotions",
           link: `/${sessionStorage.getItem("storeId")}/promotions`,
         },
-        { name: promotionId as string },
+        { name: promotion.title as string },
       ])
     );
-  }, [promotionId, dispatch]);
+  }, [promotion.title, dispatch]);
   return (
     <>
       <TitleLine
@@ -88,7 +88,7 @@ const PromotionDetailPage = () => {
         onAction={fetchChangeStatusPromotion}
         onEdit={() => {
           navigate(
-            `/${localStorage.getItem(
+            `/${sessionStorage.getItem(
               "storeId"
             )}/promotions/update/${promotionId}`
           );
