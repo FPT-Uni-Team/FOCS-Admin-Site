@@ -16,6 +16,7 @@ const CouponListPage = () => {
   useEffect(() => {
     dispatch(setBreadcrumb([]));
   }, [dispatch]);
+
   return (
     <>
       <TitleLine

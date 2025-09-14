@@ -37,9 +37,16 @@ const processQueue = (
 axiosClient.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
+    const storeId = sessionStorage.getItem("storeId");
+
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
+
+    if (storeId) {
+      config.headers.storeId = storeId;
+    }
+
     return config;
   },
   (error) => {
