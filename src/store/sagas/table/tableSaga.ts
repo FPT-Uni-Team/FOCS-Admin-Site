@@ -87,9 +87,6 @@ function* fetchCreateTable(
   try {
     const response = yield call(() => createTable(action.payload));
 
-    const storeId = action.payload.store_id;
-    yield call(() => generateTableQR(response.data.id, storeId));
-
     yield put(createTableSuccess(response.data));
   } catch (error: unknown) {
     const axiosError = error as AxiosError;

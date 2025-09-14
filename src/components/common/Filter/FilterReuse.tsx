@@ -77,7 +77,7 @@ const FilterReuse: React.FC<FilterReuseProps> = ({
               onSearch("");
             }}
           />
-          {!!isShowFilter && (
+          {!isShowFilter && (
             <Button
               icon={<FilterOutlined />}
               onClick={() => setShowForm((prev) => !prev)}

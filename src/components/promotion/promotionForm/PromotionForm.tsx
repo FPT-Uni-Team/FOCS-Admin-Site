@@ -329,7 +329,6 @@ const PromotionForm: FC<Props> = ({
               rules={[
                 {
                   validator: (_, value) => {
-                    console.log("pass", value);
                     if (!value || value.length <= 0) {
                       return Promise.reject("Please select coupon!");
                     }

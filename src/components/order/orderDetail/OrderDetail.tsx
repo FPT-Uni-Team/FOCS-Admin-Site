@@ -30,7 +30,6 @@ interface OrderDetailItem {
 }
 
 const OrderDetail: React.FC<Props> = ({ orderDetail }) => {
-  console.log("orderDetail", orderDetail);
   const orderDetailColumns: ColumnsType<OrderDetailItem> = [
     {
       title: "Menu Item",

@@ -31,7 +31,6 @@ const WorkshiftCreatePage = () => {
       .validateFields()
       .then(() => {
         const values = form.getFieldsValue();
-        console.log("Form Values:", values);
         const dataPayload: WorkshiftCreatePayload = {
           workDate: dayjs(values.workDate).format("YYYY-MM-DD"),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
