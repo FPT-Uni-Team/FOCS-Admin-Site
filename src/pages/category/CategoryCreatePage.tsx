@@ -32,7 +32,7 @@ const CategoryPage = () => {
 
   useEffect(() => {
     if (success) {
-      showNotification("success", "Create promotion success!");
+      showNotification("success", "Create category success!");
       dispatch(resetCategoryCreate());
       navigate(`/${sessionStorage.getItem("storeId")}/categories`);
     }

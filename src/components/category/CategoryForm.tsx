@@ -1,53 +1,58 @@
-import { Col, Form, Input, Row, type FormInstance } from "antd";
+import { Col, Form, Input, InputNumber, Row, type FormInstance } from "antd";
 import { useEffect } from "react";
 import ContentInner from "../../layouts/MainLayout/ContentInner/ContentInner";
+import type { CategoryListDataType } from "../../type/category/category";
 
-interface CustomerFormProps {
+interface CategoryFormProps {
   form: FormInstance;
-  initData?: {
-    email: string;
-    phone_number: string;
-    first_name: string;
-    last_name: string;
-  };
+  initData?: CategoryListDataType;
+  mode?: "Create" | "Update" | "Detail";
 }
 
-const CustomerForm: React.FC<CustomerFormProps> = ({ form, initData }) => {
+const CategoryForm: React.FC<CategoryFormProps> = ({ form, initData, mode = "Detail" }) => {
+  const isEditable = mode === "Create" || mode === "Update";
+  
   useEffect(() => {
     if (initData) {
       form.setFieldsValue({
-        email: initData.email,
-        phone_number: initData.phone_number,
-        first_name: initData.first_name,
-        last_name: initData.last_name,
+        name: initData.name,
+        description: initData.description,
+        sort_order: initData.sort_order || 0,
+      });
+    } else {
+      // Set default sort_order for new categories
+      form.setFieldsValue({
+        sort_order: 0,
       });
     }
   }, [initData, form]);
 
   return (
     <ContentInner style={{ minHeight: "fit-content" }}>
-      <Form form={form} layout="vertical" name="customerForm" colon={true}>
+      <Form form={form} layout="vertical" name="categoryForm" colon={true}>
         <Row gutter={36}>
-          <Col span={12}>
-            <Form.Item label="First Name" name="first_name">
-              <Input disabled />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item label="Last Name" name="last_name">
-              <Input disabled />
+          <Col span={24}>
+            <Form.Item 
+              label="Category Name" 
+              name="name"
+              rules={isEditable ? [{ required: true, message: "Please enter category name" }] : []}
+            >
+              <Input disabled={!isEditable} />
             </Form.Item>
           </Col>
         </Row>
+        {/* Hidden sort_order field - not displayed but included in form data */}
+        <Form.Item name="sort_order" style={{ display: 'none' }}>
+          <Input type="hidden" />
+        </Form.Item>
         <Row gutter={36}>
-          <Col span={12}>
-            <Form.Item label="Email" name="email">
-              <Input disabled />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item label="Phone Number" name="phone_number">
-              <Input disabled />
+          <Col span={24}>
+            <Form.Item 
+              label="Description" 
+              name="description"
+              rules={isEditable ? [{ required: true, message: "Please enter description" }] : []}
+            >
+              <Input.TextArea disabled={!isEditable} rows={4} />
             </Form.Item>
           </Col>
         </Row>
@@ -56,4 +61,4 @@ const CustomerForm: React.FC<CustomerFormProps> = ({ form, initData }) => {
   );
 };
 
-export default CustomerForm;
+export default CategoryForm;

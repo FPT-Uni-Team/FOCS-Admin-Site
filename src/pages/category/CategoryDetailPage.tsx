@@ -67,10 +67,10 @@ const CategoryPage = () => {
           name: "Categories",
           link: `/${sessionStorage.getItem("storeId")}/categories`,
         },
-        { name: categoryId as string },
+        { name: category.name || categoryId as string },
       ])
     );
-  }, [categoryId, dispatch]);
+  }, [categoryId, category.name, dispatch]);
   return (
     <>
       <TitleLine
@@ -96,14 +96,8 @@ const CategoryPage = () => {
       />
       <CategoryForm
         form={form}
-        initData={
-          category as unknown as {
-            email: string;
-            phone_number: string;
-            first_name: string;
-            last_name: string;
-          }
-        }
+        initData={category}
+        mode="Detail"
       />
 
       <Modal
