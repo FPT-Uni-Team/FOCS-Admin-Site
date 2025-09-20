@@ -3,6 +3,7 @@ export interface CategoryListDataType {
   name: string;
   description: string;
   is_active: boolean;
+  sort_order?: number;
 }
 
 export const StatusType = {

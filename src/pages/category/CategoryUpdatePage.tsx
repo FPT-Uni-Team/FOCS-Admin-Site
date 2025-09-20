@@ -63,10 +63,10 @@ const CategoryUpdatePage = () => {
           name: "Categories",
           link: `/${sessionStorage.getItem("storeId")}/categories`,
         },
-        { name: categoryId as string },
+        { name: category.name || categoryId as string },
       ])
     );
-  }, [categoryId, dispatch]);
+  }, [categoryId, category.name, dispatch]);
   return (
     <>
       <TitleLine
@@ -75,7 +75,7 @@ const CategoryUpdatePage = () => {
         onCreate={handleCreateCategory}
         createButtonText="Update"
       />
-      <CategoryForm form={form} mode="Update" initData={category} />
+      <CategoryForm form={form} initData={category} mode="Update" />
     </>
   );
 };
