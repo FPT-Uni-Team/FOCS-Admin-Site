@@ -39,7 +39,7 @@ const TableCreatePage = () => {
     if (success) {
       showNotification("success", "Create table success!");
       dispatch(resetTableCreate());
-      navigate(`/${sessionStorage.getItem("storeId")}/${storeId}/tables`);
+      navigate(`/${sessionStorage.getItem("storeId")}/tables`);
     }
   }, [dispatch, navigate, success, storeId]);
 

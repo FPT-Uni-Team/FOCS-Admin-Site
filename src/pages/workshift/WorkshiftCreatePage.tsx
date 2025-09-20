@@ -52,7 +52,7 @@ const WorkshiftCreatePage = () => {
         dispatch(createWorkshiftStart(dataPayload, storeId));
       })
       .catch(() => {});
-  }, [dispatch, form, storeId]);
+  }, [dispatch, form, storeId, staff]);
 
   useEffect(() => {
     if (success) {
