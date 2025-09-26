@@ -14,7 +14,7 @@ export interface OverviewStatisticResponse {
   best_selling_item: {
     item_name: string;
     quantity: number;
-  };
+  }[];
 }
 
 export interface KitchenStatisticResponse {

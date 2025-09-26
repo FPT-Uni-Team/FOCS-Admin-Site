@@ -585,7 +585,7 @@ export const columnsOrderList: ColumnsType<OrderListDataType> = [
     render: (_, record) => {
       return (
         <CustomLink
-          title={record.order_code}
+          title={`#${record.order_code}`}
           href={`orders/${record.order_code}`}
         />
       );
@@ -665,10 +665,7 @@ export const columnsOrderList: ColumnsType<OrderListDataType> = [
       "ascend" as SortOrder,
     ],
     render: (total_amount: number) => {
-      const roundedAmount = Math.round(total_amount * 100) / 100;
-      const formattedAmount = roundedAmount
-        .toFixed(2)
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      const formattedAmount = total_amount.toLocaleString("vi-VN") + " VND";
       return <Text strong>{formattedAmount}</Text>;
     },
     sorter: true,
@@ -839,21 +836,6 @@ export const columnsFeedback: ColumnsType<FeedbackListDataType> = [
         >
           {isPublic ? "True" : "False"}
         </span>
-      );
-    },
-  },
-  {
-    title: "Reply",
-    dataIndex: "reply",
-    key: "reply",
-    render: (reply: string | null) => {
-      if (!reply) {
-        return <Text type="secondary">No reply</Text>;
-      }
-      return (
-        <Text ellipsis={{ tooltip: reply }} style={{ maxWidth: 200 }}>
-          {reply}
-        </Text>
       );
     },
   },
