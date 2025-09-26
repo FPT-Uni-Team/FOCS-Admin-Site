@@ -71,10 +71,10 @@ const MenuItemDetailPage = () => {
           name: "Menu Items",
           link: `/${sessionStorage.getItem("storeId")}/menu-items`,
         },
-        { name: menuItemId as string },
+        { name: menuItem.name as string },
       ])
     );
-  }, [dispatch, menuItemId]);
+  }, [dispatch, menuItem]);
 
   return (
     <>

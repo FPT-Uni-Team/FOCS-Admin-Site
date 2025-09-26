@@ -30,7 +30,6 @@ const StoreSettingPage = () => {
         dispatch(hideLoading());
       }
     };
-
     fetchStoreSetting();
   }, [dispatch, form]);
 

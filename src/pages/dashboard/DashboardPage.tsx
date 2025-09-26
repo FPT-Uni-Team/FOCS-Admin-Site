@@ -28,6 +28,19 @@ interface PaymentMethodData {
   total_revenue: number;
 }
 
+const columnsBestSelling = [
+  {
+    title: "Item Name",
+    dataIndex: "item_name",
+    key: "item_name",
+  },
+  {
+    title: "Quantity",
+    dataIndex: "quantity",
+    key: "quantity",
+  },
+];
+
 const DashboardPage = () => {
   const dispatch = useAppDispatch();
   const {
@@ -169,7 +182,7 @@ const DashboardPage = () => {
               title="Revenue Today"
               value={overviewStatistic?.total_revenue_today || 0}
               prefix={<DollarOutlined />}
-              formatter={(value) => value.toLocaleString("vi-VN")}
+              formatter={(value) => value.toLocaleString("vi-VN") + " VND"}
               loading={loading.overviewStatistic}
             />
           </Card>
@@ -253,16 +266,19 @@ const DashboardPage = () => {
         <Col xs={24} lg={12}>
           <Card title="Best Selling Item" loading={loading.overviewStatistic}>
             {overviewStatistic?.best_selling_item && (
-              <div style={{ textAlign: "center", padding: "20px 0" }}>
-                <Title level={3} style={{ marginBottom: 8 }}>
-                  {overviewStatistic.best_selling_item.item_name}
-                </Title>
-                <Statistic
-                  title="Quantity Sold"
-                  value={overviewStatistic.best_selling_item.quantity}
-                  valueStyle={{ fontSize: "2em", color: "#52c41a" }}
+              <>
+                <Table
+                  columns={columnsBestSelling}
+                  dataSource={overviewStatistic.best_selling_item.map(
+                    (item, index) => ({
+                      ...item,
+                      key: index,
+                    })
+                  )}
+                  pagination={false}
+                  bordered
                 />
-              </div>
+              </>
             )}
           </Card>
         </Col>
@@ -281,8 +297,8 @@ const DashboardPage = () => {
               size="small"
               rowKey="payment_method"
             />
-            {financeStatistic?.average_bill_value && (
-              <div style={{ marginTop: 16, textAlign: "center" }}>
+            {financeStatistic?.average_bill_value !== undefined && (
+              <div style={{ marginTop: 16, textAlign: "left" }}>
                 <Statistic
                   title="Average Bill Value"
                   value={financeStatistic.average_bill_value}

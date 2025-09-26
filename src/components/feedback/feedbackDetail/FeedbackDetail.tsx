@@ -1,16 +1,20 @@
 import { type FC } from "react";
-import { Card, Descriptions, Rate, Image, Typography } from "antd";
+import { Card, Descriptions, Rate, Image, Typography, List } from "antd";
 import { CalendarOutlined } from "@ant-design/icons";
 import type { FeedbackListDataType } from "../../../type/feedback/feedback";
 import styles from "./FeedbackDetail.module.scss";
+import dayjs from "dayjs";
+import { useNavigate, useParams } from "react-router-dom";
 
-const { Paragraph } = Typography;
+const { Text, Title, Paragraph } = Typography;
 
 interface FeedbackDetailProps {
   feedbackDetail: FeedbackListDataType;
 }
 
 const FeedbackDetail: FC<FeedbackDetailProps> = ({ feedbackDetail }) => {
+  const { storeId } = useParams();
+  const navigate = useNavigate();
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString();
   };
@@ -91,6 +95,68 @@ const FeedbackDetail: FC<FeedbackDetailProps> = ({ feedbackDetail }) => {
                 />
               ))}
             </Image.PreviewGroup>
+          </div>
+        </Card>
+      )}
+
+      {feedbackDetail?.order && (
+        <Card
+          key={feedbackDetail.order.id}
+          title={
+            <span
+              style={{ color: "#1677ff", cursor: "pointer" }}
+              onClick={() =>
+                navigate(`/${storeId}/orders/${feedbackDetail.order?.id}`)
+              }
+            >
+              Order #{feedbackDetail.order.order_code}
+            </span>
+          }
+          bordered
+          style={{ marginBottom: 16 }}
+        >
+          {/* Order Info */}
+          <div style={{ marginBottom: 12 }}>
+            <Text strong>Date: </Text>
+            <Text>
+              {dayjs(feedbackDetail.order.created_at).format(
+                "DD/MM/YYYY HH:mm"
+              )}
+            </Text>
+          </div>
+
+          {/* Order Details */}
+          <Title level={5} style={{ marginTop: 12 }}>
+            Items
+          </Title>
+          <List
+            dataSource={feedbackDetail.order.order_details}
+            renderItem={(item) => (
+              <List.Item key={item.id}>
+                <Text>
+                  <span
+                    style={{ color: "#1677ff", cursor: "pointer" }}
+                    onClick={() =>
+                      navigate(
+                        `/${storeId}/menu-items/${feedbackDetail.order?.id}`
+                      )
+                    }
+                  >
+                    {item.menu_item_name || "Unnamed Item"}
+                  </span>{" "}
+                  × {item.quantity} - {item.total_price.toLocaleString("vi-VN")}{" "}
+                  VND
+                </Text>
+              </List.Item>
+            )}
+          />
+
+          {/* Total */}
+          <div style={{ marginTop: 12, textAlign: "right" }}>
+            <Text strong>
+              Total: {feedbackDetail.order.total_amount.toLocaleString("vi-VN")}{" "}
+              VND
+            </Text>
           </div>
         </Card>
       )}
